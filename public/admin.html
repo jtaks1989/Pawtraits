@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pawtraits — Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Instrument+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --black: #080808; --deep: #0e0e0e; --surface: #161616; --card: #111111;
+      --border: rgba(255,255,255,0.08); --white: #f4f0ea; --muted: rgba(244,240,234,0.45);
+      --teal: #3ecfb2; --red: #e05555; --gold: #c8a84b;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--black); color: var(--white); font-family: 'Instrument Sans', sans-serif; min-height: 100vh; }
+    .login-wrap { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 1.5rem; }
+    .login-box { background: #141414; border: 1px solid rgba(255,255,255,.1); border-radius: 16px; padding: 2.5rem; max-width: 380px; width: 100%; text-align: center; }
+    .login-logo { font-family: 'DM Serif Display', serif; font-size: 1.4rem; color: var(--white); margin-bottom: .25rem; }
+    .login-logo span { color: var(--teal); }
+    .login-sub { font-size: .82rem; color: var(--muted); margin-bottom: 2rem; }
+    .login-input { width: 100%; background: var(--deep); border: 1px solid var(--border); border-radius: 8px; padding: .85rem 1rem; font-family: inherit; font-size: .9rem; color: var(--white); outline: none; margin-bottom: 1rem; transition: border-color .2s; }
+    .login-input:focus { border-color: var(--teal); }
+    .login-btn { width: 100%; padding: .85rem; background: var(--teal); color: var(--black); font-family: inherit; font-size: .9rem; font-weight: 700; border: none; border-radius: 8px; cursor: pointer; transition: background .2s; }
+    .login-btn:hover { background: #5de0c8; }
+    .login-error { font-size: .82rem; color: var(--red); margin-top: .75rem; display: none; }
+    .dash { display: none; }
+    nav { display: flex; align-items: center; justify-content: space-between; padding: 1rem 2rem; background: rgba(8,8,8,.95); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
+    .nav-logo { font-family: 'DM Serif Display', serif; font-size: 1.1rem; }
+    .nav-logo span { color: var(--teal); }
+    .nav-right { display: flex; align-items: center; gap: 1rem; }
+    .nav-badge { font-size: .72rem; font-weight: 600; padding: .3rem .8rem; border-radius: 100px; background: rgba(62,207,178,.12); color: var(--teal); border: 1px solid rgba(62,207,178,.3); }
+    .logout-btn { font-size: .78rem; color: var(--muted); background: none; border: 1px solid var(--border); border-radius: 6px; padding: .35rem .85rem; cursor: pointer; transition: all .2s; }
+    .logout-btn:hover { color: var(--white); border-color: rgba(255,255,255,.2); }
+    .main { max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem; }
+    .page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem; }
+    .page-title { font-family: 'DM Serif Display', serif; font-size: 1.8rem; font-style: italic; }
+    .page-title span { color: var(--teal); }
+    .refresh-btn { display: flex; align-items: center; gap: .4rem; font-size: .82rem; font-weight: 500; padding: .55rem 1.2rem; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; color: var(--muted); cursor: pointer; transition: all .2s; }
+    .refresh-btn:hover { border-color: var(--teal); color: var(--teal); }
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+    .stat { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.4rem; }
+    .stat-label { font-size: .68rem; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: .5rem; }
+    .stat-value { font-family: 'DM Serif Display', serif; font-size: 2rem; font-style: italic; color: var(--white); }
+    .stat-value.teal { color: var(--teal); }
+    .filters { display: flex; gap: .6rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+    .filter-btn { font-size: .78rem; font-weight: 500; padding: .4rem 1rem; border-radius: 100px; border: 1px solid var(--border); background: var(--surface); color: var(--muted); cursor: pointer; transition: all .2s; }
+    .filter-btn:hover, .filter-btn.active { border-color: var(--teal); color: var(--teal); background: rgba(62,207,178,.07); }
+    .table-wrap { background: var(--card); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; overflow-x: auto; }
+    .table-header { padding: 1rem 1.5rem; background: var(--surface); border-bottom: 1px solid var(--border); font-size: .68rem; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--teal); }
+    table { width: 100%; border-collapse: collapse; min-width: 700px; }
+    th { text-align: left; padding: .85rem 1rem; font-size: .68rem; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); border-bottom: 1px solid var(--border); white-space: nowrap; }
+    td { padding: 1rem; font-size: .84rem; border-bottom: 1px solid rgba(255,255,255,.04); vertical-align: middle; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(255,255,255,.02); }
+    .portrait-thumb { width: 44px; height: 44px; border-radius: 6px; object-fit: cover; border: 1px solid var(--border); cursor: pointer; transition: transform .2s; display: block; }
+    .portrait-thumb:hover { transform: scale(1.1); }
+    .no-portrait { width: 44px; height: 44px; border-radius: 6px; background: var(--surface); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: .6rem; color: var(--muted); text-align: center; line-height: 1.3; }
+    .pkg-badge { font-size: .68rem; font-weight: 600; padding: .2rem .65rem; border-radius: 100px; white-space: nowrap; }
+    .pkg-squire { background: rgba(200,168,75,.12); color: var(--gold); border: 1px solid rgba(200,168,75,.25); }
+    .pkg-noble  { background: rgba(62,207,178,.1); color: var(--teal); border: 1px solid rgba(62,207,178,.25); }
+    .pkg-royal  { background: rgba(180,100,255,.1); color: #b464ff; border: 1px solid rgba(180,100,255,.25); }
+    .status-badge { font-size: .68rem; font-weight: 600; padding: .25rem .75rem; border-radius: 100px; cursor: pointer; white-space: nowrap; transition: all .2s; user-select: none; }
+    .status-new      { background: rgba(224,85,85,.12); color: var(--red); border: 1px solid rgba(224,85,85,.3); }
+    .status-printing { background: rgba(200,168,75,.12); color: var(--gold); border: 1px solid rgba(200,168,75,.3); }
+    .status-shipped  { background: rgba(62,207,178,.12); color: var(--teal); border: 1px solid rgba(62,207,178,.3); }
+    .addr-block { font-size: .78rem; color: var(--muted); line-height: 1.5; max-width: 200px; }
+    .addr-name { color: var(--white); font-weight: 500; font-size: .84rem; }
+    .loading { text-align: center; padding: 4rem; color: var(--muted); }
+    .spinner { width: 36px; height: 36px; border-radius: 50%; border: 2px solid rgba(62,207,178,.15); border-top-color: var(--teal); animation: spin 1s linear infinite; margin: 0 auto 1rem; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .empty { text-align: center; padding: 4rem; color: var(--muted); }
+    .empty-icon { font-size: 2.5rem; margin-bottom: 1rem; opacity: .4; }
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.85); backdrop-filter: blur(8px); z-index: 500; display: flex; align-items: center; justify-content: center; padding: 1.5rem; opacity: 0; pointer-events: none; transition: opacity .3s; }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+    .modal { background: #141414; border: 1px solid rgba(255,255,255,.12); border-radius: 16px; padding: 2rem; max-width: 480px; width: 100%; max-height: 90vh; overflow-y: auto; }
+    .modal img { width: 100%; border-radius: 10px; margin-bottom: 1.25rem; }
+    .modal-title { font-family: 'DM Serif Display', serif; font-size: 1.2rem; color: var(--white); margin-bottom: 1rem; }
+    .modal-row { display: flex; justify-content: space-between; gap: 1rem; font-size: .84rem; padding: .5rem 0; border-bottom: 1px solid var(--border); }
+    .modal-row:last-of-type { border: none; }
+    .modal-row span:first-child { color: var(--muted); flex-shrink: 0; }
+    .modal-row span:last-child { text-align: right; }
+    .modal-close { width: 100%; margin-top: 1.25rem; padding: .75rem; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; color: var(--muted); font-family: inherit; font-size: .85rem; cursor: pointer; transition: all .2s; }
+    .modal-close:hover { border-color: var(--teal); color: var(--teal); }
+    .download-btn { display: block; width: 100%; margin-top: .5rem; padding: .75rem; background: var(--teal); border: none; border-radius: 8px; color: var(--black); font-family: inherit; font-size: .85rem; font-weight: 700; cursor: pointer; text-align: center; text-decoration: none; transition: background .2s; }
+    .download-btn:hover { background: #5de0c8; }
+  </style>
+</head>
+<body>
+
+<div class="login-wrap" id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">Pawtraits<span>.</span></div>
+    <p class="login-sub">Admin Dashboard</p>
+    <input type="password" class="login-input" id="pwd-input" placeholder="Enter admin password" onkeydown="if(event.key==='Enter')login()">
+    <button class="login-btn" onclick="login()">Sign In</button>
+    <p class="login-error" id="login-error">Incorrect password</p>
+  </div>
+</div>
+
+<div class="dash" id="dashboard">
+  <nav>
+    <div class="nav-logo">Pawtraits<span>.</span> <small style="font-family:inherit;font-size:.7rem;color:var(--muted);font-weight:400;">Admin</small></div>
+    <div class="nav-right">
+      <span class="nav-badge" id="nav-count">— orders</span>
+      <button class="logout-btn" onclick="logout()">Sign out</button>
+    </div>
+  </nav>
+  <div class="main">
+    <div class="page-header">
+      <h1 class="page-title">Order <span>Dashboard</span></h1>
+      <button class="refresh-btn" onclick="loadOrders()">↻ &nbsp;Refresh</button>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="stat-label">Total Orders</div><div class="stat-value teal" id="stat-total">—</div></div>
+      <div class="stat"><div class="stat-label">New Orders</div><div class="stat-value" id="stat-new">—</div></div>
+      <div class="stat"><div class="stat-label">Printing</div><div class="stat-value" id="stat-printing">—</div></div>
+      <div class="stat"><div class="stat-label">Shipped</div><div class="stat-value" id="stat-shipped">—</div></div>
+      <div class="stat"><div class="stat-label">Revenue</div><div class="stat-value teal" id="stat-revenue">—</div></div>
+    </div>
+    <div class="filters">
+      <button class="filter-btn active" onclick="setFilter('all',this)">All Orders</button>
+      <button class="filter-btn" onclick="setFilter('New Order',this)">🔴 New</button>
+      <button class="filter-btn" onclick="setFilter('Printing',this)">🟡 Printing</button>
+      <button class="filter-btn" onclick="setFilter('Shipped',this)">✅ Shipped</button>
+    </div>
+    <div class="table-wrap">
+      <div class="table-header">Orders</div>
+      <div id="table-body"><div class="loading"><div class="spinner"></div>Loading…</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <img id="modal-img" src="" alt="Portrait">
+    <div class="modal-title" id="modal-title"></div>
+    <div id="modal-details"></div>
+    <a class="download-btn" id="modal-download" href="#" target="_blank">⬇ &nbsp;Download Portrait for Printing</a>
+    <button class="modal-close" onclick="closeModal()">Close</button>
+  </div>
+</div>
+
+<script>
+let allOrders = [], currentFilter = 'all', adminPwd = '';
+
+function login() {
+  const pwd = document.getElementById('pwd-input').value;
+  if (!pwd) return;
+  adminPwd = pwd;
+  document.getElementById('login-error').style.display = 'none';
+  loadOrders();
+}
+
+function logout() {
+  adminPwd = ''; allOrders = [];
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('dashboard').style.display = 'none';
+  document.getElementById('pwd-input').value = '';
+}
+
+async function loadOrders() {
+  document.getElementById('table-body').innerHTML = '<div class="loading"><div class="spinner"></div>Loading…</div>';
+  try {
+    const res = await fetch(`/api/orders?password=${encodeURIComponent(adminPwd)}`);
+    if (res.status === 401) { document.getElementById('login-error').textContent = 'Incorrect password'; document.getElementById('login-error').style.display = 'block'; return; }
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+    allOrders = data.orders || [];
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+    updateStats(); renderTable();
+  } catch (err) {
+    document.getElementById('login-error').textContent = err.message;
+    document.getElementById('login-error').style.display = 'block';
+    document.getElementById('table-body').innerHTML = `<div class="empty"><div class="empty-icon">⚠️</div><p>${err.message}</p></div>`;
+  }
+}
+
+function updateStats() {
+  document.getElementById('stat-total').textContent    = allOrders.length;
+  document.getElementById('stat-new').textContent      = allOrders.filter(o => o['Status'] === 'New Order').length;
+  document.getElementById('stat-printing').textContent = allOrders.filter(o => o['Status'] === 'Printing').length;
+  document.getElementById('stat-shipped').textContent  = allOrders.filter(o => o['Status'] === 'Shipped').length;
+  const rev = allOrders.reduce((s,o) => s + (parseFloat((o['Price']||'0').replace('$',''))||0), 0);
+  document.getElementById('stat-revenue').textContent  = '$' + rev.toFixed(0);
+  document.getElementById('nav-count').textContent     = `${allOrders.length} order${allOrders.length!==1?'s':''}`;
+}
+
+function setFilter(f, btn) {
+  currentFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderTable();
+}
+
+function renderTable() {
+  const rows = currentFilter === 'all' ? allOrders : allOrders.filter(o => o['Status'] === currentFilter);
+  const body = document.getElementById('table-body');
+  if (!rows.length) { body.innerHTML = '<div class="empty"><div class="empty-icon">📭</div><p>No orders found</p></div>'; return; }
+  body.innerHTML = `<table><thead><tr><th>Portrait</th><th>Customer</th><th>Package</th><th>Category</th><th>Price</th><th>Delivery Address</th><th>Date</th><th>Status</th></tr></thead><tbody>${rows.map(o => row(o)).join('')}</tbody></table>`;
+}
+
+function row(o) {
+  const url  = o['Portrait URL'] || '';
+  const img  = url ? `<img class="portrait-thumb" src="${url}" onclick='open_modal(${JSON.stringify(o).replace(/'/g,"&#39;")})'>` : `<div class="no-portrait">No img</div>`;
+  const pkg  = (o['Package']||'').toLowerCase();
+  const pcls = pkg.includes('squire') ? 'pkg-squire' : pkg.includes('noble') ? 'pkg-noble' : 'pkg-royal';
+  const st   = o['Status'] || 'New Order';
+  const scls = st==='New Order' ? 'status-new' : st==='Printing' ? 'status-printing' : 'status-shipped';
+  const addr = [o['Address Line 1'], o['Address Line 2'], o['City'], o['State'], o['Postcode'], o['Country']].filter(Boolean).join(', ');
+  return `<tr>
+    <td>${img}</td>
+    <td><div class="addr-name">${o['Customer Name']||'—'}</div><div style="font-size:.75rem;color:var(--muted)">${o['Email']||''}</div></td>
+    <td><span class="pkg-badge ${pcls}">${o['Package']||'—'}</span></td>
+    <td style="color:var(--muted);font-size:.82rem">${o['Category']||'—'}</td>
+    <td style="font-weight:600">${o['Price']||'—'}</td>
+    <td><div class="addr-block">${addr||'—'}</div></td>
+    <td style="color:var(--muted);font-size:.78rem;white-space:nowrap">${o['Order Date']||'—'}</td>
+    <td><span class="status-badge ${scls}" onclick="cycleStatus('${o.id}',this)">${st}</span></td>
+  </tr>`;
+}
+
+function open_modal(o) {
+  const url = o['Portrait URL'] || '';
+  document.getElementById('modal-img').src = url;
+  document.getElementById('modal-img').style.display = url ? 'block' : 'none';
+  document.getElementById('modal-title').textContent = `${o['Customer Name']||'Order'} — ${o['Package']||''}`;
+  document.getElementById('modal-download').href = url || '#';
+  const addr = [o['Address Line 1'],o['Address Line 2'],o['City'],o['State'],o['Postcode'],o['Country']].filter(Boolean).join(', ');
+  document.getElementById('modal-details').innerHTML = `
+    <div class="modal-row"><span>Email</span><span>${o['Email']||'—'}</span></div>
+    <div class="modal-row"><span>Package</span><span>${o['Package']||'—'}</span></div>
+    <div class="modal-row"><span>Category</span><span>${o['Category']||'—'}</span></div>
+    <div class="modal-row"><span>Price</span><span>${o['Price']||'—'}</span></div>
+    <div class="modal-row"><span>Ship to</span><span>${addr||'—'}</span></div>
+    <div class="modal-row"><span>Date</span><span>${o['Order Date']||'—'}</span></div>
+  `;
+  document.getElementById('modal').classList.add('open');
+}
+
+function closeModal() { document.getElementById('modal').classList.remove('open'); }
+
+function cycleStatus(id, badge) {
+  const list = ['New Order','Printing','Shipped'];
+  const next = list[(list.indexOf(badge.textContent.trim())+1)%3];
+  badge.textContent = next;
+  badge.className   = 'status-badge ' + (next==='New Order'?'status-new':next==='Printing'?'status-printing':'status-shipped');
+  const o = allOrders.find(x => x.id===id);
+  if (o) o['Status'] = next;
+  updateStats();
+}
+</script>
+</body>
+</html>

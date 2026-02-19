@@ -21,8 +21,8 @@ module.exports = async function handler(req, res) {
     const imageDataUrl = `data:${imageMimeType};base64,${imageBase64}`;
     const prompt = stylePrompts[category] || stylePrompts.self;
 
-    // Start prediction using instant-id-artistic for identity preservation
-    const startRes = await fetch('https://api.replicate.com/v1/models/grandlineai/instant-id-artistic/predictions', {
+    // Use versioned endpoint with specific version hash
+    const startRes = await fetch('https://api.replicate.com/v1/predictions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -30,6 +30,7 @@ module.exports = async function handler(req, res) {
         'Prefer': 'wait=60',
       },
       body: JSON.stringify({
+        version: '9cad10c7870bac9d6b587f406aef28208f964454abff5c4152f7dec9b0212a9a',
         input: {
           image: imageDataUrl,
           prompt,

@@ -16,22 +16,27 @@ async function handler(req, res) {
   };
 
   try {
+    const visionBody = {
+      model: 'grok-2-vision-1212',
+      max_tokens: 300,
+      messages: [{ role: 'user', content: [
+        { type: 'image_url', image_url: { url: `data:${imageMimeType};base64,${imageBase64}` } },
+        { type: 'text', text: `Describe this ${catLabel} in vivid detail for a Renaissance portrait painter. Species, age, colours, features, expression. Max 120 words. No preamble.` }
+      ]}]
+    };
+
     const vRes = await fetch('https://api.x.ai/v1/chat/completions', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${XAI_KEY}` },
-      body: JSON.stringify({
-        model: 'grok-2-vision-1212',
-        max_tokens: 300,
-        messages: [{ role: 'user', content: [
-          { type: 'image_url', image_url: { url: `data:${imageMimeType};base64,${imageBase64}`, detail: 'high' } },
-          { type: 'text', text: `Describe this ${catLabel} in vivid detail for a Renaissance portrait painter. Species, age, colours, features, expression. Max 120 words. No preamble.` }
-        ]}]
-      }),
+      body: JSON.stringify(visionBody),
     });
+
     if (!vRes.ok) {
-      const e = await vRes.json().catch(() => ({}));
-      throw new Error(e?.error?.message || `Vision API HTTP ${vRes.status}`);
+      const errText = await vRes.text();
+      console.error('xAI Vision error body:', errText);
+      return res.status(500).json({ error: `Vision API HTTP ${vRes.status}: ${errText}` });
     }
+
     const vData = await vRes.json();
     const description = vData.choices?.[0]?.message?.content?.trim() || 'a noble subject';
 
@@ -42,13 +47,16 @@ async function handler(req, res) {
       headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${XAI_KEY}` },
       body: JSON.stringify({ model: 'grok-2-image', prompt, n: 1, response_format: 'b64_json' }),
     });
+
     if (!iRes.ok) {
-      const e = await iRes.json().catch(() => ({}));
-      throw new Error(e?.error?.message || `Image API HTTP ${iRes.status}`);
+      const errText = await iRes.text();
+      console.error('xAI Image error body:', errText);
+      return res.status(500).json({ error: `Image API HTTP ${iRes.status}: ${errText}` });
     }
+
     const iData = await iRes.json();
     const b64 = iData.data?.[0]?.b64_json;
-    if (!b64) throw new Error('No image returned');
+    if (!b64) return res.status(500).json({ error: 'No image returned from xAI' });
 
     let printifyImageId = null, printifyImageUrl = null;
     const PK = process.env.PRINTIFY_API_KEY, PS = process.env.PRINTIFY_SHOP_ID;
@@ -64,6 +72,7 @@ async function handler(req, res) {
     }
 
     return res.status(200).json({ imageData: `data:image/jpeg;base64,${b64}`, printifyImageId, printifyImageUrl });
+
   } catch (err) {
     console.error('generate error:', err.message);
     return res.status(500).json({ error: err.message });

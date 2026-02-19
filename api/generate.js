@@ -1,8 +1,4 @@
-module.exports.config = {
-  api: { bodyParser: { sizeLimit: '20mb' } }
-};
-
-module.exports = async function handler(req, res) {
+async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   const { imageBase64, imageMimeType = 'image/jpeg', category, catLabel } = req.body;
@@ -72,4 +68,7 @@ module.exports = async function handler(req, res) {
     console.error('generate error:', err.message);
     return res.status(500).json({ error: err.message });
   }
-};
+}
+
+handler.config = { api: { bodyParser: { sizeLimit: '20mb' } } };
+module.exports = handler;

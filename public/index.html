@@ -8,217 +8,251 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=DM+Serif+Display:ital@0;1&family=Instrument+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --black:   #080808;
-      --deep:    #0e0e0e;
-      --surface: #161616;
-      --card:    #111111;
-      --border:  rgba(255,255,255,0.08);
-      --bh:      rgba(255,255,255,0.15);
-      --white:   #f4f0ea;
-      --muted:   rgba(244,240,234,0.45);
-      --teal:    #3ecfb2;
-      --teal-dk: #2aab92;
-      --gold:    #c8a84b;
-      --red:     #e05555;
+      --black:#080808;--deep:#0e0e0e;--surface:#161616;--card:#111111;
+      --border:rgba(255,255,255,0.08);--bh:rgba(255,255,255,0.15);
+      --white:#f4f0ea;--muted:rgba(244,240,234,0.45);
+      --teal:#3ecfb2;--teal-dk:#2aab92;--gold:#c8a84b;--red:#e05555;
     }
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-    body { background: var(--black); color: var(--white); font-family: 'Instrument Sans', sans-serif; font-size: 16px; line-height: 1.6; overflow-x: hidden; min-height: 100vh; }
-    body::after { content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 9999; opacity: .026; background: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E"); background-size: 200px; }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{background:var(--black);color:var(--white);font-family:'Instrument Sans',sans-serif;font-size:16px;line-height:1.6;overflow-x:hidden;min-height:100vh;}
 
-    nav { position: sticky; top: 0; z-index: 300; display: flex; align-items: center; justify-content: space-between; padding: .9rem 2rem; background: rgba(8,8,8,.94); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); }
-    .logo { font-family: 'DM Serif Display', serif; font-size: 1.15rem; color: var(--white); text-decoration: none; }
-    .logo span { color: var(--teal); }
-    .nav-right { display: flex; gap: 1.25rem; align-items: center; }
-    .nav-link { font-size: .82rem; color: var(--muted); text-decoration: none; transition: color .2s; background: none; border: none; cursor: pointer; }
-    .nav-link:hover { color: var(--white); }
-    .nav-api-btn { display: flex; align-items: center; gap: .4rem; font-size: .78rem; font-weight: 500; padding: .42rem .9rem; border: 1px solid var(--border); border-radius: 100px; background: var(--surface); color: var(--muted); cursor: pointer; transition: all .2s; }
-    .nav-api-btn.connected { border-color: rgba(62,207,178,.4); color: var(--teal); background: rgba(62,207,178,.07); }
-    .api-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--muted); transition: background .3s; }
-    .nav-api-btn.connected .api-dot { background: var(--teal); box-shadow: 0 0 6px var(--teal); }
+    .ship-banner{background:var(--teal);color:var(--black);text-align:center;padding:.55rem 1rem;font-size:.8rem;font-weight:600;letter-spacing:.06em;position:sticky;top:0;z-index:400;}
+    .ship-banner span{margin:0 .5rem;}
 
-    .hero { text-align: center; padding: 5.5rem 1.5rem 4.5rem; position: relative; overflow: hidden; }
-    .hero-glow { position: absolute; width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(ellipse, rgba(62,207,178,.065) 0%, transparent 68%); top: 50%; left: 50%; transform: translate(-50%,-50%); pointer-events: none; }
-    .hero-eyebrow { display: inline-flex; align-items: center; gap: .5rem; font-size: .7rem; font-weight: 500; letter-spacing: .15em; text-transform: uppercase; color: var(--teal); margin-bottom: 1.5rem; animation: fadeUp .7s ease both; }
-    .hero-eyebrow::before, .hero-eyebrow::after { content: ''; display: block; width: 22px; height: 1px; background: var(--teal); }
-    .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.6rem, 7vw, 6rem); font-style: italic; font-weight: 900; line-height: .95; letter-spacing: -.02em; color: var(--white); margin-bottom: 1.5rem; animation: fadeUp .7s .1s ease both; }
-    .hero h1 .accent { color: var(--teal); }
-    .hero-sub { font-size: 1rem; color: var(--muted); max-width: 420px; margin: 0 auto 2.25rem; line-height: 1.7; animation: fadeUp .7s .2s ease both; }
-    .hero-sub strong { color: var(--white); font-weight: 500; }
-    .hero-rating { display: flex; align-items: center; gap: .85rem; justify-content: center; flex-wrap: wrap; font-size: .82rem; color: var(--muted); animation: fadeUp .7s .3s ease both; }
-    .hero-rating strong { color: var(--white); }
-    .stars { color: #00b67a; letter-spacing: .05em; }
-    .rsep { width: 1px; height: 14px; background: var(--bh); }
+    nav{position:sticky;top:36px;z-index:300;display:flex;align-items:center;justify-content:space-between;padding:.9rem 2rem;background:rgba(8,8,8,.94);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+    .logo{font-family:'DM Serif Display',serif;font-size:1.15rem;color:var(--white);text-decoration:none;}
+    .logo span{color:var(--teal);}
+    .nav-right{display:flex;gap:1.25rem;align-items:center;}
+    .nav-link{font-size:.82rem;color:var(--muted);text-decoration:none;transition:color .2s;background:none;border:none;cursor:pointer;}
+    .nav-link:hover{color:var(--white);}
+    .nav-api-btn{display:flex;align-items:center;gap:.4rem;font-size:.78rem;font-weight:500;padding:.42rem .9rem;border:1px solid var(--border);border-radius:100px;background:var(--surface);color:var(--muted);cursor:pointer;transition:all .2s;}
+    .nav-api-btn.connected{border-color:rgba(62,207,178,.4);color:var(--teal);background:rgba(62,207,178,.07);}
+    .api-dot{width:6px;height:6px;border-radius:50%;background:var(--teal);box-shadow:0 0 6px var(--teal);}
 
-    .wizard-wrap { max-width: 840px; margin: 0 auto; padding: 0 1.5rem 8rem; }
+    .hero{text-align:center;padding:5.5rem 1.5rem 4.5rem;position:relative;overflow:hidden;}
+    .hero-glow{position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(ellipse,rgba(62,207,178,.065) 0%,transparent 68%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;}
+    .hero-eyebrow{display:inline-flex;align-items:center;gap:.5rem;font-size:.7rem;font-weight:500;letter-spacing:.15em;text-transform:uppercase;color:var(--teal);margin-bottom:1.5rem;animation:fadeUp .7s ease both;}
+    .hero-eyebrow::before,.hero-eyebrow::after{content:'';display:block;width:22px;height:1px;background:var(--teal);}
+    .hero h1{font-family:'Playfair Display',serif;font-size:clamp(2.6rem,7vw,6rem);font-style:italic;font-weight:900;line-height:.95;letter-spacing:-.02em;color:var(--white);margin-bottom:1.5rem;animation:fadeUp .7s .1s ease both;}
+    .hero h1 .accent{color:var(--teal);}
+    .hero-sub{font-size:1rem;color:var(--muted);max-width:420px;margin:0 auto 2.25rem;line-height:1.7;animation:fadeUp .7s .2s ease both;}
+    .hero-sub strong{color:var(--white);font-weight:500;}
+    .hero-rating{display:flex;align-items:center;gap:.85rem;justify-content:center;flex-wrap:wrap;font-size:.82rem;color:var(--muted);animation:fadeUp .7s .3s ease both;}
+    .hero-rating strong{color:var(--white);}
+    .stars{color:#00b67a;letter-spacing:.05em;}
+    .rsep{width:1px;height:14px;background:var(--bh);}
 
-    .progress-bar { display: flex; align-items: flex-start; margin-bottom: 3.5rem; }
-    .pb-step { display: flex; flex-direction: column; align-items: center; flex: 1; position: relative; }
-    .pb-step::before { content: ''; position: absolute; top: 15px; left: 50%; right: -50%; height: 2px; background: var(--border); z-index: 0; }
-    .pb-step:last-child::before { display: none; }
-    .pb-dot { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: .72rem; font-weight: 600; background: var(--surface); border: 2px solid var(--border); color: var(--muted); position: relative; z-index: 1; transition: all .35s; }
-    .pb-step.done .pb-dot { background: var(--teal); border-color: var(--teal); color: var(--black); }
-    .pb-step.done .pb-dot span { display: none; }
-    .pb-step.done .pb-dot::after { content: '✓'; font-size: .72rem; }
-    .pb-step.active .pb-dot { background: var(--teal); border-color: var(--teal); color: var(--black); box-shadow: 0 0 0 4px rgba(62,207,178,.2); }
-    .pb-fill { position: absolute; top: 15px; left: 50%; right: -50%; height: 2px; background: var(--teal); z-index: 0; transform-origin: left; transform: scaleX(0); transition: transform .45s ease; }
-    .pb-step.done .pb-fill { transform: scaleX(1); }
-    .pb-label { font-size: .63rem; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-top: .5rem; text-align: center; white-space: nowrap; transition: color .3s; }
-    .pb-step.active .pb-label, .pb-step.done .pb-label { color: var(--teal); }
+    .wizard-wrap{max-width:900px;margin:0 auto;padding:0 1.5rem 8rem;}
 
-    .step-panel { display: none; animation: fadeUp .4s ease both; }
-    .step-panel.active { display: block; }
-    .step-heading { font-family: 'Playfair Display', serif; font-size: clamp(1.7rem, 3.5vw, 2.5rem); font-style: italic; font-weight: 900; color: var(--white); margin-bottom: .45rem; text-align: center; }
-    .step-heading .accent { color: var(--teal); }
-    .step-desc { font-size: .92rem; color: var(--muted); text-align: center; margin-bottom: 2.5rem; line-height: 1.65; }
+    .progress-bar{display:flex;align-items:flex-start;margin-bottom:3.5rem;}
+    .pb-step{display:flex;flex-direction:column;align-items:center;flex:1;position:relative;}
+    .pb-step::before{content:'';position:absolute;top:15px;left:50%;right:-50%;height:2px;background:var(--border);z-index:0;}
+    .pb-step:last-child::before{display:none;}
+    .pb-dot{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:600;background:var(--surface);border:2px solid var(--border);color:var(--muted);position:relative;z-index:1;transition:all .35s;}
+    .pb-step.done .pb-dot{background:var(--teal);border-color:var(--teal);color:var(--black);}
+    .pb-step.done .pb-dot span{display:none;}
+    .pb-step.done .pb-dot::after{content:'✓';font-size:.72rem;}
+    .pb-step.active .pb-dot{background:var(--teal);border-color:var(--teal);color:var(--black);box-shadow:0 0 0 4px rgba(62,207,178,.2);}
+    .pb-fill{position:absolute;top:15px;left:50%;right:-50%;height:2px;background:var(--teal);z-index:0;transform-origin:left;transform:scaleX(0);transition:transform .45s ease;}
+    .pb-step.done .pb-fill{transform:scaleX(1);}
+    .pb-label{font-size:.6rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-top:.5rem;text-align:center;white-space:nowrap;transition:color .3s;}
+    .pb-step.active .pb-label,.pb-step.done .pb-label{color:var(--teal);}
 
-    .cat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: .85rem; }
-    .cat-card { background: var(--card); border: 1.5px solid var(--border); border-radius: 14px; padding: 1.6rem 1.2rem; cursor: pointer; transition: border-color .25s, background .25s, transform .25s; text-align: center; display: flex; flex-direction: column; gap: .55rem; align-items: center; }
-    .cat-card:hover { border-color: var(--bh); background: #1a1a1a; transform: translateY(-3px); }
-    .cat-card.selected { border-color: var(--teal); background: rgba(62,207,178,.07); box-shadow: 0 0 0 1px var(--teal); }
-    .cat-icon { font-size: 2rem; line-height: 1; }
-    .cat-title { font-family: 'DM Serif Display', serif; font-size: 1rem; color: var(--white); }
-    .cat-desc { font-size: .78rem; color: var(--muted); line-height: 1.5; }
+    .step-panel{display:none;animation:fadeUp .4s ease both;}
+    .step-panel.active{display:block;}
+    .step-heading{font-family:'Playfair Display',serif;font-size:clamp(1.7rem,3.5vw,2.5rem);font-style:italic;font-weight:900;color:var(--white);margin-bottom:.45rem;text-align:center;}
+    .step-heading .accent{color:var(--teal);}
+    .step-desc{font-size:.92rem;color:var(--muted);text-align:center;margin-bottom:2.5rem;line-height:1.65;}
 
-    .upload-zone { border: 2px dashed rgba(62,207,178,.3); border-radius: 16px; background: rgba(62,207,178,.025); padding: 3.5rem 2rem; text-align: center; cursor: pointer; position: relative; transition: border-color .25s, background .25s; }
-    .upload-zone:hover, .upload-zone.drag-over { border-color: var(--teal); background: rgba(62,207,178,.065); }
-    .upload-zone input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
-    .upload-icon { font-size: 2.8rem; margin-bottom: .85rem; opacity: .7; }
-    .upload-zone h3 { font-family: 'DM Serif Display', serif; font-size: 1.35rem; color: var(--white); margin-bottom: .4rem; }
-    .upload-zone p { font-size: .88rem; color: var(--muted); margin-bottom: .3rem; }
-    .upload-zone small { font-size: .7rem; color: rgba(244,240,234,.28); letter-spacing: .08em; text-transform: uppercase; }
-    .upload-tips { display: flex; gap: .75rem; justify-content: center; flex-wrap: wrap; margin-top: 1.75rem; }
-    .upload-tip { display: flex; align-items: center; gap: .35rem; font-size: .78rem; color: var(--muted); background: var(--surface); border: 1px solid var(--border); border-radius: 100px; padding: .3rem .8rem; }
-    .upload-tip::before { content: '✓'; color: var(--teal); font-size: .68rem; }
+    .cat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.85rem;}
+    .cat-card{background:var(--card);border:1.5px solid var(--border);border-radius:14px;padding:1.6rem 1.2rem;cursor:pointer;transition:border-color .25s,background .25s,transform .25s;text-align:center;display:flex;flex-direction:column;gap:.55rem;align-items:center;}
+    .cat-card:hover{border-color:var(--bh);background:#1a1a1a;transform:translateY(-3px);}
+    .cat-card.selected{border-color:var(--teal);background:rgba(62,207,178,.07);box-shadow:0 0 0 1px var(--teal);}
+    .cat-icon{font-size:2rem;line-height:1;}
+    .cat-title{font-family:'DM Serif Display',serif;font-size:1rem;color:var(--white);}
+    .cat-desc{font-size:.78rem;color:var(--muted);line-height:1.5;}
 
-    .gen-wrap { text-align: center; padding: 2.5rem 0; }
-    .gen-spinner { width: 72px; height: 72px; border-radius: 50%; border: 3px solid rgba(62,207,178,.15); border-top-color: var(--teal); animation: spin 1s linear infinite; margin: 0 auto 2rem; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .gen-title { font-family: 'DM Serif Display', serif; font-size: 1.5rem; color: var(--white); margin-bottom: .6rem; }
-    .gen-status { font-size: .88rem; color: var(--teal); margin-bottom: 2rem; min-height: 1.4em; }
-    .gen-steps { display: flex; flex-direction: column; gap: .6rem; max-width: 340px; margin: 0 auto; }
-    .gen-step { display: flex; align-items: center; gap: .75rem; padding: .6rem 1rem; border-radius: 8px; background: var(--surface); border: 1px solid var(--border); font-size: .84rem; color: var(--muted); text-align: left; transition: all .3s; }
-    .gen-step.active { border-color: rgba(62,207,178,.35); color: var(--white); background: rgba(62,207,178,.06); }
-    .gen-step.done { border-color: rgba(62,207,178,.2); color: rgba(244,240,234,.5); }
-    .gen-step-ico { font-size: 1rem; flex-shrink: 0; }
-    .gen-step.active .gen-step-ico { animation: pulse 1.2s ease infinite; }
-    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .4; } }
-    .gen-step-check { font-size: .75rem; color: var(--teal); margin-left: auto; flex-shrink: 0; }
-    .gen-error { display: none; background: rgba(224,85,85,.08); border: 1px solid rgba(224,85,85,.25); border-radius: 10px; padding: 1.5rem; margin-top: 1.5rem; text-align: left; }
-    .gen-error.visible { display: block; }
-    .gen-error-title { font-size: .82rem; font-weight: 600; color: var(--red); margin-bottom: .5rem; }
-    .gen-error-msg { font-size: .82rem; color: rgba(244,240,234,.6); line-height: 1.6; }
-    .gen-error-actions { display: flex; gap: .75rem; margin-top: 1rem; flex-wrap: wrap; }
-    .gen-retry-btn { font-size: .82rem; font-weight: 600; padding: .55rem 1.25rem; background: var(--red); color: white; border: none; border-radius: 6px; cursor: pointer; }
-    .gen-skip-btn { font-size: .82rem; font-weight: 500; padding: .55rem 1.25rem; background: none; border: 1px solid var(--border); border-radius: 6px; color: var(--muted); cursor: pointer; }
+    .style-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;}
+    .style-card{background:var(--card);border:1.5px solid var(--border);border-radius:12px;overflow:hidden;cursor:pointer;transition:border-color .25s,transform .25s;position:relative;}
+    .style-card:hover{border-color:var(--bh);transform:translateY(-3px);}
+    .style-card.selected{border-color:var(--teal);box-shadow:0 0 0 1px var(--teal);}
+    .style-thumb{width:100%;aspect-ratio:3/4;background:linear-gradient(145deg,#1a1208,#2a1e0e);display:flex;align-items:center;justify-content:center;font-size:2.5rem;position:relative;overflow:hidden;}
+    .style-info{padding:.9rem;border-top:1px solid var(--border);}
+    .style-name{font-family:'DM Serif Display',serif;font-size:.95rem;color:var(--white);margin-bottom:.2rem;}
+    .style-era{font-size:.72rem;color:var(--muted);}
+    .style-selected-badge{position:absolute;top:.5rem;right:.5rem;background:var(--teal);color:var(--black);font-size:.6rem;font-weight:700;padding:.2rem .5rem;border-radius:100px;display:none;}
+    .style-card.selected .style-selected-badge{display:block;}
 
-    .preview-wrap { display: flex; flex-direction: column; align-items: center; gap: 1.75rem; }
-    .preview-frame { position: relative; display: inline-block; border-radius: 12px; overflow: hidden; box-shadow: 0 0 0 1px var(--border), 0 24px 60px rgba(0,0,0,.6); max-width: 400px; width: 100%; }
-    .preview-frame canvas { display: block; width: 100%; height: auto; border-radius: 12px; }
-    .preview-badge { position: absolute; bottom: .85rem; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,.72); backdrop-filter: blur(8px); border: 1px solid rgba(62,207,178,.3); border-radius: 100px; padding: .35rem 1rem; font-size: .68rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--teal); white-space: nowrap; }
-    .preview-info { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.4rem; width: 100%; max-width: 400px; }
-    .preview-info-title { font-size: .65rem; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--teal); margin-bottom: .9rem; }
-    .preview-row { display: flex; justify-content: space-between; font-size: .86rem; padding: .5rem 0; border-bottom: 1px solid var(--border); color: var(--muted); }
-    .preview-row:last-child { border-bottom: none; }
-    .preview-row span:last-child { color: var(--white); font-weight: 500; }
+    .upload-zone{border:2px dashed rgba(62,207,178,.3);border-radius:16px;background:rgba(62,207,178,.025);padding:3rem 2rem;text-align:center;cursor:pointer;position:relative;transition:border-color .25s,background .25s;}
+    .upload-zone:hover,.upload-zone.drag-over{border-color:var(--teal);background:rgba(62,207,178,.065);}
+    .upload-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+    .upload-icon{font-size:2.8rem;margin-bottom:.85rem;opacity:.7;}
+    .upload-zone h3{font-family:'DM Serif Display',serif;font-size:1.35rem;color:var(--white);margin-bottom:.4rem;}
+    .upload-zone p{font-size:.88rem;color:var(--muted);margin-bottom:.3rem;}
+    .upload-zone small{font-size:.7rem;color:rgba(244,240,234,.28);letter-spacing:.08em;text-transform:uppercase;}
+    .upload-tips{display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap;margin-top:1.75rem;}
+    .upload-tip{display:flex;align-items:center;gap:.35rem;font-size:.78rem;color:var(--muted);background:var(--surface);border:1px solid var(--border);border-radius:100px;padding:.3rem .8rem;}
+    .upload-tip::before{content:'✓';color:var(--teal);font-size:.68rem;}
+    .upload-previews{display:flex;gap:.75rem;flex-wrap:wrap;margin-top:1.25rem;justify-content:center;}
+    .upload-thumb{width:80px;height:80px;border-radius:8px;object-fit:cover;border:2px solid var(--teal);}
+    .upload-thumb-wrap{position:relative;display:inline-block;}
+    .upload-thumb-remove{position:absolute;top:-6px;right:-6px;background:var(--red);color:#fff;border:none;border-radius:50%;width:18px;height:18px;font-size:.65rem;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:700;}
+    .upload-add-btn{width:80px;height:80px;border-radius:8px;border:2px dashed rgba(62,207,178,.35);background:rgba(62,207,178,.04);color:var(--teal);font-size:1.5rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:border-color .2s,background .2s;}
+    .upload-add-btn:hover{border-color:var(--teal);background:rgba(62,207,178,.1);}
 
-    .pkg-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; align-items: start; }
-    .pkg-card { background: var(--card); border: 1.5px solid var(--border); border-radius: 14px; padding: 1.85rem 1.4rem; cursor: pointer; transition: border-color .25s, background .25s, transform .25s; display: flex; flex-direction: column; position: relative; }
-    .pkg-card:hover { border-color: var(--bh); transform: translateY(-3px); }
-    .pkg-card.selected { border-color: var(--teal); background: rgba(62,207,178,.055); box-shadow: 0 0 0 1px var(--teal); }
-    .pkg-badge-pop { position: absolute; top: -13px; left: 50%; transform: translateX(-50%); background: var(--teal); color: var(--black); font-size: .6rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; padding: .28rem .8rem; border-radius: 100px; white-space: nowrap; }
-    .pkg-badge-val { position: absolute; top: -13px; left: 50%; transform: translateX(-50%); background: var(--black); color: var(--white); font-size: .6rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; padding: .26rem .8rem; border-radius: 100px; border: 1.5px solid rgba(255,255,255,.28); white-space: nowrap; }
-    .pkg-incl { display: flex; justify-content: center; margin-bottom: 1rem; }
-    .pkg-incl span { font-size: .66rem; font-weight: 500; padding: .2rem .65rem; border-radius: 100px; background: rgba(62,207,178,.14); color: var(--teal); }
-    .pkg-name { font-family: 'DM Serif Display', serif; font-size: 1.4rem; color: var(--white); text-align: center; margin-bottom: .8rem; }
-    .pkg-price { font-size: 3.2rem; font-weight: 800; line-height: 1; color: var(--white); text-align: center; margin-bottom: .3rem; }
-    .pkg-price sup { font-size: 1.4rem; vertical-align: super; font-weight: 700; }
-    .pkg-count { font-size: .82rem; color: var(--muted); text-align: center; margin-bottom: 1.4rem; }
-    .pkg-feats { list-style: none; display: flex; flex-direction: column; gap: .55rem; margin-bottom: 1.5rem; flex: 1; }
-    .pkg-feats li { font-size: .8rem; color: rgba(244,240,234,.7); display: flex; align-items: flex-start; gap: .5rem; line-height: 1.4; }
-    .pkg-feats li::before { content: '✓'; color: var(--teal); font-size: .7rem; flex-shrink: 0; margin-top: .15rem; font-weight: 700; }
-    .pkg-sel-btn { display: block; width: 100%; padding: .85rem; border-radius: 8px; font-size: .86rem; font-weight: 600; background: var(--white); color: var(--black); border: none; cursor: pointer; text-align: center; transition: background .2s; }
-    .pkg-card.selected .pkg-sel-btn { background: var(--teal); }
-    .pkg-sel-btn:hover { background: var(--teal); }
+    .gen-wrap{text-align:center;padding:2.5rem 0;}
+    .gen-spinner{width:72px;height:72px;border-radius:50%;border:3px solid rgba(62,207,178,.15);border-top-color:var(--teal);animation:spin 1s linear infinite;margin:0 auto 2rem;}
+    @keyframes spin{to{transform:rotate(360deg);}}
+    .gen-title{font-family:'DM Serif Display',serif;font-size:1.5rem;color:var(--white);margin-bottom:.6rem;}
+    .gen-status{font-size:.88rem;color:var(--teal);margin-bottom:2rem;min-height:1.4em;}
+    .gen-steps{display:flex;flex-direction:column;gap:.6rem;max-width:340px;margin:0 auto;}
+    .gen-step{display:flex;align-items:center;gap:.75rem;padding:.6rem 1rem;border-radius:8px;background:var(--surface);border:1px solid var(--border);font-size:.84rem;color:var(--muted);text-align:left;transition:all .3s;}
+    .gen-step.active{border-color:rgba(62,207,178,.35);color:var(--white);background:rgba(62,207,178,.06);}
+    .gen-step.done{border-color:rgba(62,207,178,.2);color:rgba(244,240,234,.5);}
+    .gen-step-ico{font-size:1rem;flex-shrink:0;}
+    .gen-step.active .gen-step-ico{animation:pulse 1.2s ease infinite;}
+    @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
+    .gen-step-check{font-size:.75rem;color:var(--teal);margin-left:auto;flex-shrink:0;}
+    .gen-error{display:none;background:rgba(224,85,85,.08);border:1px solid rgba(224,85,85,.25);border-radius:10px;padding:1.5rem;margin-top:1.5rem;text-align:left;}
+    .gen-error.visible{display:block;}
+    .gen-error-title{font-size:.82rem;font-weight:600;color:var(--red);margin-bottom:.5rem;}
+    .gen-error-msg{font-size:.82rem;color:rgba(244,240,234,.6);line-height:1.6;}
+    .gen-error-actions{display:flex;gap:.75rem;margin-top:1rem;flex-wrap:wrap;}
+    .gen-retry-btn{font-size:.82rem;font-weight:600;padding:.55rem 1.25rem;background:var(--red);color:white;border:none;border-radius:6px;cursor:pointer;}
+    .gen-skip-btn{font-size:.82rem;font-weight:500;padding:.55rem 1.25rem;background:none;border:1px solid var(--border);border-radius:6px;color:var(--muted);cursor:pointer;}
 
-    .checkout-wrap { max-width: 500px; margin: 0 auto; }
-    .order-summary { background: var(--card); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; margin-bottom: 1.4rem; }
-    .os-header { background: var(--surface); padding: 1.1rem 1.5rem; font-size: .68rem; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--teal); border-bottom: 1px solid var(--border); }
-    .os-body { padding: 1.4rem 1.5rem; display: flex; flex-direction: column; gap: .9rem; }
-    .os-row { display: flex; justify-content: space-between; align-items: flex-start; font-size: .88rem; }
-    .os-label { color: var(--muted); flex-shrink: 0; }
-    .os-val { color: var(--white); font-weight: 500; text-align: right; max-width: 58%; }
-    .os-thumb { width: 52px; height: 52px; border-radius: 8px; object-fit: cover; border: 1px solid var(--border); flex-shrink: 0; }
-    .os-divider { border: none; border-top: 1px solid var(--border); }
-    .os-total { display: flex; justify-content: space-between; align-items: center; font-size: 1rem; font-weight: 600; }
-    .os-total .os-price { font-size: 1.55rem; font-weight: 800; color: var(--teal); }
-    .pay-methods { display: flex; align-items: center; gap: .45rem; flex-wrap: wrap; margin-bottom: .9rem; }
-    .pay-chip { font-size: .66rem; font-weight: 600; padding: .25rem .6rem; background: var(--surface); border: 1px solid var(--border); border-radius: 4px; color: var(--muted); }
-    .pay-secure { display: flex; align-items: center; gap: .35rem; font-size: .73rem; color: var(--muted); margin-left: auto; }
-    .pay-note { font-size: .8rem; color: var(--muted); line-height: 1.65; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: .95rem 1.15rem; margin-bottom: 1.4rem; }
-    .pay-note strong { color: var(--white); font-weight: 500; }
-    .pay-btn { width: 100%; padding: 1.05rem; font-family: 'Instrument Sans', sans-serif; font-size: .98rem; font-weight: 700; background: var(--teal); color: var(--black); border: none; border-radius: 10px; cursor: pointer; transition: background .2s, transform .2s, box-shadow .2s; }
-    .pay-btn:hover { background: #5de0c8; transform: translateY(-2px); box-shadow: 0 8px 28px rgba(62,207,178,.25); }
+    .preview-wrap{display:flex;flex-direction:column;align-items:center;gap:1.75rem;}
+    .preview-frame{position:relative;display:inline-block;border-radius:12px;overflow:hidden;box-shadow:0 0 0 1px var(--border),0 24px 60px rgba(0,0,0,.6);max-width:400px;width:100%;}
+    .preview-frame canvas,.preview-frame img{display:block;width:100%;height:auto;border-radius:12px;}
+    .preview-badge{position:absolute;bottom:.85rem;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.72);backdrop-filter:blur(8px);border:1px solid rgba(62,207,178,.3);border-radius:100px;padding:.35rem 1rem;font-size:.68rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);white-space:nowrap;}
+    .preview-info{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.4rem;width:100%;max-width:400px;}
+    .preview-info-title{font-size:.65rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);margin-bottom:.9rem;}
+    .preview-row{display:flex;justify-content:space-between;font-size:.86rem;padding:.5rem 0;border-bottom:1px solid var(--border);color:var(--muted);}
+    .preview-row:last-child{border-bottom:none;}
+    .preview-row span:last-child{color:var(--white);font-weight:500;}
+    .gen-history{margin-top:2rem;width:100%;max-width:600px;}
+    .gen-history-title{font-size:.7rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:.9rem;text-align:center;}
+    .gen-history-grid{display:flex;gap:.75rem;flex-wrap:wrap;justify-content:center;}
+    .gen-history-thumb{width:90px;height:90px;border-radius:8px;object-fit:cover;cursor:pointer;border:2px solid transparent;transition:border-color .2s,transform .2s;opacity:.65;}
+    .gen-history-thumb:hover{transform:scale(1.05);opacity:.9;}
+    .gen-history-thumb.active{border-color:var(--teal);opacity:1;}
+    .preview-actions{display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap;margin-top:.5rem;}
+    .preview-retry-btn{font-size:.84rem;font-weight:600;padding:.65rem 1.4rem;background:none;border:1px solid var(--border);border-radius:8px;color:var(--muted);cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:.4rem;}
+    .preview-retry-btn:hover{border-color:var(--teal);color:var(--teal);}
 
-    .step-nav { display: flex; align-items: center; justify-content: space-between; margin-top: 2.25rem; gap: 1rem; }
-    .btn-back { display: flex; align-items: center; gap: .45rem; font-size: .84rem; font-weight: 500; color: var(--muted); background: none; border: 1px solid var(--border); border-radius: 8px; padding: .65rem 1.2rem; cursor: pointer; transition: color .2s, border-color .2s; }
-    .btn-back:hover { color: var(--white); border-color: var(--bh); }
-    .btn-next { display: flex; align-items: center; gap: .45rem; font-size: .88rem; font-weight: 600; color: var(--black); background: var(--teal); border: none; border-radius: 8px; padding: .75rem 1.9rem; cursor: pointer; transition: background .2s, transform .2s, box-shadow .2s; margin-left: auto; }
-    .btn-next:hover { background: #5de0c8; transform: translateY(-2px); box-shadow: 0 6px 22px rgba(62,207,178,.22); }
-    .btn-next:disabled { opacity: .38; cursor: not-allowed; transform: none !important; box-shadow: none !important; }
+    .pkg-banner{background:rgba(62,207,178,.07);border:1px solid rgba(62,207,178,.2);border-radius:10px;padding:.75rem 1.25rem;text-align:center;font-size:.82rem;color:var(--teal);font-weight:600;margin-bottom:1.75rem;display:flex;align-items:center;justify-content:center;gap:.5rem;}
+    .pkg-grid-fable{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem;align-items:start;}
+    .pkg-card-f{background:var(--card);border:1.5px solid var(--border);border-radius:16px;padding:2rem 1.5rem;cursor:pointer;transition:border-color .25s,background .25s,transform .2s;display:flex;flex-direction:column;position:relative;}
+    .pkg-card-f:hover{border-color:var(--bh);transform:translateY(-2px);}
+    .pkg-card-f.selected{border-color:var(--teal);background:rgba(62,207,178,.04);box-shadow:0 0 0 1px var(--teal);}
+    .pkg-card-f.royal-card{background:rgba(62,207,178,.04);border-color:rgba(62,207,178,.3);}
+    .pkg-badge-top{position:absolute;top:-13px;left:50%;transform:translateX(-50%);font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.28rem .9rem;border-radius:100px;white-space:nowrap;}
+    .pkg-badge-pop{background:var(--teal);color:var(--black);}
+    .pkg-badge-gift{background:#7c3aed;color:#fff;}
+    .pkg-icon{text-align:center;font-size:1.4rem;margin-bottom:.75rem;}
+    .pkg-name-f{font-family:'DM Serif Display',serif;font-size:1.25rem;color:var(--white);text-align:center;margin-bottom:.6rem;}
+    .pkg-price-wrap{text-align:center;margin-bottom:.3rem;}
+    .pkg-orig{font-size:.9rem;color:var(--muted);text-decoration:line-through;margin-right:.3rem;}
+    .pkg-price-f{font-size:2.6rem;font-weight:800;line-height:1;color:var(--white);}
+    .pkg-timer{font-size:.72rem;color:var(--teal);text-align:center;margin-bottom:1rem;min-height:1.1em;}
+    .pkg-desc{font-size:.82rem;color:var(--muted);text-align:center;margin-bottom:1.1rem;line-height:1.55;}
+    .pkg-size-label{font-size:.68rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.45rem;}
+    .pkg-size-select{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:.65rem .9rem;color:var(--white);font-family:'Instrument Sans',sans-serif;font-size:.86rem;margin-bottom:1rem;outline:none;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%233ecfb2' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right .9rem center;}
+    .pkg-size-select:focus{border-color:var(--teal);}
+    .pkg-feats-f{list-style:none;display:flex;flex-direction:column;gap:.5rem;margin-bottom:1.4rem;flex:1;}
+    .pkg-feats-f li{font-size:.8rem;color:rgba(244,240,234,.7);display:flex;align-items:flex-start;gap:.45rem;line-height:1.4;}
+    .pkg-feats-f li::before{content:'✓';color:var(--teal);font-size:.7rem;flex-shrink:0;margin-top:.15rem;font-weight:700;}
+    .pkg-ship-banner{display:flex;align-items:center;gap:.5rem;background:rgba(62,207,178,.08);border:1px solid rgba(62,207,178,.18);border-radius:8px;padding:.6rem .9rem;font-size:.78rem;color:var(--teal);margin-bottom:1rem;}
+    .pkg-digital-tag{font-size:.72rem;color:var(--teal);text-align:center;margin-bottom:.85rem;opacity:.8;}
+    .pkg-sel-btn-f{display:block;width:100%;padding:.85rem;border-radius:10px;font-size:.9rem;font-weight:700;background:var(--white);color:var(--black);border:none;cursor:pointer;text-align:center;transition:background .2s;}
+    .pkg-card-f.selected .pkg-sel-btn-f,.pkg-sel-btn-f:hover{background:var(--teal);color:var(--black);}
+    .pkg-view-packs{text-align:center;font-size:.8rem;color:var(--muted);margin-top:.75rem;}
+    .pkg-view-packs a{color:var(--teal);text-decoration:none;}
 
-    .info-section { padding: 5rem 1.5rem; }
-    .info-inner { max-width: 960px; margin: 0 auto; }
-    .stag { display: inline-flex; align-items: center; gap: .4rem; font-size: .68rem; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--teal); margin-bottom: 1rem; }
-    .stag::before { content: ''; display: block; width: 18px; height: 1px; background: var(--teal); }
-    .sh { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 3.5vw, 2.9rem); font-style: italic; font-weight: 900; line-height: 1.1; color: var(--white); margin-bottom: .85rem; }
-    .how-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.15rem; margin-top: 2.75rem; }
-    .how-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.6rem; transition: border-color .3s; }
-    .how-card:hover { border-color: var(--bh); }
-    .how-num { font-family: 'Playfair Display', serif; font-size: 2.2rem; font-style: italic; font-weight: 900; color: rgba(62,207,178,.12); line-height: 1; margin-bottom: .75rem; }
-    .how-ico { font-size: 1.3rem; margin-bottom: .6rem; }
-    .how-title { font-family: 'DM Serif Display', serif; font-size: 1rem; color: var(--white); margin-bottom: .35rem; }
-    .how-desc { font-size: .83rem; color: var(--muted); line-height: 1.6; }
-    .rev-strip { background: var(--deep); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 5rem 1.5rem; }
-    .rev-inner { max-width: 960px; margin: 0 auto; }
-    .rev-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 2.75rem; }
-    .rv { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.4rem; transition: border-color .3s; }
-    .rv:hover { border-color: var(--bh); }
-    .rv-stars { color: #00b67a; font-size: .8rem; margin-bottom: .8rem; letter-spacing: .1em; }
-    .rv-text { font-size: .88rem; color: rgba(244,240,234,.78); font-style: italic; line-height: 1.7; margin-bottom: 1rem; }
-    .rv-author { font-size: .73rem; color: var(--muted); display: flex; align-items: center; gap: .5rem; }
-    .rv-av { width: 26px; height: 26px; border-radius: 50%; background: rgba(62,207,178,.14); border: 1px solid rgba(62,207,178,.3); display: flex; align-items: center; justify-content: center; font-size: .72rem; color: var(--teal); font-weight: 600; }
-    .faq-list { margin-top: 2.5rem; }
-    .fi { border-bottom: 1px solid var(--border); }
-    .fq { width: 100%; background: none; border: none; text-align: left; padding: 1.2rem 0; font-family: 'DM Serif Display', serif; font-size: 1rem; color: var(--white); cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
-    .fq::after { content: '+'; font-size: 1.25rem; color: var(--teal); flex-shrink: 0; font-weight: 300; transition: transform .3s; }
-    .fi.open .fq::after { transform: rotate(45deg); }
-    .fa { max-height: 0; overflow: hidden; transition: max-height .4s ease; }
-    .fa p { padding-bottom: 1.2rem; font-size: .87rem; color: var(--muted); line-height: 1.75; }
-    footer { background: #050505; border-top: 1px solid var(--border); padding: 2.5rem 2rem; }
-    .footer-inner { max-width: 960px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.25rem; }
-    .footer-logo { font-family: 'DM Serif Display', serif; font-size: 1.05rem; }
-    .footer-logo span { color: var(--teal); }
-    .footer-links { display: flex; gap: 1.25rem; flex-wrap: wrap; }
-    .footer-links a { font-size: .8rem; color: var(--muted); text-decoration: none; transition: color .2s; }
-    .footer-links a:hover { color: var(--teal); }
-    .footer-copy { font-size: .73rem; color: rgba(244,240,234,.22); text-align: center; padding-top: 1.25rem; border-top: 1px solid var(--border); max-width: 960px; margin: 1.25rem auto 0; }
+    .checkout-wrap{max-width:500px;margin:0 auto;}
+    .order-summary{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:1.4rem;}
+    .os-header{background:var(--surface);padding:1.1rem 1.5rem;font-size:.68rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);border-bottom:1px solid var(--border);}
+    .os-body{padding:1.4rem 1.5rem;display:flex;flex-direction:column;gap:.9rem;}
+    .os-row{display:flex;justify-content:space-between;align-items:flex-start;font-size:.88rem;}
+    .os-label{color:var(--muted);flex-shrink:0;}
+    .os-val{color:var(--white);font-weight:500;text-align:right;max-width:58%;}
+    .os-thumb{width:52px;height:52px;border-radius:8px;object-fit:cover;border:1px solid var(--border);flex-shrink:0;}
+    .os-divider{border:none;border-top:1px solid var(--border);}
+    .os-total{display:flex;justify-content:space-between;align-items:center;font-size:1rem;font-weight:600;}
+    .os-total .os-price{font-size:1.55rem;font-weight:800;color:var(--teal);}
+    .pay-methods{display:flex;align-items:center;gap:.45rem;flex-wrap:wrap;margin-bottom:.9rem;}
+    .pay-chip{font-size:.66rem;font-weight:600;padding:.25rem .6rem;background:var(--surface);border:1px solid var(--border);border-radius:4px;color:var(--muted);letter-spacing:.04em;}
+    .pay-secure{display:flex;align-items:center;gap:.35rem;font-size:.73rem;color:var(--muted);margin-left:auto;}
+    .pay-note{font-size:.8rem;color:var(--muted);line-height:1.65;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:.95rem 1.15rem;margin-bottom:1.4rem;}
+    .pay-note strong{color:var(--white);font-weight:500;}
+    .pay-btn{width:100%;padding:1.05rem;font-family:'Instrument Sans',sans-serif;font-size:.98rem;font-weight:700;background:var(--teal);color:var(--black);border:none;border-radius:10px;cursor:pointer;transition:background .2s,transform .2s;}
+    .pay-btn:hover{background:#5de0c8;transform:translateY(-2px);}
 
-    .reveal { opacity: 0; transform: translateY(20px); transition: opacity .6s ease, transform .6s ease; }
-    .reveal.visible { opacity: 1; transform: none; }
-    @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+    .step-nav{display:flex;align-items:center;justify-content:space-between;margin-top:2.25rem;gap:1rem;}
+    .btn-back{display:flex;align-items:center;gap:.45rem;font-size:.84rem;font-weight:500;color:var(--muted);background:none;border:1px solid var(--border);border-radius:8px;padding:.65rem 1.2rem;cursor:pointer;transition:color .2s,border-color .2s;}
+    .btn-back:hover{color:var(--white);border-color:var(--bh);}
+    .btn-next{display:flex;align-items:center;gap:.45rem;font-size:.88rem;font-weight:600;color:var(--black);background:var(--teal);border:none;border-radius:8px;padding:.75rem 1.9rem;cursor:pointer;transition:background .2s,transform .2s;margin-left:auto;}
+    .btn-next:hover{background:#5de0c8;transform:translateY(-2px);}
+    .btn-next:disabled{opacity:.38;cursor:not-allowed;transform:none !important;}
 
-    @media (max-width: 680px) {
-      .cat-grid { grid-template-columns: repeat(2, 1fr); }
-      .pkg-grid { grid-template-columns: 1fr; max-width: 360px; margin: 0 auto; }
-      .pb-label { display: none; }
-      .hero h1 { font-size: 2.5rem; }
-      nav { padding: .85rem 1.1rem; }
-      .wizard-wrap { padding: 0 1rem 6rem; }
+    .info-section{padding:5rem 1.5rem;}
+    .info-inner{max-width:960px;margin:0 auto;}
+    .stag{display:inline-flex;align-items:center;gap:.4rem;font-size:.68rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);margin-bottom:1rem;}
+    .stag::before{content:'';display:block;width:18px;height:1px;background:var(--teal);}
+    .sh{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,3.5vw,2.9rem);font-style:italic;font-weight:900;line-height:1.1;color:var(--white);margin-bottom:.85rem;}
+    .how-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.15rem;margin-top:2.75rem;}
+    .how-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.6rem;transition:border-color .3s;}
+    .how-card:hover{border-color:var(--bh);}
+    .how-num{font-family:'Playfair Display',serif;font-size:2.2rem;font-style:italic;font-weight:900;color:rgba(62,207,178,.12);line-height:1;margin-bottom:.75rem;}
+    .how-ico{font-size:1.3rem;margin-bottom:.6rem;}
+    .how-title{font-family:'DM Serif Display',serif;font-size:1rem;color:var(--white);margin-bottom:.35rem;}
+    .how-desc{font-size:.83rem;color:var(--muted);line-height:1.6;}
+    .rev-strip{background:var(--deep);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:5rem 1.5rem;}
+    .rev-inner{max-width:960px;margin:0 auto;}
+    .rev-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1rem;margin-top:2.75rem;}
+    .rv{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.4rem;transition:border-color .3s;}
+    .rv:hover{border-color:var(--bh);}
+    .rv-stars{color:#00b67a;font-size:.8rem;margin-bottom:.8rem;letter-spacing:.1em;}
+    .rv-text{font-size:.88rem;color:rgba(244,240,234,.78);font-style:italic;line-height:1.7;margin-bottom:1rem;}
+    .rv-author{font-size:.73rem;color:var(--muted);display:flex;align-items:center;gap:.5rem;}
+    .rv-av{width:26px;height:26px;border-radius:50%;background:rgba(62,207,178,.14);border:1px solid rgba(62,207,178,.3);display:flex;align-items:center;justify-content:center;font-size:.72rem;color:var(--teal);font-weight:600;}
+    .faq-list{margin-top:2.5rem;}
+    .fi{border-bottom:1px solid var(--border);}
+    .fq{width:100%;background:none;border:none;text-align:left;padding:1.2rem 0;font-family:'DM Serif Display',serif;font-size:1rem;color:var(--white);cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:1rem;}
+    .fq::after{content:'+';font-size:1.25rem;color:var(--teal);flex-shrink:0;font-weight:300;transition:transform .3s;}
+    .fi.open .fq::after{transform:rotate(45deg);}
+    .fa{max-height:0;overflow:hidden;transition:max-height .4s ease;}
+    .fa p{padding-bottom:1.2rem;font-size:.87rem;color:var(--muted);line-height:1.75;}
+    footer{background:#050505;border-top:1px solid var(--border);padding:2.5rem 2rem;}
+    .footer-inner{max-width:960px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1.25rem;}
+    .footer-logo{font-family:'DM Serif Display',serif;font-size:1.05rem;}
+    .footer-logo span{color:var(--teal);}
+    .footer-links{display:flex;gap:1.25rem;flex-wrap:wrap;}
+    .footer-links a{font-size:.8rem;color:var(--muted);text-decoration:none;transition:color .2s;}
+    .footer-links a:hover{color:var(--teal);}
+    .footer-copy{font-size:.73rem;color:rgba(244,240,234,.22);text-align:center;padding-top:1.25rem;border-top:1px solid var(--border);max-width:960px;margin:1.25rem auto 0;}
+    .reveal{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease;}
+    .reveal.visible{opacity:1;transform:none;}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+
+    @media(max-width:680px){
+      .cat-grid{grid-template-columns:repeat(2,1fr);}
+      .style-grid{grid-template-columns:repeat(2,1fr);}
+      .pkg-grid-fable{grid-template-columns:1fr;max-width:360px;margin:0 auto;}
+      .pb-label{display:none;}
+      .hero h1{font-size:2.5rem;}
+      nav{padding:.85rem 1.1rem;}
+      .wizard-wrap{padding:0 1rem 6rem;}
+      .ship-banner{font-size:.72rem;}
     }
   </style>
 </head>
 <body>
+
+<div class="ship-banner">
+  🚚 <span>Free Shipping on All Prints</span> · <span>Worldwide Delivery</span> · <span>7–10 Business Days</span>
+</div>
 
 <nav>
   <a class="logo" href="#">Pawtraits<span>.</span></a>
@@ -227,36 +261,39 @@
     <a class="nav-link" href="#faq">FAQ</a>
     <div class="nav-api-btn connected" style="cursor:default;">
       <span class="api-dot"></span>
-      <span>Grok AI Active</span>
+      <span>AI Active</span>
     </div>
   </div>
 </nav>
 
 <section class="hero">
   <div class="hero-glow"></div>
-  <div class="hero-eyebrow">Powered by Grok AI</div>
+  <div class="hero-eyebrow">Powered by AI</div>
   <h1>Upload. Generate.<br><span class="accent">Immortalise.</span></h1>
-  <p class="hero-sub">Upload your photo — our AI paints it as a Renaissance masterpiece. <strong>Printed on archival canvas and shipped to your door.</strong></p>
+  <p class="hero-sub">Upload your photo — our AI paints it as an aristocratic masterpiece. <strong>Printed on archival canvas and shipped to your door.</strong></p>
   <div class="hero-rating">
     <div class="stars">★★★★★</div>
     <strong>4.9 / 5</strong>
     <div class="rsep"></div>
     <span>2,400+ portraits delivered</span>
     <div class="rsep"></div>
-    <span>Ships worldwide</span>
+    <span>Ships worldwide · Free</span>
   </div>
 </section>
 
 <div class="wizard-wrap">
+
   <div class="progress-bar" id="progress-bar">
     <div class="pb-step active" data-step="1"><div class="pb-dot"><span>1</span></div><div class="pb-fill"></div><div class="pb-label">Subject</div></div>
-    <div class="pb-step" data-step="2"><div class="pb-dot"><span>2</span></div><div class="pb-fill"></div><div class="pb-label">Upload</div></div>
-    <div class="pb-step" data-step="3"><div class="pb-dot"><span>3</span></div><div class="pb-fill"></div><div class="pb-label">Generating</div></div>
-    <div class="pb-step" data-step="4"><div class="pb-dot"><span>4</span></div><div class="pb-fill"></div><div class="pb-label">Preview</div></div>
-    <div class="pb-step" data-step="5"><div class="pb-dot"><span>5</span></div><div class="pb-fill"></div><div class="pb-label">Package</div></div>
-    <div class="pb-step" data-step="6"><div class="pb-dot"><span>6</span></div><div class="pb-fill"></div><div class="pb-label">Checkout</div></div>
+    <div class="pb-step" data-step="2"><div class="pb-dot"><span>2</span></div><div class="pb-fill"></div><div class="pb-label">Style</div></div>
+    <div class="pb-step" data-step="3"><div class="pb-dot"><span>3</span></div><div class="pb-fill"></div><div class="pb-label">Upload</div></div>
+    <div class="pb-step" data-step="4"><div class="pb-dot"><span>4</span></div><div class="pb-fill"></div><div class="pb-label">Generating</div></div>
+    <div class="pb-step" data-step="5"><div class="pb-dot"><span>5</span></div><div class="pb-fill"></div><div class="pb-label">Preview</div></div>
+    <div class="pb-step" data-step="6"><div class="pb-dot"><span>6</span></div><div class="pb-fill"></div><div class="pb-label">Package</div></div>
+    <div class="pb-step" data-step="7"><div class="pb-dot"><span>7</span></div><div class="pb-fill"></div><div class="pb-label">Checkout</div></div>
   </div>
 
+  <!-- STEP 1: CATEGORY -->
   <div class="step-panel active" id="step-1">
     <h2 class="step-heading">What would you like to <span class="accent">immortalise?</span></h2>
     <p class="step-desc">Choose your portrait category — our AI will style it accordingly.</p>
@@ -265,21 +302,37 @@
       <div class="cat-card" data-cat="family" onclick="selectCat(this)"><div class="cat-icon">👨‍👩‍👧</div><div class="cat-title">Family</div><div class="cat-desc">The whole household in one masterpiece</div></div>
       <div class="cat-card" data-cat="children" onclick="selectCat(this)"><div class="cat-icon">🧒</div><div class="cat-title">Children</div><div class="cat-desc">Crown your little one for the ages</div></div>
       <div class="cat-card" data-cat="couples" onclick="selectCat(this)"><div class="cat-icon">💑</div><div class="cat-title">Couples</div><div class="cat-desc">Weddings, anniversaries, or simply love</div></div>
-      <div class="cat-card" data-cat="self" onclick="selectCat(this)"><div class="cat-icon">🪞</div><div class="cat-title">Self-Portrait</div><div class="cat-desc">You, rendered as a 17th-century noble</div></div>
+      <div class="cat-card" data-cat="self" onclick="selectCat(this)"><div class="cat-icon">🪞</div><div class="cat-title">Self-Portrait</div><div class="cat-desc">You, rendered as an 18th-century noble</div></div>
     </div>
-    <div class="step-nav"><div></div><button class="btn-next" id="btn-next-1" disabled onclick="goToStep(2)">Continue &nbsp;→</button></div>
+    <div class="step-nav">
+      <div></div>
+      <button class="btn-next" id="btn-next-1" disabled onclick="goToStep(2)">Choose Style &nbsp;→</button>
+    </div>
   </div>
 
+  <!-- STEP 2: STYLE -->
   <div class="step-panel" id="step-2">
-    <h2 class="step-heading">Upload your <span class="accent">photo</span></h2>
-    <p class="step-desc">Share a clear, well-lit photo. The face should be visible and in focus.</p>
-    <div class="upload-zone" id="upload-zone">
-      <input type="file" id="photo-input" accept="image/*" onchange="handleFile(this.files[0])">
-      <div class="upload-icon">📸</div>
-      <h3>Drop your photo here</h3>
-      <p>or click anywhere to browse</p>
-      <small>JPG · PNG · HEIC &nbsp;·&nbsp; Max 20 MB</small>
+    <h2 class="step-heading">Choose your <span class="accent">style</span></h2>
+    <p class="step-desc">Each style reflects a distinct era of portrait painting — pick the one that speaks to you.</p>
+    <div class="style-grid" id="style-grid"></div>
+    <div class="step-nav">
+      <button class="btn-back" onclick="goToStep(1)">← Back</button>
+      <button class="btn-next" id="btn-next-2" disabled onclick="goToStep(3)">Upload Photo &nbsp;→</button>
     </div>
+  </div>
+
+  <!-- STEP 3: UPLOAD -->
+  <div class="step-panel" id="step-3">
+    <h2 class="step-heading">Upload your <span class="accent">photo</span></h2>
+    <p class="step-desc">Upload one or more photos. For groups, add each person separately — our AI will combine them into one portrait.</p>
+    <div class="upload-zone" id="upload-zone">
+      <input type="file" id="photo-input" accept="image/*" multiple onchange="handleFiles(this.files)">
+      <div class="upload-icon">📸</div>
+      <h3 id="upload-h3">Drop your photo here</h3>
+      <p id="upload-p">or click to browse · add up to 4 photos</p>
+      <small>JPG · PNG · HEIC &nbsp;·&nbsp; Max 20 MB each</small>
+    </div>
+    <div class="upload-previews" id="upload-previews"></div>
     <div class="upload-tips">
       <div class="upload-tip">Face clearly visible</div>
       <div class="upload-tip">Good natural lighting</div>
@@ -287,27 +340,28 @@
       <div class="upload-tip">Front-facing works best</div>
     </div>
     <div class="step-nav">
-      <button class="btn-back" onclick="goToStep(1)">← Back</button>
-      <button class="btn-next" id="btn-next-2" disabled onclick="startGeneration()">Generate Portrait &nbsp;→</button>
+      <button class="btn-back" onclick="goToStep(2)">← Back</button>
+      <button class="btn-next" id="btn-next-3" disabled onclick="startGeneration()">Generate Portrait &nbsp;→</button>
     </div>
   </div>
 
-  <div class="step-panel" id="step-3">
+  <!-- STEP 4: GENERATING -->
+  <div class="step-panel" id="step-4">
     <h2 class="step-heading">Creating your <span class="accent">masterpiece</span></h2>
-    <p class="step-desc">Grok AI is painting your Renaissance portrait. This takes about 20–30 seconds.</p>
+    <p class="step-desc">Our AI is painting your portrait. This takes about 20–40 seconds.</p>
     <div class="gen-wrap">
       <div class="gen-spinner" id="gen-spinner"></div>
       <div class="gen-title" id="gen-title">Analysing your photo…</div>
-      <div class="gen-status" id="gen-status">Studying your subject with Grok Vision</div>
+      <div class="gen-status" id="gen-status">Studying your subject</div>
       <div class="gen-steps">
-        <div class="gen-step active" id="gstep-1"><span class="gen-step-ico">🔍</span><span>Analysing subject with Grok Vision</span><span class="gen-step-check" id="gcheck-1" style="display:none">✓</span></div>
-        <div class="gen-step" id="gstep-2"><span class="gen-step-ico">🎨</span><span>Crafting Renaissance portrait prompt</span><span class="gen-step-check" id="gcheck-2" style="display:none">✓</span></div>
-        <div class="gen-step" id="gstep-3"><span class="gen-step-ico">🖼️</span><span>Generating masterpiece with Grok Imagine</span><span class="gen-step-check" id="gcheck-3" style="display:none">✓</span></div>
-        <div class="gen-step" id="gstep-4"><span class="gen-step-ico">✨</span><span>Applying finishing touches</span><span class="gen-step-check" id="gcheck-4" style="display:none">✓</span></div>
+        <div class="gen-step active" id="gstep-1"><span class="gen-step-ico">🔍</span>Analysing subject<span class="gen-step-check" id="gcheck-1" style="display:none">✓</span></div>
+        <div class="gen-step" id="gstep-2"><span class="gen-step-ico">🎨</span>Applying <span id="style-label-gen" style="margin-left:.25rem;color:var(--teal)"></span>&nbsp;style<span class="gen-step-check" id="gcheck-2" style="display:none">✓</span></div>
+        <div class="gen-step" id="gstep-3"><span class="gen-step-ico">🖼️</span>Painting portrait<span class="gen-step-check" id="gcheck-3" style="display:none">✓</span></div>
+        <div class="gen-step" id="gstep-4"><span class="gen-step-ico">✨</span>Applying finishing touches<span class="gen-step-check" id="gcheck-4" style="display:none">✓</span></div>
       </div>
       <div class="gen-error" id="gen-error">
         <div class="gen-error-title" id="gen-error-title">Generation failed</div>
-        <div class="gen-error-msg" id="gen-error-msg">An error occurred while generating your portrait.</div>
+        <div class="gen-error-msg" id="gen-error-msg">An error occurred.</div>
         <div class="gen-error-actions">
           <button class="gen-retry-btn" onclick="startGeneration()">Retry</button>
           <button class="gen-skip-btn" onclick="showFallbackPreview()">Continue with preview photo</button>
@@ -316,88 +370,116 @@
     </div>
   </div>
 
-  <div class="step-panel" id="step-4">
+  <!-- STEP 5: PREVIEW -->
+  <div class="step-panel" id="step-5">
     <h2 class="step-heading">Your AI <span class="accent">portrait</span></h2>
-    <p class="step-desc">Your masterpiece is ready. Select a package to receive your full-resolution, watermark-free print.</p>
+    <p class="step-desc">Your masterpiece is ready. Not happy? Try again or generate in a different style.</p>
     <div class="preview-wrap">
       <div class="preview-frame">
         <canvas id="preview-canvas"></canvas>
         <div class="preview-badge">✦ &nbsp; Watermarked Preview</div>
       </div>
+      <div class="preview-actions">
+        <button class="preview-retry-btn" onclick="startGeneration()">🔄 &nbsp;Regenerate</button>
+        <button class="preview-retry-btn" onclick="goToStep(2)" style="border-color:rgba(62,207,178,.3);color:var(--teal)">🎨 &nbsp;Change Style</button>
+      </div>
+      <div class="gen-history" id="gen-history" style="display:none;">
+        <div class="gen-history-title">Previous generations — click to switch</div>
+        <div class="gen-history-grid" id="gen-history-grid"></div>
+      </div>
       <div class="preview-info">
         <div class="preview-info-title">Your commission details</div>
         <div class="preview-row"><span>Category</span><span id="prev-cat">—</span></div>
-        <div class="preview-row"><span>Style</span><span>Old Masters Renaissance</span></div>
-        <div class="preview-row"><span>Generated by</span><span style="color:var(--teal)">Grok AI ✦</span></div>
+        <div class="preview-row"><span>Style</span><span id="prev-style">—</span></div>
+        <div class="preview-row"><span>Generated by</span><span style="color:var(--teal)">AI ✦</span></div>
         <div class="preview-row"><span>Status</span><span style="color:var(--teal)">✓ Portrait ready</span></div>
       </div>
     </div>
     <div class="step-nav">
-      <button class="btn-back" onclick="goToStep(2)">← Retake photo</button>
-      <button class="btn-next" onclick="goToStep(5)">Choose Package &nbsp;→</button>
+      <button class="btn-back" onclick="goToStep(3)">← Retake photo</button>
+      <button class="btn-next" onclick="goToStep(6)">Choose Package &nbsp;→</button>
     </div>
   </div>
 
-  <div class="step-panel" id="step-5">
-    <h2 class="step-heading">Choose your <span class="accent">package</span></h2>
-    <p class="step-desc">All packages include a digital preview before printing and your high-resolution digital file.</p>
-    <div class="pkg-grid">
-      <div class="pkg-card" data-pkg="squire" data-price="$49" onclick="selectPkg(this)">
-        <div class="pkg-badge-pop">POPULAR</div>
-        <div class="pkg-incl"><span>+ Digital File Included</span></div>
-        <div class="pkg-name">Squire Pack</div>
-        <div class="pkg-price"><sup>$</sup>49</div>
-        <div class="pkg-count">20 × 25 cm &nbsp;(8×10 in)</div>
-        <ul class="pkg-feats">
-          <li>Premium 425 GSM archival canvas</li>
-          <li>Museum-grade colour printing</li>
-          <li>Gallery-wrapped, ready to hang</li>
-          <li>High-res digital file included</li>
-          <li>Shipped to your door</li>
-          <li>Ships in 7–10 business days</li>
+  <!-- STEP 6: PACKAGES -->
+  <div class="step-panel" id="step-6">
+    <h2 class="step-heading">Choose your <span class="accent">format</span></h2>
+    <p class="step-desc">All formats include your high-resolution digital file. Prints ship free worldwide.</p>
+    <div class="pkg-banner">🚚 Free Shipping on All Prints &nbsp;·&nbsp; Delivery 7–10 days &nbsp;·&nbsp; Worldwide</div>
+    <div class="pkg-grid-fable">
+
+      <div class="pkg-card-f" data-pkg="digital" data-price="$29" onclick="selectPkg(this)">
+        <div class="pkg-badge-top pkg-badge-pop">MOST POPULAR</div>
+        <div class="pkg-icon">⬇️</div>
+        <div class="pkg-name-f">Instant Masterpiece</div>
+        <div class="pkg-price-wrap"><span class="pkg-orig">$49</span><span class="pkg-price-f">$29</span></div>
+        <div class="pkg-timer">Expires in <span id="countdown">15:00</span></div>
+        <div class="pkg-desc">Instant high-resolution download — perfect for sharing or saving.</div>
+        <ul class="pkg-feats-f">
+          <li>High-resolution download</li>
+          <li>No watermark</li>
+          <li>Commercial use rights</li>
         </ul>
-        <button class="pkg-sel-btn">Select Squire</button>
+        <button class="pkg-sel-btn-f">Download Now</button>
+        <div class="pkg-view-packs" style="margin-top:.85rem;"><a href="#">Want more styles &amp; masterpieces?<br>View Packs &amp; Pricing →</a></div>
       </div>
-      <div class="pkg-card" data-pkg="noble" data-price="$89" onclick="selectPkg(this)">
-        <div class="pkg-badge-pop">MOST POPULAR</div>
-        <div class="pkg-incl"><span>+ Digital File Included</span></div>
-        <div class="pkg-name">Noble Pack</div>
-        <div class="pkg-price"><sup>$</sup>89</div>
-        <div class="pkg-count">30 × 40 cm &nbsp;(12×16 in)</div>
-        <ul class="pkg-feats">
-          <li>Premium 425 GSM archival canvas</li>
-          <li>Museum-grade colour printing</li>
-          <li>Gallery-wrapped, ready to hang</li>
-          <li>High-res digital file included</li>
-          <li>Priority processing</li>
-          <li>Ships in 7–10 business days</li>
+
+      <div class="pkg-card-f" data-pkg="print" data-price="$89" onclick="selectPkg(this)">
+        <div class="pkg-icon">📦</div>
+        <div class="pkg-name-f">Fine Art Print</div>
+        <div class="pkg-price-wrap"><span class="pkg-price-f">$89</span></div>
+        <div class="pkg-timer"></div>
+        <div class="pkg-desc">Printed on museum-quality archival paper with fade-resistant inks.</div>
+        <div class="pkg-size-label">Choose Size</div>
+        <select class="pkg-size-select" id="print-size" onchange="updatePkgPrice()" onclick="event.stopPropagation()">
+          <option value="20x25" data-price="89">20 × 25 cm (8″ × 10″)</option>
+          <option value="30x40" data-price="109">30 × 40 cm (12″ × 16″)</option>
+          <option value="45x60" data-price="139">45 × 60 cm (18″ × 24″)</option>
+          <option value="60x90" data-price="169">60 × 90 cm (24″ × 36″)</option>
+        </select>
+        <ul class="pkg-feats-f">
+          <li>Museum-quality archival paper</li>
+          <li>Fade-resistant inks</li>
+          <li>Made to last decades</li>
         </ul>
-        <button class="pkg-sel-btn">Select Noble</button>
+        <div class="pkg-ship-banner">🚚 <span><strong>Free Shipping</strong> ($20 value) · Delivery: 7-9 days</span></div>
+        <div class="pkg-digital-tag">+ Includes digital download</div>
+        <button class="pkg-sel-btn-f">Order Print</button>
       </div>
-      <div class="pkg-card" data-pkg="royal" data-price="$149" onclick="selectPkg(this)">
-        <div class="pkg-badge-val">BEST VALUE</div>
-        <div class="pkg-incl"><span>+ Digital File Included</span></div>
-        <div class="pkg-name">Royal Pack</div>
-        <div class="pkg-price"><sup>$</sup>149</div>
-        <div class="pkg-count">45 × 60 cm &nbsp;(18×24 in)</div>
-        <ul class="pkg-feats">
-          <li>Premium 425 GSM archival canvas</li>
-          <li>Museum-grade colour printing</li>
-          <li>Gallery-wrapped, ready to hang</li>
-          <li>High-res digital file included</li>
-          <li>Up to 3 subjects</li>
-          <li>Ships in 7–10 business days</li>
+
+      <div class="pkg-card-f royal-card" data-pkg="canvas" data-price="$149" onclick="selectPkg(this)">
+        <div class="pkg-badge-top pkg-badge-gift">🎁 The Perfect Gift</div>
+        <div class="pkg-icon">📦</div>
+        <div class="pkg-name-f">Large Canvas</div>
+        <div class="pkg-price-wrap"><span class="pkg-price-f" id="canvas-price-display">$149</span></div>
+        <div class="pkg-timer"></div>
+        <div class="pkg-desc">Gallery-quality canvas on wood — arrives ready to hang.</div>
+        <div class="pkg-size-label">Choose Size</div>
+        <select class="pkg-size-select" id="canvas-size" onchange="updatePkgPrice()" onclick="event.stopPropagation()">
+          <option value="30x40" data-price="149">30 × 40 cm (12″ × 16″)</option>
+          <option value="45x60" data-price="199">45 × 60 cm (18″ × 24″)</option>
+          <option value="60x90" data-price="249">60 × 90 cm (24″ × 36″)</option>
+          <option value="100x150" data-price="299">100 × 150 cm (40″ × 60″)</option>
+        </select>
+        <ul class="pkg-feats-f">
+          <li>Ready to hang</li>
+          <li>Cotton-blend canvas, 3 cm thick</li>
+          <li>Mounting included</li>
         </ul>
-        <button class="pkg-sel-btn">Select Royal</button>
+        <div class="pkg-ship-banner">🚚 <span><strong>Free Shipping</strong> ($20 value) · Delivery: 7-9 days</span></div>
+        <div class="pkg-digital-tag">+ Includes digital download</div>
+        <button class="pkg-sel-btn-f">Order Canvas</button>
       </div>
+
     </div>
     <div class="step-nav">
-      <button class="btn-back" onclick="goToStep(4)">← Back</button>
-      <button class="btn-next" id="btn-next-5" disabled onclick="goToStep(6)">Review Order &nbsp;→</button>
+      <button class="btn-back" onclick="goToStep(5)">← Back</button>
+      <button class="btn-next" id="btn-next-6" disabled onclick="goToStep(7)">Review Order &nbsp;→</button>
     </div>
   </div>
 
-  <div class="step-panel" id="step-6">
+  <!-- STEP 7: CHECKOUT -->
+  <div class="step-panel" id="step-7">
     <h2 class="step-heading">Review &amp; <span class="accent">pay</span></h2>
     <p class="step-desc">You'll be taken to Stripe's secure checkout. After payment, we print and ship your masterpiece.</p>
     <div class="checkout-wrap">
@@ -407,167 +489,114 @@
           <div class="os-row"><span class="os-label">Your portrait</span><img class="os-thumb" id="checkout-thumb" src="" alt=""></div>
           <hr class="os-divider">
           <div class="os-row"><span class="os-label">Category</span><span class="os-val" id="checkout-cat">—</span></div>
-          <div class="os-row"><span class="os-label">Generated by</span><span class="os-val" style="color:var(--teal)">Grok AI ✦</span></div>
+          <div class="os-row"><span class="os-label">Style</span><span class="os-val" id="checkout-style">—</span></div>
+          <div class="os-row"><span class="os-label">Generated by</span><span class="os-val" style="color:var(--teal)">AI ✦</span></div>
           <div class="os-row"><span class="os-label">Package</span><span class="os-val" id="checkout-pkg">—</span></div>
           <div class="os-row"><span class="os-label">Includes</span><span class="os-val" id="checkout-includes">—</span></div>
-          <div class="os-row"><span class="os-label">Shipping</span><span class="os-val" id="checkout-ship">—</span></div>
+          <div class="os-row"><span class="os-label">Shipping</span><span class="os-val" style="color:var(--teal)">Free 🚚</span></div>
           <hr class="os-divider">
           <div class="os-total"><span>Total</span><span class="os-price" id="checkout-price">—</span></div>
         </div>
       </div>
       <div class="pay-note">After checkout, <strong>your AI-generated portrait file is sent to us automatically.</strong> We'll print it on archival canvas per your package and ship it to you with full tracking.</div>
       <div class="pay-methods">
-        <div class="pay-chip">VISA</div>
-        <div class="pay-chip">Mastercard</div>
-        <div class="pay-chip">AMEX</div>
-        <div class="pay-chip">Apple Pay</div>
-        <div class="pay-chip">Google Pay</div>
+        <div class="pay-chip">VISA</div><div class="pay-chip">Mastercard</div><div class="pay-chip">AMEX</div><div class="pay-chip">Apple Pay</div><div class="pay-chip">Google Pay</div>
         <div class="pay-secure">🔒 Stripe secured</div>
       </div>
       <button class="pay-btn" onclick="goToStripe()">Proceed to Secure Checkout</button>
       <div class="step-nav" style="margin-top:1rem;">
-        <button class="btn-back" onclick="goToStep(5)">← Change package</button>
+        <button class="btn-back" onclick="goToStep(6)">← Change package</button>
       </div>
     </div>
   </div>
-</div>
 
-<!-- GALLERY EXAMPLES -->
+</div><!-- /wizard-wrap -->
+
+<!-- GALLERY -->
 <div id="gallery" style="background:#0a0805;border-top:1px solid var(--border);padding:5.5rem 1.5rem;">
   <div style="max-width:1100px;margin:0 auto;">
     <div style="text-align:center;margin-bottom:3.5rem;">
       <p class="stag reveal" style="justify-content:center;">Real Results</p>
       <h2 class="sh reveal" style="text-align:center;">Your photo, <span style="color:var(--teal);font-style:italic;">immortalised</span></h2>
-      <p style="font-size:.95rem;color:var(--muted);max-width:520px;margin:.75rem auto 0;line-height:1.7;" class="reveal">Our Grok AI transforms any photo into a stunning Renaissance oil painting in 30 seconds — then we print it on museum-grade canvas and ship it straight to your door.</p>
+      <p style="font-size:.95rem;color:var(--muted);max-width:520px;margin:.75rem auto 0;line-height:1.7;" class="reveal">Our AI transforms any photo into a stunning aristocratic oil painting in seconds — then we print it on museum-grade canvas and ship it to your door.</p>
     </div>
     <div class="gal-grid">
-
       <div class="gal-item reveal" onclick="document.querySelector('.wizard-wrap').scrollIntoView({behavior:'smooth'})">
-        <div class="gal-wall">
-          <div class="gal-shadow"></div>
-          <div class="gal-outer-frame gal-gold">
-            <div class="gal-inner-frame"><img src="/portrait-couple.webp" alt="Couple Renaissance portrait" loading="lazy"></div>
-          </div>
-          <div class="gal-plate gal-plate-gold">
-            <div class="gal-plate-name">James &amp; Elizabeth</div>
-            <div class="gal-plate-sub">Couple Portrait · Noble Pack</div>
-          </div>
-        </div>
-        <div class="gal-caption">
-          <div class="gal-cat-tag">💑 Couple Portrait</div>
-          <div class="gal-cta">Create yours <span style="color:var(--teal)">→</span></div>
-        </div>
+        <div class="gal-wall"><div class="gal-shadow"></div><div class="gal-outer-frame gal-gold"><div class="gal-inner-frame"><img src="/portrait-couple.webp" alt="Couple portrait" loading="lazy"></div></div><div class="gal-plate gal-plate-gold"><div class="gal-plate-name">James &amp; Elizabeth</div><div class="gal-plate-sub">Couple Portrait · Fine Art Print</div></div></div>
+        <div class="gal-caption"><div class="gal-cat-tag">💑 Couple Portrait</div><div class="gal-cta">Create yours <span style="color:var(--teal)">→</span></div></div>
         <div class="gal-hover-overlay"><div class="gal-hover-text">✦ Create Yours</div></div>
       </div>
-
       <div class="gal-item gal-featured reveal" onclick="document.querySelector('.wizard-wrap').scrollIntoView({behavior:'smooth'})">
         <div class="gal-badge-featured">✦ Most Gifted</div>
-        <div class="gal-wall gal-wall-featured">
-          <div class="gal-shadow"></div>
-          <div class="gal-outer-frame gal-teal-frame">
-            <div class="gal-inner-frame"><img src="/portrait-family.webp" alt="Family Renaissance portrait" loading="lazy"></div>
-          </div>
-          <div class="gal-plate gal-plate-teal">
-            <div class="gal-plate-name">The Harrison Family</div>
-            <div class="gal-plate-sub">Family Portrait · Royal Pack</div>
-          </div>
-        </div>
-        <div class="gal-caption">
-          <div class="gal-cat-tag">👨‍👩‍👧 Family Portrait</div>
-          <div class="gal-cta">Create yours <span style="color:var(--teal)">→</span></div>
-        </div>
+        <div class="gal-wall gal-wall-featured"><div class="gal-shadow"></div><div class="gal-outer-frame gal-teal-frame"><div class="gal-inner-frame"><img src="/portrait-family.webp" alt="Family portrait" loading="lazy"></div></div><div class="gal-plate gal-plate-teal"><div class="gal-plate-name">The Harrison Family</div><div class="gal-plate-sub">Family Portrait · Large Canvas</div></div></div>
+        <div class="gal-caption"><div class="gal-cat-tag">👨‍👩‍👧 Family Portrait</div><div class="gal-cta">Create yours <span style="color:var(--teal)">→</span></div></div>
         <div class="gal-hover-overlay"><div class="gal-hover-text">✦ Create Yours</div></div>
       </div>
-
       <div class="gal-item reveal" onclick="document.querySelector('.wizard-wrap').scrollIntoView({behavior:'smooth'})">
-        <div class="gal-wall">
-          <div class="gal-shadow"></div>
-          <div class="gal-outer-frame gal-gold">
-            <div class="gal-inner-frame"><img src="/portrait-pet.jpg" alt="Pet Renaissance portrait" loading="lazy"></div>
-          </div>
-          <div class="gal-plate gal-plate-gold">
-            <div class="gal-plate-name">Duchess</div>
-            <div class="gal-plate-sub">Pet Portrait · Squire Pack</div>
-          </div>
-        </div>
-        <div class="gal-caption">
-          <div class="gal-cat-tag">🐾 Pet Portrait</div>
-          <div class="gal-cta">Create yours <span style="color:var(--teal)">→</span></div>
-        </div>
+        <div class="gal-wall"><div class="gal-shadow"></div><div class="gal-outer-frame gal-gold"><div class="gal-inner-frame"><img src="/portrait-pet.jpg" alt="Pet portrait" loading="lazy"></div></div><div class="gal-plate gal-plate-gold"><div class="gal-plate-name">Duchess</div><div class="gal-plate-sub">Pet Portrait · Fine Art Print</div></div></div>
+        <div class="gal-caption"><div class="gal-cat-tag">🐾 Pet Portrait</div><div class="gal-cta">Create yours <span style="color:var(--teal)">→</span></div></div>
         <div class="gal-hover-overlay"><div class="gal-hover-text">✦ Create Yours</div></div>
       </div>
-
     </div>
-
     <div class="reveal" style="display:flex;gap:2rem;justify-content:center;flex-wrap:wrap;margin:3rem 0 3.5rem;padding:1.5rem;background:rgba(255,255,255,.025);border:1px solid var(--border);border-radius:12px;">
       <div style="text-align:center;"><div style="font-family:'Playfair Display',serif;font-size:1.8rem;font-style:italic;font-weight:900;color:var(--teal)">2,400+</div><div style="font-size:.75rem;color:var(--muted);margin-top:.2rem">Portraits delivered</div></div>
       <div style="width:1px;background:var(--border);flex-shrink:0;"></div>
       <div style="text-align:center;"><div style="font-family:'Playfair Display',serif;font-size:1.8rem;font-style:italic;font-weight:900;color:var(--white)">4.9★</div><div style="font-size:.75rem;color:var(--muted);margin-top:.2rem">Average rating</div></div>
       <div style="width:1px;background:var(--border);flex-shrink:0;"></div>
-      <div style="text-align:center;"><div style="font-family:'Playfair Display',serif;font-size:1.8rem;font-style:italic;font-weight:900;color:var(--gold)">30s</div><div style="font-size:.75rem;color:var(--muted);margin-top:.2rem">AI generation time</div></div>
+      <div style="text-align:center;"><div style="font-family:'Playfair Display',serif;font-size:1.8rem;font-style:italic;font-weight:900;color:var(--gold)">9 Styles</div><div style="font-size:.75rem;color:var(--muted);margin-top:.2rem">Art styles available</div></div>
       <div style="width:1px;background:var(--border);flex-shrink:0;"></div>
       <div style="text-align:center;"><div style="font-family:'Playfair Display',serif;font-size:1.8rem;font-style:italic;font-weight:900;color:var(--white)">60+</div><div style="font-size:.75rem;color:var(--muted);margin-top:.2rem">Countries shipped</div></div>
     </div>
-
     <div class="reveal gal-cta-banner">
-      <div>
-        <div style="font-size:.7rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--teal);margin-bottom:.6rem;">Ready to create yours?</div>
-        <h3 style="font-family:'Playfair Display',serif;font-size:clamp(1.3rem,2.5vw,1.9rem);font-style:italic;font-weight:900;color:var(--white);line-height:1.2;">Transform your favourite photo<br>into a <span style="color:var(--teal)">timeless masterpiece</span></h3>
-        <p style="font-size:.85rem;color:var(--muted);margin-top:.6rem;line-height:1.6;">Upload any photo. AI paints it in 30 seconds. Printed on 425 GSM museum canvas and shipped to your door.</p>
-      </div>
+      <div><div style="font-size:.7rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--teal);margin-bottom:.6rem;">Ready to create yours?</div><h3 style="font-family:'Playfair Display',serif;font-size:clamp(1.3rem,2.5vw,1.9rem);font-style:italic;font-weight:900;color:var(--white);line-height:1.2;">Transform your favourite photo<br>into a <span style="color:var(--teal)">timeless masterpiece</span></h3><p style="font-size:.85rem;color:var(--muted);margin-top:.6rem;line-height:1.6;">Upload any photo. AI paints it in 30 seconds. Free shipping worldwide.</p></div>
       <div style="display:flex;flex-direction:column;align-items:flex-end;gap:.75rem;flex-shrink:0;">
         <button class="gal-cta-btn" onclick="document.querySelector('.wizard-wrap').scrollIntoView({behavior:'smooth'})">✦ &nbsp; Start My Portrait &nbsp;→</button>
-        <div style="display:flex;gap:1rem;font-size:.72rem;color:var(--muted);">
-          <span>⚡ 30-second AI</span><span>🖼️ Museum canvas</span><span>🔒 Secure checkout</span>
-        </div>
+        <div style="display:flex;gap:1rem;font-size:.72rem;color:var(--muted);"><span>⚡ 30-second AI</span><span>🖼️ Museum canvas</span><span>🚚 Free shipping</span></div>
       </div>
     </div>
   </div>
 </div>
 
 <style>
-.gal-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:2.5rem; }
-.gal-item { cursor:pointer; position:relative; }
-.gal-featured { transform:scale(1.04); }
-.gal-badge-featured { position:absolute; top:-14px; left:50%; transform:translateX(-50%); background:var(--teal); color:var(--black); font-size:.62rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; padding:.3rem 1rem; border-radius:100px; white-space:nowrap; z-index:10; }
-.gal-wall { position:relative; padding-bottom:2.8rem; }
-.gal-wall-featured::before { content:''; position:absolute; inset:-2rem; background:radial-gradient(ellipse at center, rgba(62,207,178,.08) 0%, transparent 70%); pointer-events:none; }
-.gal-shadow { position:absolute; bottom:1.5rem; left:10%; right:10%; height:40px; background:radial-gradient(ellipse,rgba(0,0,0,.65) 0%,transparent 70%); filter:blur(14px); pointer-events:none; z-index:0; }
-.gal-outer-frame { padding:10px; border-radius:3px; transition:transform .35s, box-shadow .35s; position:relative; z-index:1; }
-.gal-gold { background:linear-gradient(145deg,#6b4e10,#c8a84b,#e8d08a,#c8a84b,#8b6914,#a07820,#c8a84b); box-shadow:inset 0 0 0 1px rgba(255,255,255,.12), 0 20px 60px rgba(0,0,0,.75), 0 4px 16px rgba(200,168,75,.2); }
-.gal-teal-frame { background:linear-gradient(145deg,#1a5c50,#3ecfb2,#5de0c8,#3ecfb2,#1a5c50,#2aab92,#3ecfb2); box-shadow:inset 0 0 0 1px rgba(255,255,255,.14), 0 20px 60px rgba(0,0,0,.75), 0 4px 20px rgba(62,207,178,.25); }
-.gal-item:hover .gal-outer-frame { transform:translateY(-8px); }
-.gal-item:hover .gal-gold { box-shadow:inset 0 0 0 1px rgba(255,255,255,.18), 0 32px 80px rgba(0,0,0,.85), 0 8px 28px rgba(200,168,75,.3); }
-.gal-item:hover .gal-teal-frame { box-shadow:inset 0 0 0 1px rgba(255,255,255,.18), 0 32px 80px rgba(0,0,0,.85), 0 8px 28px rgba(62,207,178,.3); }
-.gal-inner-frame { padding:4px; background:#0e0a04; border:1px solid rgba(0,0,0,.8); overflow:hidden; }
-.gal-inner-frame img { display:block; width:100%; height:auto; aspect-ratio:4/5; object-fit:cover; object-position:top center; transition:transform .5s ease; }
-.gal-item:hover .gal-inner-frame img { transform:scale(1.03); }
-.gal-plate { display:inline-block; position:absolute; bottom:0; left:50%; transform:translateX(-50%); padding:.45rem 1.6rem; min-width:160px; text-align:center; border-radius:3px; white-space:nowrap; }
-.gal-plate-gold { background:linear-gradient(135deg,#1a140a,#2a1e0e); border:1px solid #8b6914; box-shadow:0 2px 14px rgba(0,0,0,.6), inset 0 1px 0 rgba(200,168,75,.2); }
-.gal-plate-teal { background:linear-gradient(135deg,#051a16,#0a2e28); border:1px solid #2aab92; box-shadow:0 2px 14px rgba(0,0,0,.6), inset 0 1px 0 rgba(62,207,178,.15); }
-.gal-plate-name { font-family:'DM Serif Display',serif; font-size:.88rem; color:#e8d08a; letter-spacing:.1em; text-transform:uppercase; }
-.gal-plate-teal .gal-plate-name { color:#7eecd8; }
-.gal-plate-sub { font-size:.58rem; color:rgba(244,240,234,.35); letter-spacing:.08em; text-transform:uppercase; margin-top:.15rem; }
-.gal-caption { display:flex; justify-content:space-between; align-items:center; margin-top:1rem; padding:0 .25rem; }
-.gal-cat-tag { font-size:.8rem; color:var(--muted); }
-.gal-cta { font-size:.8rem; font-weight:600; color:rgba(244,240,234,.4); transition:color .2s; }
-.gal-item:hover .gal-cta { color:var(--teal); }
-.gal-hover-overlay { position:absolute; top:0; left:0; right:0; bottom:2.8rem; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0); transition:background .3s; pointer-events:none; z-index:2; }
-.gal-item:hover .gal-hover-overlay { background:rgba(0,0,0,.2); }
-.gal-hover-text { background:rgba(62,207,178,.92); color:var(--black); font-size:.85rem; font-weight:700; padding:.6rem 1.75rem; border-radius:100px; opacity:0; transform:translateY(6px); transition:opacity .25s, transform .25s; white-space:nowrap; }
-.gal-item:hover .gal-hover-text { opacity:1; transform:translateY(0); }
-.gal-cta-banner { display:flex; align-items:center; justify-content:space-between; gap:2rem; background:linear-gradient(135deg,rgba(62,207,178,.07) 0%,rgba(200,168,75,.04) 100%); border:1px solid rgba(62,207,178,.2); border-radius:16px; padding:2.25rem 2.5rem; }
-.gal-cta-btn { display:inline-flex; align-items:center; gap:.5rem; background:var(--teal); color:var(--black); font-family:'Instrument Sans',sans-serif; font-size:.95rem; font-weight:700; padding:.9rem 2.25rem; border:none; border-radius:10px; cursor:pointer; transition:background .2s,transform .2s,box-shadow .2s; white-space:nowrap; }
-.gal-cta-btn:hover { background:#5de0c8; transform:translateY(-2px); box-shadow:0 8px 28px rgba(62,207,178,.3); }
+.gal-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2.5rem;}
+.gal-item{cursor:pointer;position:relative;}
+.gal-featured{transform:scale(1.04);}
+.gal-badge-featured{position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:var(--teal);color:var(--black);font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:.3rem 1rem;border-radius:100px;white-space:nowrap;z-index:10;}
+.gal-wall{position:relative;padding-bottom:2.8rem;}
+.gal-wall-featured::before{content:'';position:absolute;inset:-2rem;background:radial-gradient(ellipse at center,rgba(62,207,178,.08) 0%,transparent 70%);pointer-events:none;}
+.gal-shadow{position:absolute;bottom:1.5rem;left:10%;right:10%;height:40px;background:radial-gradient(ellipse,rgba(0,0,0,.65) 0%,transparent 70%);filter:blur(14px);pointer-events:none;z-index:0;}
+.gal-outer-frame{padding:10px;border-radius:3px;transition:transform .35s,box-shadow .35s;position:relative;z-index:1;}
+.gal-gold{background:linear-gradient(145deg,#6b4e10,#c8a84b,#e8d08a,#c8a84b,#8b6914,#a07820,#c8a84b);box-shadow:inset 0 0 0 1px rgba(255,255,255,.12),0 20px 60px rgba(0,0,0,.75),0 4px 16px rgba(200,168,75,.2);}
+.gal-teal-frame{background:linear-gradient(145deg,#1a5c50,#3ecfb2,#5de0c8,#3ecfb2,#1a5c50,#2aab92,#3ecfb2);box-shadow:inset 0 0 0 1px rgba(255,255,255,.14),0 20px 60px rgba(0,0,0,.75),0 4px 20px rgba(62,207,178,.25);}
+.gal-item:hover .gal-outer-frame{transform:translateY(-8px);}
+.gal-inner-frame{padding:4px;background:#0e0a04;border:1px solid rgba(0,0,0,.8);overflow:hidden;}
+.gal-inner-frame img{display:block;width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;object-position:top center;transition:transform .5s ease;}
+.gal-item:hover .gal-inner-frame img{transform:scale(1.03);}
+.gal-plate{display:inline-block;position:absolute;bottom:0;left:50%;transform:translateX(-50%);padding:.45rem 1.6rem;min-width:160px;text-align:center;border-radius:3px;white-space:nowrap;}
+.gal-plate-gold{background:linear-gradient(135deg,#1a140a,#2a1e0e);border:1px solid #8b6914;box-shadow:0 2px 14px rgba(0,0,0,.6),inset 0 1px 0 rgba(200,168,75,.2);}
+.gal-plate-teal{background:linear-gradient(135deg,#051a16,#0a2e28);border:1px solid #2aab92;box-shadow:0 2px 14px rgba(0,0,0,.6),inset 0 1px 0 rgba(62,207,178,.15);}
+.gal-plate-name{font-family:'DM Serif Display',serif;font-size:.88rem;color:#e8d08a;letter-spacing:.1em;text-transform:uppercase;}
+.gal-plate-teal .gal-plate-name{color:#7eecd8;}
+.gal-plate-sub{font-size:.58rem;color:rgba(244,240,234,.35);letter-spacing:.08em;text-transform:uppercase;margin-top:.15rem;}
+.gal-caption{display:flex;justify-content:space-between;align-items:center;margin-top:1rem;padding:0 .25rem;}
+.gal-cat-tag{font-size:.8rem;color:var(--muted);}
+.gal-cta{font-size:.8rem;font-weight:600;color:rgba(244,240,234,.4);transition:color .2s;}
+.gal-item:hover .gal-cta{color:var(--teal);}
+.gal-hover-overlay{position:absolute;top:0;left:0;right:0;bottom:2.8rem;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0);transition:background .3s;pointer-events:none;z-index:2;}
+.gal-item:hover .gal-hover-overlay{background:rgba(0,0,0,.2);}
+.gal-hover-text{background:rgba(62,207,178,.92);color:var(--black);font-size:.85rem;font-weight:700;padding:.6rem 1.75rem;border-radius:100px;opacity:0;transform:translateY(6px);transition:opacity .25s,transform .25s;white-space:nowrap;}
+.gal-item:hover .gal-hover-text{opacity:1;transform:translateY(0);}
+.gal-cta-banner{display:flex;align-items:center;justify-content:space-between;gap:2rem;background:linear-gradient(135deg,rgba(62,207,178,.07) 0%,rgba(200,168,75,.04) 100%);border:1px solid rgba(62,207,178,.2);border-radius:16px;padding:2.25rem 2.5rem;}
+.gal-cta-btn{display:inline-flex;align-items:center;gap:.5rem;background:var(--teal);color:var(--black);font-family:'Instrument Sans',sans-serif;font-size:.95rem;font-weight:700;padding:.9rem 2.25rem;border:none;border-radius:10px;cursor:pointer;transition:background .2s,transform .2s;white-space:nowrap;}
+.gal-cta-btn:hover{background:#5de0c8;transform:translateY(-2px);}
 @media(max-width:768px){
-  .gal-grid { grid-template-columns:1fr; max-width:360px; margin:0 auto; }
-  .gal-featured { transform:none; }
-  .gal-cta-banner { flex-direction:column; align-items:flex-start; padding:1.5rem; }
-  .gal-cta-btn { width:100%; justify-content:center; }
+  .gal-grid{grid-template-columns:1fr;max-width:360px;margin:0 auto;}
+  .gal-featured{transform:none;}
+  .gal-cta-banner{flex-direction:column;align-items:flex-start;padding:1.5rem;}
+  .gal-cta-btn{width:100%;justify-content:center;}
 }
 </style>
 
-<!-- HOW IT WORKS -->
 <div id="how-it-works" style="background:var(--deep);border-top:1px solid var(--border);">
   <div class="info-section">
     <div class="info-inner">
@@ -575,15 +604,14 @@
       <h2 class="sh reveal">How it works</h2>
       <div class="how-grid">
         <div class="how-card reveal"><div class="how-num">01</div><div class="how-ico">🖼️</div><div class="how-title">Pick your subject</div><p class="how-desc">Choose from pets, family, couples, children, or a self-portrait.</p></div>
-        <div class="how-card reveal"><div class="how-num">02</div><div class="how-ico">📸</div><div class="how-title">Upload your photo</div><p class="how-desc">A clear, well-lit photo. Grok Vision analyses your subject instantly.</p></div>
-        <div class="how-card reveal"><div class="how-num">03</div><div class="how-ico">🤖</div><div class="how-title">AI paints the portrait</div><p class="how-desc">Grok Imagine renders your subject in old-master style in about 20–30 seconds.</p></div>
-        <div class="how-card reveal"><div class="how-num">04</div><div class="how-ico">📦</div><div class="how-title">Print &amp; delivery</div><p class="how-desc">We print your portrait on archival canvas and ship worldwide in 7–10 days.</p></div>
+        <div class="how-card reveal"><div class="how-num">02</div><div class="how-ico">🎨</div><div class="how-title">Choose your style</div><p class="how-desc">Pick from 9 distinct art styles — from Grand Manner to French Romance.</p></div>
+        <div class="how-card reveal"><div class="how-num">03</div><div class="how-ico">📸</div><div class="how-title">Upload your photo</div><p class="how-desc">A clear, well-lit photo. Add multiple photos for group portraits.</p></div>
+        <div class="how-card reveal"><div class="how-num">04</div><div class="how-ico">📦</div><div class="how-title">Print &amp; delivery</div><p class="how-desc">We print your portrait on archival canvas and ship free worldwide in 7–10 days.</p></div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- REVIEWS -->
 <div class="rev-strip" id="reviews">
   <div class="rev-inner">
     <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;">
@@ -591,25 +619,24 @@
       <div class="reveal" style="text-align:right;"><div class="stars" style="font-size:1.15rem;">★★★★★</div><div style="font-size:.78rem;color:var(--muted);margin-top:.25rem;">4.9 · 2,400+ reviews</div></div>
     </div>
     <div class="rev-grid">
-      <div class="rv reveal"><div class="rv-stars">★★★★★</div><p class="rv-text">"I cannot stop staring at it. Max dressed in full 17th-century regalia — it is the most magnificent thing I have ever hung in my home."</p><div class="rv-author"><div class="rv-av">S</div>Sarah K. · London · Pet Portrait</div></div>
+      <div class="rv reveal"><div class="rv-stars">★★★★★</div><p class="rv-text">"I cannot stop staring at it. Max dressed in full 18th-century regalia — it is the most magnificent thing I have ever hung in my home."</p><div class="rv-author"><div class="rv-av">S</div>Sarah K. · London · Pet Portrait</div></div>
       <div class="rv reveal"><div class="rv-stars">★★★★★</div><p class="rv-text">"Ordered a couples portrait as an anniversary gift. She wept. The quality is extraordinary — it genuinely looks like a painting from a museum."</p><div class="rv-author"><div class="rv-av">M</div>Marco D. · Milan · Couple Portrait</div></div>
       <div class="rv reveal"><div class="rv-stars">★★★★★</div><p class="rv-text">"Got a children's portrait for my daughter's birthday. She asks to look at it every single morning. Worth every penny."</p><div class="rv-author"><div class="rv-av">A</div>Amelia T. · New York · Children's Portrait</div></div>
     </div>
   </div>
 </div>
 
-<!-- FAQ -->
 <div class="info-section" id="faq">
   <div class="info-inner" style="max-width:680px;">
     <p class="stag reveal">FAQ</p>
     <h2 class="sh reveal">Common questions</h2>
     <div class="faq-list">
-      <div class="fi reveal"><button class="fq">How does the AI generation work?</button><div class="fa"><p>We use two Grok AI models from xAI. First, Grok Vision analyses your uploaded photo and creates a detailed description of your subject. Then, Grok Imagine uses that description to paint a full Renaissance-style portrait in the style of the old masters — Rembrandt, Van Dyck, Vermeer. The whole process takes about 20–30 seconds.</p></div></div>
-      <div class="fi reveal"><button class="fq">Why is there a watermark on my preview?</button><div class="fa"><p>The watermark is applied to your AI-generated portrait preview so you can see the result before paying. Once you complete your purchase, we remove the watermark and print the full-resolution version on archival canvas.</p></div></div>
-      <div class="fi reveal"><button class="fq">What photo should I upload?</button><div class="fa"><p>A clear, well-lit, front-facing photo works best. Natural daylight, sharp focus, and a visible face give the best AI results. You can always regenerate if you're not happy with the first result.</p></div></div>
-      <div class="fi reveal"><button class="fq">Can I include multiple people or pets?</button><div class="fa"><p>Yes — upload a photo with multiple subjects and the AI will include all of them. The Royal package supports up to 3 subjects with the best results.</p></div></div>
-      <div class="fi reveal"><button class="fq">How long does delivery take?</button><div class="fa"><p>Standard orders ship within 7–10 business days. International delivery adds 3–7 days. You'll receive full tracking once your portrait ships.</p></div></div>
-      <div class="fi reveal"><button class="fq">Where do I get a Grok API key?</button><div class="fa"><p>Sign up at <a href="https://console.x.ai" target="_blank" style="color:var(--teal)">console.x.ai</a> — you'll get free credits to start.</p></div></div>
+      <div class="fi reveal"><button class="fq">How does the AI generation work?</button><div class="fa"><p>We use advanced AI models that take your uploaded photo and transform it into an aristocratic portrait painting while preserving your face and features. The process takes about 20–40 seconds. You can regenerate as many times as you like before purchasing.</p></div></div>
+      <div class="fi reveal"><button class="fq">Why is there a watermark on my preview?</button><div class="fa"><p>The watermark is applied so you can see the result before paying. Once you purchase, we remove the watermark and print the full-resolution version.</p></div></div>
+      <div class="fi reveal"><button class="fq">Can I upload multiple photos?</button><div class="fa"><p>Yes! For family and couple portraits, upload up to 4 photos — one per person. Our AI will combine all subjects into a single portrait. For pets and self-portraits, one photo works best.</p></div></div>
+      <div class="fi reveal"><button class="fq">Can I change the art style?</button><div class="fa"><p>Absolutely. After seeing your preview, click "Change Style" to go back and pick a different style, then regenerate. You can also click "Regenerate" for a different interpretation of the same style.</p></div></div>
+      <div class="fi reveal"><button class="fq">How long does delivery take?</button><div class="fa"><p>All prints ship free worldwide. Orders ship within 7–10 business days. You'll receive full tracking once your portrait ships.</p></div></div>
+      <div class="fi reveal"><button class="fq">What size should I choose?</button><div class="fa"><p>For a desk or small wall, 20×25 cm is perfect. For a statement piece, 45×60 cm or larger. Large canvases (60×90 cm and above) are stunning gallery pieces and make exceptional gifts.</p></div></div>
     </div>
   </div>
 </div>
@@ -622,193 +649,380 @@
       <a href="#reviews">Reviews</a>
       <a href="#faq">FAQ</a>
       <a href="mailto:hello@pawtraits.com">hello@pawtraits.com</a>
+      <a href="#">Privacy Policy</a>
     </div>
   </div>
-  <div class="footer-copy">© 2025 Pawtraits · All rights reserved · AI portraits powered by Grok (xAI) · Payments secured by Stripe · Ships worldwide</div>
+  <div class="footer-copy">© 2025 Pawtraits · All rights reserved · AI portraits · Payments secured by Stripe · Free shipping worldwide</div>
 </footer>
 
 <script>
+const STYLES = [
+  { id:'grand-manner',   name:'Grand Manner',   era:'18th Century · Gainsborough', emoji:'👑', prompt:'formal Grand Manner aristocratic oil painting, subject in rich velvet and silk attire, dramatic draped curtain background, stately pose, warm golden light, in the style of Thomas Gainsborough and Joshua Reynolds' },
+  { id:'storm',          name:'Storm',           era:'Romantic Era · Turner',       emoji:'⛈️', prompt:'Romantic era portrait, dramatic stormy sky behind subject, windswept atmosphere, emotional lighting, rich colours, in the style of J.M.W. Turner and Delacroix, passionate and dramatic' },
+  { id:'nobel',          name:'Nobel',           era:'19th Century · Academic',     emoji:'🏛️', prompt:'formal 19th century Academic portrait, subject in distinguished attire, neutral dark background, classical composition, precise realist technique, in the style of Léon Bonnat and William-Adolphe Bouguereau' },
+  { id:'velazquez',      name:'Velázquez',       era:'Spanish Baroque · 17th C',    emoji:'🖤', prompt:'Spanish Baroque portrait in the style of Diego Velázquez, subject in dark formal Spanish court attire with white ruff collar, muted dark background, masterful light, loose brushwork, 17th century' },
+  { id:'french-romance', name:'French Romance',  era:'Victorian · Sargent',         emoji:'💫', prompt:'intimate Victorian era portrait painting, elegant French salon style, soft warm candlelight, in the style of John Singer Sargent, painterly brushwork, rich dark background, romantic atmosphere' },
+  { id:'belle-epoque',   name:'Belle Époque',    era:'Late 19th C · Tissot',        emoji:'🌹', prompt:'Belle Époque portrait in the style of James Tissot, fashionable late 19th century attire, warm interior setting, detailed fabric and texture, elegant and refined, 1880s Paris atmosphere' },
+  { id:'tweed',          name:'Tweed',           era:'Northern European · Dark',    emoji:'🦌', prompt:'dark Northern European portrait, subject in rich tweeds and earthy tones, dark moody background, Flemish-inspired technique, in the style of Franz Hals and Anthony van Dyck, strong chiaroscuro' },
+  { id:'red-forest',     name:'Red Forest',      era:'Romantic · Landscape',        emoji:'🌲', prompt:'romantic portrait with lush red and golden autumn forest landscape behind subject, warm glowing light, painterly technique, in the style of Caspar David Friedrich, nature and nobility combined' },
+  { id:'casati',         name:'Casati',          era:'Theatrical · Opulent',        emoji:'✨', prompt:'theatrical and opulent portrait, subject in elaborate dramatic costume and jewellery, rich brocade and fur, grand baroque interior background, in the style of Giovanni Boldini, theatrical and expressive' },
+];
+
 const state = {
-  cat:null,catLabel:null,file:null,imageDataURL:null,imageBase64:null,
-  generatedImageData:null,printifyImageId:null,printifyImageUrl:null,
-  isFallback:false,pkg:null,pkgPrice:null,pkgLabel:null
-};
-const catLabels={pets:'Pet Portrait',family:'Family Portrait',children:"Children's Portrait",couples:'Couple Portrait',self:'Self-Portrait'};
-const pkgDetails={
-  squire:{includes:'20×25 cm canvas (8×10 in) + digital file',shipping:'7–10 business days'},
-  noble:{includes:'30×40 cm canvas (12×16 in) + digital file',shipping:'7–10 business days'},
-  royal:{includes:'45×60 cm canvas (18×24 in) + digital file',shipping:'7–10 business days'}
+  cat:null, catLabel:null,
+  style:null, styleLabel:null, stylePrompt:null,
+  files:[], imageDatas:[], imageBase64s:[],
+  generatedImageData:null, generationHistory:[],
+  printifyImageId:null, printifyImageUrl:null,
+  isFallback:false,
+  pkg:null, pkgPrice:null, pkgLabel:null, pkgSize:null,
 };
 
-function goToStep(n){
-  document.querySelectorAll('.step-panel').forEach(p=>p.classList.remove('active'));
-  document.getElementById('step-'+n).classList.add('active');
-  document.querySelectorAll('.pb-step').forEach(s=>{
-    const sn=parseInt(s.dataset.step);
+const catLabels = { pets:'Pet Portrait', family:'Family Portrait', children:"Children's Portrait", couples:'Couple Portrait', self:'Self-Portrait' };
+const pkgDetails = {
+  digital:{ includes:'High-res digital file, no watermark', shipping:'Instant download' },
+  print:  { includes:'Fine art print + digital file',       shipping:'Free · 7–10 business days' },
+  canvas: { includes:'Gallery canvas + digital file',       shipping:'Free · 7–10 business days' },
+};
+
+function renderStyleGrid() {
+  document.getElementById('style-grid').innerHTML = STYLES.map(s => `
+    <div class="style-card" data-style="${s.id}" onclick="selectStyle(this)">
+      <div class="style-thumb"><span style="font-size:2.5rem">${s.emoji}</span></div>
+      <div class="style-info"><div class="style-name">${s.name}</div><div class="style-era">${s.era}</div></div>
+      <div class="style-selected-badge">✓ Selected</div>
+    </div>`).join('');
+}
+renderStyleGrid();
+
+let countdownSecs = 15 * 60;
+setInterval(() => {
+  if (countdownSecs <= 0) return;
+  countdownSecs--;
+  const m = Math.floor(countdownSecs / 60), s = countdownSecs % 60;
+  const el = document.getElementById('countdown');
+  if (el) el.textContent = `${m}:${s.toString().padStart(2,'0')}`;
+}, 1000);
+
+function goToStep(n) {
+  document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('step-' + n).classList.add('active');
+  document.querySelectorAll('.pb-step').forEach(s => {
+    const sn = parseInt(s.dataset.step);
     s.classList.remove('active','done');
-    if(sn<n)s.classList.add('done');else if(sn===n)s.classList.add('active');
+    if (sn < n) s.classList.add('done');
+    else if (sn === n) s.classList.add('active');
   });
   document.querySelector('.wizard-wrap').scrollIntoView({behavior:'smooth',block:'start'});
-  if(n===6)populateCheckout();
+  if (n === 7) populateCheckout();
 }
-function selectCat(el){
-  document.querySelectorAll('.cat-card').forEach(c=>c.classList.remove('selected'));
+
+function selectCat(el) {
+  document.querySelectorAll('.cat-card').forEach(c => c.classList.remove('selected'));
   el.classList.add('selected');
-  state.cat=el.dataset.cat;state.catLabel=catLabels[state.cat];
-  document.getElementById('btn-next-1').disabled=false;
+  state.cat = el.dataset.cat;
+  state.catLabel = catLabels[state.cat];
+  document.getElementById('btn-next-1').disabled = false;
 }
-function handleFile(file){
-  if(!file)return;
-  if(file.size>20*1024*1024){alert('File too large. Please upload an image under 20 MB.');return;}
-  state.file=file;
-  const reader=new FileReader();
-  reader.onload=e=>{
-    const img=new Image();
-    img.onload=()=>{
-      const canvas=document.createElement('canvas');
-      const MAX=1024;let w=img.width,h=img.height;
-      if(w>h&&w>MAX){h=Math.round(h*MAX/w);w=MAX;}else if(h>MAX){w=Math.round(w*MAX/h);h=MAX;}
-      canvas.width=w;canvas.height=h;
-      canvas.getContext('2d').drawImage(img,0,0,w,h);
-      const resized=canvas.toDataURL('image/jpeg',0.85);
-      state.imageDataURL=resized;state.imageBase64=resized.split(',')[1];
-      document.getElementById('btn-next-2').disabled=false;
-      const zone=document.getElementById('upload-zone');
-      zone.style.borderColor='var(--teal)';zone.style.background='rgba(62,207,178,.06)';
-      zone.querySelector('h3').textContent='✓  Photo ready';zone.querySelector('p').textContent=file.name;
+
+function selectStyle(el) {
+  document.querySelectorAll('.style-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  const found = STYLES.find(s => s.id === el.dataset.style);
+  if (found) { state.style = found.id; state.styleLabel = found.name; state.stylePrompt = found.prompt; }
+  document.getElementById('btn-next-2').disabled = false;
+}
+
+function handleFiles(fileList) {
+  Array.from(fileList).forEach(file => {
+    if (state.files.length >= 4) return;
+    if (!file.type.startsWith('image/')) return;
+    if (file.size > 20 * 1024 * 1024) { alert('File too large. Max 20 MB.'); return; }
+    const reader = new FileReader();
+    reader.onload = e => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const MAX = 1024;
+        let w = img.width, h = img.height;
+        if (w > h && w > MAX) { h = Math.round(h * MAX / w); w = MAX; }
+        else if (h > MAX) { w = Math.round(w * MAX / h); h = MAX; }
+        canvas.width = w; canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        const resized = canvas.toDataURL('image/jpeg', 0.85);
+        state.files.push(file);
+        state.imageDatas.push(resized);
+        state.imageBase64s.push(resized.split(',')[1]);
+        renderUploadPreviews();
+        document.getElementById('btn-next-3').disabled = false;
+      };
+      img.src = e.target.result;
     };
-    img.src=e.target.result;
-  };
-  reader.readAsDataURL(file);
+    reader.readAsDataURL(file);
+  });
 }
-const uploadZone=document.getElementById('upload-zone');
-uploadZone.addEventListener('dragover',e=>{e.preventDefault();uploadZone.classList.add('drag-over');});
-uploadZone.addEventListener('dragleave',()=>uploadZone.classList.remove('drag-over'));
-uploadZone.addEventListener('drop',e=>{
-  e.preventDefault();uploadZone.classList.remove('drag-over');
-  const file=e.dataTransfer.files[0];
-  if(file&&file.type.startsWith('image/')){document.getElementById('photo-input').files=e.dataTransfer.files;handleFile(file);}
-});
-function setGenStep(n,status){
-  for(let i=1;i<n;i++){document.getElementById('gstep-'+i).classList.remove('active');document.getElementById('gstep-'+i).classList.add('done');document.getElementById('gcheck-'+i).style.display='inline';}
-  for(let i=1;i<=4;i++){
-    if(i===n){document.getElementById('gstep-'+i).classList.add('active');document.getElementById('gstep-'+i).classList.remove('done');document.getElementById('gcheck-'+i).style.display='none';}
-    else if(i>n){document.getElementById('gstep-'+i).classList.remove('active','done');document.getElementById('gcheck-'+i).style.display='none';}
+
+function removeUploadPhoto(idx) {
+  state.files.splice(idx, 1); state.imageDatas.splice(idx, 1); state.imageBase64s.splice(idx, 1);
+  renderUploadPreviews();
+  if (state.files.length === 0) document.getElementById('btn-next-3').disabled = true;
+}
+
+function renderUploadPreviews() {
+  const container = document.getElementById('upload-previews');
+  const zone = document.getElementById('upload-zone');
+  container.innerHTML = '';
+  state.imageDatas.forEach((src, i) => {
+    const wrap = document.createElement('div');
+    wrap.className = 'upload-thumb-wrap';
+    wrap.innerHTML = `<img class="upload-thumb" src="${src}"><button class="upload-thumb-remove" onclick="removeUploadPhoto(${i})">×</button>`;
+    container.appendChild(wrap);
+  });
+  if (state.files.length < 4) {
+    const addBtn = document.createElement('label');
+    addBtn.className = 'upload-add-btn'; addBtn.innerHTML = '+'; addBtn.htmlFor = 'photo-input-extra';
+    const inp = document.createElement('input');
+    inp.type = 'file'; inp.accept = 'image/*'; inp.multiple = true; inp.id = 'photo-input-extra'; inp.style.display = 'none';
+    inp.onchange = () => handleFiles(inp.files);
+    container.appendChild(addBtn); container.appendChild(inp);
   }
-  document.getElementById('gen-status').textContent=status;
+  const h3 = document.getElementById('upload-h3'), p = document.getElementById('upload-p');
+  if (state.files.length > 0) {
+    h3.textContent = `✓  ${state.files.length} photo${state.files.length > 1 ? 's' : ''} ready`;
+    p.textContent = state.files.length < 4 ? 'Click + to add more photos' : 'Maximum 4 photos reached';
+    zone.style.borderColor = 'var(--teal)'; zone.style.background = 'rgba(62,207,178,.04)';
+  } else {
+    h3.textContent = 'Drop your photo here'; p.textContent = 'or click to browse · add up to 4 photos';
+    zone.style.borderColor = ''; zone.style.background = '';
+  }
 }
-function showGenError(title,msg){
-  document.getElementById('gen-spinner').style.display='none';
-  document.getElementById('gen-title').textContent='Something went wrong';
-  document.getElementById('gen-status').textContent='';
-  document.getElementById('gen-error-title').textContent=title;
-  document.getElementById('gen-error-msg').textContent=msg;
+
+const uploadZone = document.getElementById('upload-zone');
+uploadZone.addEventListener('dragover', e => { e.preventDefault(); uploadZone.classList.add('drag-over'); });
+uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('drag-over'));
+uploadZone.addEventListener('drop', e => { e.preventDefault(); uploadZone.classList.remove('drag-over'); handleFiles(e.dataTransfer.files); });
+document.getElementById('photo-input').addEventListener('change', function() { handleFiles(this.files); });
+
+function setGenStep(n, status) {
+  for (let i = 1; i <= 4; i++) {
+    const s = document.getElementById('gstep-' + i), c = document.getElementById('gcheck-' + i);
+    s.classList.remove('active','done'); c.style.display = 'none';
+    if (i < n) { s.classList.add('done'); c.style.display = 'inline'; }
+    else if (i === n) s.classList.add('active');
+  }
+  document.getElementById('gen-status').textContent = status;
+}
+
+function showGenError(title, msg) {
+  document.getElementById('gen-spinner').style.display = 'none';
+  document.getElementById('gen-title').textContent = 'Something went wrong';
+  document.getElementById('gen-status').textContent = '';
+  document.getElementById('gen-error-title').textContent = title;
+  document.getElementById('gen-error-msg').textContent = msg;
   document.getElementById('gen-error').classList.add('visible');
 }
-function resetGenUI(){
-  document.getElementById('gen-spinner').style.display='block';
-  document.getElementById('gen-title').textContent='Analysing your photo…';
-  document.getElementById('gen-status').textContent='Studying your subject with Grok Vision';
+
+function resetGenUI() {
+  document.getElementById('gen-spinner').style.display = 'block';
+  document.getElementById('gen-title').textContent = 'Analysing your photo…';
+  document.getElementById('gen-status').textContent = 'Studying your subject';
   document.getElementById('gen-error').classList.remove('visible');
-  for(let i=1;i<=4;i++){document.getElementById('gstep-'+i).classList.remove('active','done');document.getElementById('gcheck-'+i).style.display='none';}
+  document.getElementById('style-label-gen').textContent = state.styleLabel || '';
+  for (let i = 1; i <= 4; i++) {
+    document.getElementById('gstep-' + i).classList.remove('active','done');
+    document.getElementById('gcheck-' + i).style.display = 'none';
+  }
   document.getElementById('gstep-1').classList.add('active');
 }
-async function startGeneration(){
-  goToStep(3);resetGenUI();state.isFallback=false;
-  try{
-    setGenStep(1,'Studying your subject with Grok Vision…');
-    const t2=setTimeout(()=>setGenStep(2,'Crafting the Renaissance portrait prompt…'),4000);
-    const t3=setTimeout(()=>{setGenStep(3,'Painting your portrait with Grok Imagine…');document.getElementById('gen-title').textContent='Painting your portrait…';},7000);
-    const res=await fetch('/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({imageBase64:state.imageBase64,imageMimeType:state.file?.type||'image/jpeg',category:state.cat,catLabel:state.catLabel})});
-    clearTimeout(t2);clearTimeout(t3);
-    if(!res.ok){const err=await res.json().catch(()=>({}));throw new Error(err.error||`Server error ${res.status}`);}
-    const data=await res.json();
-    state.generatedImageData=data.imageData;state.printifyImageId=data.printifyImageId||null;state.printifyImageUrl=data.printifyImageUrl||null;
-    setGenStep(4,'Applying the finishing touches…');
+
+async function startGeneration() {
+  let imageBase64;
+  if (state.imageBase64s.length === 0) return;
+  if (state.imageBase64s.length === 1) {
+    imageBase64 = state.imageBase64s[0];
+  } else {
+    imageBase64 = await compositeImages(state.imageDatas);
+  }
+  goToStep(4); resetGenUI(); state.isFallback = false;
+  try {
+    setGenStep(1, 'Studying your subject…');
+    const t2 = setTimeout(() => setGenStep(2, `Applying ${state.styleLabel} style…`), 4000);
+    const t3 = setTimeout(() => { setGenStep(3, 'Painting your portrait…'); document.getElementById('gen-title').textContent = 'Painting your portrait…'; }, 8000);
+    const res = await fetch('/api/generate', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ imageBase64, imageMimeType:'image/jpeg', category:state.cat, catLabel:state.catLabel, style:state.style, stylePrompt:state.stylePrompt }),
+    });
+    clearTimeout(t2); clearTimeout(t3);
+    if (!res.ok) { const err = await res.json().catch(() => ({})); throw new Error(err.error || `Server error ${res.status}`); }
+    const data = await res.json();
+    state.generatedImageData = data.imageData;
+    state.printifyImageId = data.printifyImageId || null;
+    state.printifyImageUrl = data.printifyImageUrl || null;
+    state.generationHistory.unshift(data.imageData);
+    if (state.generationHistory.length > 6) state.generationHistory.pop();
+    setGenStep(4, 'Applying finishing touches…');
     await delay(700);
-    for(let i=1;i<=4;i++){document.getElementById('gstep-'+i).classList.remove('active');document.getElementById('gstep-'+i).classList.add('done');document.getElementById('gcheck-'+i).style.display='inline';}
-    document.getElementById('gen-status').textContent='Your masterpiece is ready ✦';
-    document.getElementById('gen-title').textContent='Portrait complete!';
+    for (let i = 1; i <= 4; i++) { document.getElementById('gstep-'+i).classList.remove('active'); document.getElementById('gstep-'+i).classList.add('done'); document.getElementById('gcheck-'+i).style.display='inline'; }
+    document.getElementById('gen-status').textContent = 'Your masterpiece is ready ✦';
+    document.getElementById('gen-title').textContent = 'Portrait complete!';
     await delay(800);
     renderWatermarkedPreview(state.generatedImageData);
-    goToStep(4);
-  }catch(err){showGenError('Generation failed',err.message||'An unexpected error occurred.');}
-}
-function showFallbackPreview(){state.isFallback=true;renderWatermarkedPreview(state.imageDataURL);goToStep(4);}
-function renderWatermarkedPreview(imageSrc){
-  const canvas=document.getElementById('preview-canvas');
-  const ctx=canvas.getContext('2d');
-  const img=new Image();img.crossOrigin='anonymous';
-  img.onload=()=>{
-    const maxW=400,scale=Math.min(1,maxW/img.width);
-    canvas.width=Math.round(img.width*scale);canvas.height=Math.round(img.height*scale);
-    const W=canvas.width,H=canvas.height;
-    ctx.drawImage(img,0,0,W,H);
-    ctx.fillStyle='rgba(10,5,0,0.12)';ctx.fillRect(0,0,W,H);
-    ctx.save();ctx.font='bold 13px Arial,sans-serif';ctx.fillStyle='rgba(255,255,255,0.18)';
-    ctx.translate(W/2,H/2);ctx.rotate(-Math.PI/6);
-    for(let r=-8;r<=8;r++)for(let c=-8;c<=8;c++)ctx.fillText('PAWTRAITS',c*155,r*100);
-    ctx.restore();
-    ctx.save();ctx.textAlign='center';ctx.textBaseline='middle';
-    const cx=W/2,cy=H/2,pw=230,ph=44;
-    ctx.fillStyle='rgba(0,0,0,0.60)';roundRect(ctx,cx-pw/2,cy-ph/2,pw,ph,22);ctx.fill();
-    ctx.strokeStyle='rgba(62,207,178,0.75)';ctx.lineWidth=1.5;roundRect(ctx,cx-pw/2,cy-ph/2,pw,ph,22);ctx.stroke();
-    ctx.fillStyle='rgba(62,207,178,0.92)';ctx.font='bold 12px Arial,sans-serif';ctx.fillText('✦  PAWTRAITS  ·  PREVIEW ONLY  ✦',cx,cy);ctx.restore();
-    ctx.save();ctx.fillStyle='rgba(62,207,178,0.65)';ctx.font='9px Arial,sans-serif';ctx.textAlign='right';ctx.fillText('PAWTRAITS.COM',W-8,H-8);ctx.restore();
-    const vign=ctx.createRadialGradient(W/2,H/2,W*0.35,W/2,H/2,W*0.75);
-    vign.addColorStop(0,'transparent');vign.addColorStop(1,'rgba(0,0,0,0.35)');
-    ctx.fillStyle=vign;ctx.fillRect(0,0,W,H);
-  };
-  img.onerror=()=>{if(imageSrc!==state.imageDataURL)renderWatermarkedPreview(state.imageDataURL);};
-  img.src=imageSrc;
-  document.getElementById('prev-cat').textContent=state.catLabel||'—';
-}
-function roundRect(ctx,x,y,w,h,r){
-  ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.quadraticCurveTo(x+w,y,x+w,y+r);
-  ctx.lineTo(x+w,y+h-r);ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);ctx.lineTo(x+r,y+h);
-  ctx.quadraticCurveTo(x,y+h,x,y+h-r);ctx.lineTo(x,y+r);ctx.quadraticCurveTo(x,y,x+r,y);ctx.closePath();
-}
-function selectPkg(el){
-  document.querySelectorAll('.pkg-card').forEach(c=>c.classList.remove('selected'));
-  el.classList.add('selected');
-  state.pkg=el.dataset.pkg;state.pkgPrice=el.dataset.price;state.pkgLabel=el.querySelector('.pkg-name').textContent;
-  document.getElementById('btn-next-5').disabled=false;
-}
-function populateCheckout(){
-  const canvas=document.getElementById('preview-canvas');
-  if(canvas.width>0)document.getElementById('checkout-thumb').src=canvas.toDataURL('image/jpeg',0.65);
-  document.getElementById('checkout-cat').textContent=state.catLabel||'—';
-  document.getElementById('checkout-pkg').textContent=state.pkgLabel||'—';
-  const d=pkgDetails[state.pkg]||{};
-  document.getElementById('checkout-includes').textContent=d.includes||'—';
-  document.getElementById('checkout-ship').textContent=d.shipping||'—';
-  document.getElementById('checkout-price').textContent=state.pkgPrice||'—';
-}
-async function goToStripe(){
-  const btn=document.querySelector('.pay-btn');
-  btn.textContent='Preparing checkout…';btn.disabled=true;
-  try{
-    const res=await fetch('/api/checkout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({pkg:state.pkg,printifyImageId:state.printifyImageId,printifyImageUrl:state.printifyImageUrl,catLabel:state.catLabel})});
-    const data=await res.json();
-    if(!res.ok||!data.url)throw new Error(data.error||'Could not create checkout session');
-    window.location.href=data.url;
-  }catch(err){
-    btn.textContent='Proceed to Secure Checkout';btn.disabled=false;
-    alert('Checkout failed: '+err.message);
+    renderGenerationHistory();
+    goToStep(5);
+  } catch (err) {
+    console.error('Generation error:', err);
+    showGenError('Generation failed', err.message || 'An unexpected error occurred.');
   }
 }
-function delay(ms){return new Promise(r=>setTimeout(r,ms));}
-document.querySelectorAll('.fq').forEach(btn=>{
-  btn.addEventListener('click',()=>{
-    const item=btn.closest('.fi'),ans=item.querySelector('.fa'),open=item.classList.contains('open');
-    document.querySelectorAll('.fi.open').forEach(i=>{i.classList.remove('open');i.querySelector('.fa').style.maxHeight=null;});
-    if(!open){item.classList.add('open');ans.style.maxHeight=ans.scrollHeight+'px';}
+
+async function compositeImages(dataSrcs) {
+  return new Promise(resolve => {
+    const imgs = dataSrcs.map(src => { const img = new Image(); img.src = src; return img; });
+    Promise.all(imgs.map(img => new Promise(r => { img.onload = r; if(img.complete) r(); }))).then(() => {
+      const h = 512;
+      const totalW = imgs.reduce((sum, img) => sum + Math.round(img.width * h / img.height), 0);
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.min(totalW, 1024); canvas.height = h;
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#111'; ctx.fillRect(0, 0, canvas.width, h);
+      let x = 0;
+      const scale = canvas.width / totalW;
+      imgs.forEach(img => { const iw = Math.round(img.width * h / img.height) * scale; ctx.drawImage(img, x, 0, iw, h); x += iw; });
+      resolve(canvas.toDataURL('image/jpeg', 0.85).split(',')[1]);
+    });
+  });
+}
+
+function showFallbackPreview() {
+  state.isFallback = true;
+  renderWatermarkedPreview(state.imageDatas[0] || '');
+  goToStep(5);
+}
+
+function renderWatermarkedPreview(imageSrc) {
+  const canvas = document.getElementById('preview-canvas');
+  const ctx = canvas.getContext('2d');
+  const img = new Image();
+  img.crossOrigin = 'anonymous';
+  img.onload = () => {
+    const maxW = 400, scale = Math.min(1, maxW / img.width);
+    canvas.width = Math.round(img.width * scale); canvas.height = Math.round(img.height * scale);
+    const W = canvas.width, H = canvas.height;
+    ctx.drawImage(img, 0, 0, W, H);
+    ctx.fillStyle = 'rgba(10,5,0,0.12)'; ctx.fillRect(0, 0, W, H);
+    ctx.save();
+    ctx.font = 'bold 13px "Instrument Sans", Arial, sans-serif'; ctx.fillStyle = 'rgba(255,255,255,0.18)';
+    ctx.translate(W/2, H/2); ctx.rotate(-Math.PI/6);
+    const step=100, cols=Math.ceil((W*1.5)/step)+3, rows=Math.ceil((H*1.5)/step)+3;
+    for(let r=-rows;r<=rows;r++) for(let c=-cols;c<=cols;c++) ctx.fillText('PAWTRAITS', c*155, r*step);
+    ctx.restore();
+    ctx.save();
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    const cx=W/2, cy=H/2, pw=230, ph=44;
+    ctx.fillStyle='rgba(0,0,0,0.60)'; roundRect(ctx,cx-pw/2,cy-ph/2,pw,ph,22); ctx.fill();
+    ctx.strokeStyle='rgba(62,207,178,0.75)'; ctx.lineWidth=1.5; roundRect(ctx,cx-pw/2,cy-ph/2,pw,ph,22); ctx.stroke();
+    ctx.fillStyle='rgba(62,207,178,0.92)'; ctx.font='bold 12px "Instrument Sans",Arial,sans-serif';
+    ctx.fillText('✦  PAWTRAITS  ·  PREVIEW ONLY  ✦', cx, cy);
+    ctx.restore();
+    const vign = ctx.createRadialGradient(W/2,H/2,W*0.35,W/2,H/2,W*0.75);
+    vign.addColorStop(0,'transparent'); vign.addColorStop(1,'rgba(0,0,0,0.35)');
+    ctx.fillStyle=vign; ctx.fillRect(0,0,W,H);
+  };
+  img.src = imageSrc;
+  document.getElementById('prev-cat').textContent = state.catLabel || '—';
+  document.getElementById('prev-style').textContent = state.styleLabel || '—';
+}
+
+function renderGenerationHistory() {
+  const container = document.getElementById('gen-history'), grid = document.getElementById('gen-history-grid');
+  if (state.generationHistory.length <= 1) { container.style.display = 'none'; return; }
+  container.style.display = 'block';
+  grid.innerHTML = state.generationHistory.map((src, i) =>
+    `<img class="gen-history-thumb ${i===0?'active':''}" src="${src}" title="Generation ${i+1}" onclick="switchGeneration(${i},this)">`).join('');
+}
+
+function switchGeneration(idx, el) {
+  state.generatedImageData = state.generationHistory[idx];
+  renderWatermarkedPreview(state.generatedImageData);
+  document.querySelectorAll('.gen-history-thumb').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function roundRect(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.quadraticCurveTo(x+w,y,x+w,y+r);ctx.lineTo(x+w,y+h-r);ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);ctx.lineTo(x+r,y+h);ctx.quadraticCurveTo(x,y+h,x,y+h-r);ctx.lineTo(x,y+r);ctx.quadraticCurveTo(x,y,x+r,y);ctx.closePath();}
+
+function selectPkg(el) {
+  document.querySelectorAll('.pkg-card-f').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  state.pkg = el.dataset.pkg;
+  updatePkgPrice();
+  document.getElementById('btn-next-6').disabled = false;
+}
+
+function updatePkgPrice() {
+  const selected = document.querySelector('.pkg-card-f.selected');
+  if (!selected) return;
+  const pkg = selected.dataset.pkg;
+  let price = selected.dataset.price;
+  if (pkg === 'print') {
+    const sel = document.getElementById('print-size');
+    price = '$' + sel.options[sel.selectedIndex].dataset.price;
+    state.pkgSize = sel.value;
+  } else if (pkg === 'canvas') {
+    const sel = document.getElementById('canvas-size');
+    price = '$' + sel.options[sel.selectedIndex].dataset.price;
+    document.getElementById('canvas-price-display').textContent = price;
+    state.pkgSize = sel.value;
+    selected.dataset.price = price;
+  }
+  state.pkg = pkg;
+  state.pkgPrice = price;
+  state.pkgLabel = selected.querySelector('.pkg-name-f').textContent;
+}
+
+function populateCheckout() {
+  const canvas = document.getElementById('preview-canvas');
+  if (canvas.width > 0) document.getElementById('checkout-thumb').src = canvas.toDataURL('image/jpeg', 0.65);
+  document.getElementById('checkout-cat').textContent = state.catLabel || '—';
+  document.getElementById('checkout-style').textContent = state.styleLabel || '—';
+  document.getElementById('checkout-pkg').textContent = state.pkgLabel || '—';
+  const d = pkgDetails[state.pkg] || {};
+  const sizeStr = state.pkgSize ? ` (${state.pkgSize.replace('x',' × ')} cm)` : '';
+  document.getElementById('checkout-includes').textContent = (d.includes || '—') + sizeStr;
+  document.getElementById('checkout-price').textContent = state.pkgPrice || '—';
+}
+
+async function goToStripe() {
+  const btn = document.querySelector('.pay-btn');
+  btn.textContent = 'Preparing checkout…'; btn.disabled = true;
+  try {
+    const res = await fetch('/api/checkout', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ pkg:state.pkg, pkgSize:state.pkgSize, printifyImageId:state.printifyImageId, printifyImageUrl:state.printifyImageUrl, catLabel:state.catLabel }),
+    });
+    const data = await res.json();
+    if (!res.ok || !data.url) throw new Error(data.error || 'Could not create checkout session');
+    window.location.href = data.url;
+  } catch(err) {
+    console.error('Checkout error:', err);
+    btn.textContent = 'Proceed to Secure Checkout'; btn.disabled = false;
+    alert('Checkout failed: ' + err.message);
+  }
+}
+
+function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+document.querySelectorAll('.fq').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const item = btn.closest('.fi'), ans = item.querySelector('.fa'), open = item.classList.contains('open');
+    document.querySelectorAll('.fi.open').forEach(i => { i.classList.remove('open'); i.querySelector('.fa').style.maxHeight = null; });
+    if (!open) { item.classList.add('open'); ans.style.maxHeight = ans.scrollHeight + 'px'; }
   });
 });
-const obs=new IntersectionObserver(entries=>{
-  entries.forEach((e,i)=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('visible'),80*i);obs.unobserve(e.target);}});
-},{threshold:.1});
-document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+const obs = new IntersectionObserver(entries => {
+  entries.forEach((e,i) => { if (e.isIntersecting) { setTimeout(() => e.target.classList.add('visible'), 80*i); obs.unobserve(e.target); } });
+}, {threshold:.1});
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 </script>
 </body>
 </html>

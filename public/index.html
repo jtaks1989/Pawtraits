@@ -77,11 +77,13 @@
     .style-card{background:var(--card);border:1.5px solid var(--border);border-radius:12px;overflow:hidden;cursor:pointer;transition:border-color .25s,transform .25s;position:relative;}
     .style-card:hover{border-color:var(--bh);transform:translateY(-3px);}
     .style-card.selected{border-color:var(--teal);box-shadow:0 0 0 1px var(--teal);}
-    .style-thumb{width:100%;aspect-ratio:3/4;background:linear-gradient(145deg,#1a1208,#2a1e0e);display:flex;align-items:center;justify-content:center;font-size:2.5rem;position:relative;overflow:hidden;}
+    .style-thumb{width:100%;aspect-ratio:3/4;background:linear-gradient(145deg,#1a1208,#2a1e0e);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+    .style-thumb-img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;transition:transform .4s ease;}
+    .style-card:hover .style-thumb-img{transform:scale(1.05);}
     .style-info{padding:.9rem;border-top:1px solid var(--border);}
     .style-name{font-family:'DM Serif Display',serif;font-size:.95rem;color:var(--white);margin-bottom:.2rem;}
     .style-era{font-size:.72rem;color:var(--muted);}
-    .style-selected-badge{position:absolute;top:.5rem;right:.5rem;background:var(--teal);color:var(--black);font-size:.6rem;font-weight:700;padding:.2rem .5rem;border-radius:100px;display:none;}
+    .style-selected-badge{position:absolute;top:.5rem;right:.5rem;background:var(--teal);color:var(--black);font-size:.6rem;font-weight:700;padding:.2rem .5rem;border-radius:100px;display:none;z-index:2;}
     .style-card.selected .style-selected-badge{display:block;}
 
     .upload-zone{border:2px dashed rgba(62,207,178,.3);border-radius:16px;background:rgba(62,207,178,.025);padding:3rem 2rem;text-align:center;cursor:pointer;position:relative;transition:border-color .25s,background .25s;}
@@ -657,15 +659,15 @@
 
 <script>
 const STYLES = [
-  { id:'grand-manner',   name:'Grand Manner',   era:'18th Century · Gainsborough', emoji:'👑', prompt:'formal Grand Manner aristocratic oil painting, subject in rich velvet and silk attire, dramatic draped curtain background, stately pose, warm golden light, in the style of Thomas Gainsborough and Joshua Reynolds' },
-  { id:'storm',          name:'Storm',           era:'Romantic Era · Turner',       emoji:'⛈️', prompt:'Romantic era portrait, dramatic stormy sky behind subject, windswept atmosphere, emotional lighting, rich colours, in the style of J.M.W. Turner and Delacroix, passionate and dramatic' },
-  { id:'nobel',          name:'Nobel',           era:'19th Century · Academic',     emoji:'🏛️', prompt:'formal 19th century Academic portrait, subject in distinguished attire, neutral dark background, classical composition, precise realist technique, in the style of Léon Bonnat and William-Adolphe Bouguereau' },
-  { id:'velazquez',      name:'Velázquez',       era:'Spanish Baroque · 17th C',    emoji:'🖤', prompt:'Spanish Baroque portrait in the style of Diego Velázquez, subject in dark formal Spanish court attire with white ruff collar, muted dark background, masterful light, loose brushwork, 17th century' },
-  { id:'french-romance', name:'French Romance',  era:'Victorian · Sargent',         emoji:'💫', prompt:'intimate Victorian era portrait painting, elegant French salon style, soft warm candlelight, in the style of John Singer Sargent, painterly brushwork, rich dark background, romantic atmosphere' },
-  { id:'belle-epoque',   name:'Belle Époque',    era:'Late 19th C · Tissot',        emoji:'🌹', prompt:'Belle Époque portrait in the style of James Tissot, fashionable late 19th century attire, warm interior setting, detailed fabric and texture, elegant and refined, 1880s Paris atmosphere' },
-  { id:'tweed',          name:'Tweed',           era:'Northern European · Dark',    emoji:'🦌', prompt:'dark Northern European portrait, subject in rich tweeds and earthy tones, dark moody background, Flemish-inspired technique, in the style of Franz Hals and Anthony van Dyck, strong chiaroscuro' },
-  { id:'red-forest',     name:'Red Forest',      era:'Romantic · Landscape',        emoji:'🌲', prompt:'romantic portrait with lush red and golden autumn forest landscape behind subject, warm glowing light, painterly technique, in the style of Caspar David Friedrich, nature and nobility combined' },
-  { id:'casati',         name:'Casati',          era:'Theatrical · Opulent',        emoji:'✨', prompt:'theatrical and opulent portrait, subject in elaborate dramatic costume and jewellery, rich brocade and fur, grand baroque interior background, in the style of Giovanni Boldini, theatrical and expressive' },
+  { id:'grand-manner',   name:'Grand Manner',   era:'18th Century · Gainsborough', prompt:'formal Grand Manner aristocratic oil painting, subject in rich velvet and silk attire, dramatic draped curtain background, stately pose, warm golden light, in the style of Thomas Gainsborough and Joshua Reynolds' },
+  { id:'storm',          name:'Storm',           era:'Romantic Era · Turner',       prompt:'Romantic era portrait, dramatic stormy sky behind subject, windswept atmosphere, emotional lighting, rich colours, in the style of J.M.W. Turner and Delacroix, passionate and dramatic' },
+  { id:'nobel',          name:'Nobel',           era:'19th Century · Academic',     prompt:'formal 19th century Academic portrait, subject in distinguished attire, neutral dark background, classical composition, precise realist technique, in the style of Léon Bonnat and William-Adolphe Bouguereau' },
+  { id:'velazquez',      name:'Velázquez',       era:'Spanish Baroque · 17th C',    prompt:'Spanish Baroque portrait in the style of Diego Velázquez, subject in dark formal Spanish court attire with white ruff collar, muted dark background, masterful light, loose brushwork, 17th century' },
+  { id:'french-romance', name:'French Romance',  era:'Victorian · Sargent',         prompt:'intimate Victorian era portrait painting, elegant French salon style, soft warm candlelight, in the style of John Singer Sargent, painterly brushwork, rich dark background, romantic atmosphere' },
+  { id:'belle-epoque',   name:'Belle Époque',    era:'Late 19th C · Tissot',        prompt:'Belle Époque portrait in the style of James Tissot, fashionable late 19th century attire, warm interior setting, detailed fabric and texture, elegant and refined, 1880s Paris atmosphere' },
+  { id:'tweed',          name:'Tweed',           era:'Northern European · Dark',    prompt:'dark Northern European portrait, subject in rich tweeds and earthy tones, dark moody background, Flemish-inspired technique, in the style of Franz Hals and Anthony van Dyck, strong chiaroscuro' },
+  { id:'red-forest',     name:'Red Forest',      era:'Romantic · Landscape',        prompt:'romantic portrait with lush red and golden autumn forest landscape behind subject, warm glowing light, painterly technique, in the style of Caspar David Friedrich, nature and nobility combined' },
+  { id:'casati',         name:'Casati',          era:'Theatrical · Opulent',        prompt:'theatrical and opulent portrait, subject in elaborate dramatic costume and jewellery, rich brocade and fur, grand baroque interior background, in the style of Giovanni Boldini, theatrical and expressive' },
 ];
 
 const state = {
@@ -688,7 +690,9 @@ const pkgDetails = {
 function renderStyleGrid() {
   document.getElementById('style-grid').innerHTML = STYLES.map(s => `
     <div class="style-card" data-style="${s.id}" onclick="selectStyle(this)">
-      <div class="style-thumb"><span style="font-size:2.5rem">${s.emoji}</span></div>
+      <div class="style-thumb">
+        <img class="style-thumb-img" src="/style-${s.id}.jpg" alt="${s.name}" loading="lazy">
+      </div>
       <div class="style-info"><div class="style-name">${s.name}</div><div class="style-era">${s.era}</div></div>
       <div class="style-selected-badge">✓ Selected</div>
     </div>`).join('');

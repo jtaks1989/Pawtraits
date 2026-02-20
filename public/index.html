@@ -312,7 +312,7 @@
     <div class="pb-step" data-step="7"><div class="pb-dot"><span>7</span></div><div class="pb-fill"></div><div class="pb-label">Checkout</div></div>
   </div>
 
-  <!-- STEP 1: CATEGORY -->
+  <!-- STEP 1 -->
   <div class="step-panel active" id="step-1">
     <h2 class="step-heading">What would you like to <span class="accent">immortalise?</span></h2>
     <p class="step-desc">Choose your portrait category — our AI will style it accordingly.</p>
@@ -329,7 +329,7 @@
     </div>
   </div>
 
-  <!-- STEP 2: STYLE -->
+  <!-- STEP 2 -->
   <div class="step-panel" id="step-2">
     <h2 class="step-heading">Choose your <span class="accent">style</span></h2>
     <p class="step-desc">Each style reflects a distinct era of portrait painting — pick the one that speaks to you.</p>
@@ -340,11 +340,10 @@
     </div>
   </div>
 
-  <!-- STEP 3: UPLOAD -->
+  <!-- STEP 3 -->
   <div class="step-panel" id="step-3">
     <h2 class="step-heading">Upload your <span class="accent">photo</span></h2>
-    <p class="step-desc">Upload one or more photos. For groups, add each person separately — our AI will combine them into one portrait.</p>
-
+    <p class="step-desc" id="upload-step-desc">Upload one or more photos. For groups, add each person separately — our AI will combine them into one portrait.</p>
     <div class="gender-wrap">
       <div class="gender-label">Who is in the photo?</div>
       <div class="gender-btns">
@@ -354,7 +353,6 @@
         <button class="gender-btn" data-gender="mixed" onclick="selectGender(this)"><span class="gender-btn-ico">👫</span> Mixed / Group</button>
       </div>
     </div>
-
     <div class="upload-zone" id="upload-zone" style="margin-top:1.5rem;">
       <input type="file" id="photo-input" accept="image/*" multiple>
       <div class="upload-icon">📸</div>
@@ -375,7 +373,7 @@
     </div>
   </div>
 
-  <!-- STEP 4: GENERATING -->
+  <!-- STEP 4 -->
   <div class="step-panel" id="step-4">
     <h2 class="step-heading">Creating your <span class="accent">masterpiece</span></h2>
     <p class="step-desc">Our AI is painting your portrait. This takes about 20–40 seconds.</p>
@@ -383,7 +381,6 @@
       <div class="gen-spinner" id="gen-spinner"></div>
       <div class="gen-title" id="gen-title">Analysing your photo…</div>
       <div class="gen-status" id="gen-status">Studying your subject</div>
-
       <div class="gen-progress-wrap">
         <div class="gen-progress-pct-row">
           <span class="gen-progress-pct" id="gen-progress-pct">0</span><span class="gen-progress-pct-sym">%</span>
@@ -391,7 +388,6 @@
         <div class="gen-progress-bar"><div class="gen-progress-fill" id="gen-progress-fill"></div></div>
         <div class="gen-progress-eta" id="gen-progress-eta">~40 seconds remaining</div>
       </div>
-
       <div class="gen-steps">
         <div class="gen-step active" id="gstep-1"><span class="gen-step-ico">🔍</span>Analysing subject<span class="gen-step-check" id="gcheck-1" style="display:none">✓</span></div>
         <div class="gen-step" id="gstep-2"><span class="gen-step-ico">🎨</span>Applying <span id="style-label-gen" style="margin-left:.25rem;color:var(--teal)"></span>&nbsp;style<span class="gen-step-check" id="gcheck-2" style="display:none">✓</span></div>
@@ -409,7 +405,7 @@
     </div>
   </div>
 
-  <!-- STEP 5: PREVIEW -->
+  <!-- STEP 5 -->
   <div class="step-panel" id="step-5">
     <h2 class="step-heading">Your AI <span class="accent">portrait</span></h2>
     <p class="step-desc">Your masterpiece is ready. Not happy? Try again or generate in a different style.</p>
@@ -440,13 +436,12 @@
     </div>
   </div>
 
-  <!-- STEP 6: PACKAGES -->
+  <!-- STEP 6 -->
   <div class="step-panel" id="step-6">
     <h2 class="step-heading">Choose your <span class="accent">format</span></h2>
     <p class="step-desc">All formats include your high-resolution digital file. Prints ship free worldwide.</p>
     <div class="pkg-banner">🚚 Free Shipping on All Prints &nbsp;·&nbsp; Delivery 7–10 days &nbsp;·&nbsp; Worldwide</div>
     <div class="pkg-grid-fable">
-
       <div class="pkg-card-f" data-pkg="digital" data-price="$29" onclick="selectPkg(this)">
         <div class="pkg-badge-top pkg-badge-pop">MOST POPULAR</div>
         <div class="pkg-icon">⬇️</div>
@@ -461,7 +456,6 @@
         </ul>
         <button class="pkg-sel-btn-f">Download Now</button>
       </div>
-
       <div class="pkg-card-f" data-pkg="print" data-price="$89" onclick="selectPkg(this)">
         <div class="pkg-icon">📦</div>
         <div class="pkg-name-f">Fine Art Print</div>
@@ -484,7 +478,6 @@
         <div class="pkg-digital-tag">+ Includes digital download</div>
         <button class="pkg-sel-btn-f">Order Print</button>
       </div>
-
       <div class="pkg-card-f royal-card" data-pkg="canvas" data-price="$149" onclick="selectPkg(this)">
         <div class="pkg-badge-top pkg-badge-gift">🎁 The Perfect Gift</div>
         <div class="pkg-icon">📦</div>
@@ -508,7 +501,6 @@
         <div class="pkg-digital-tag">+ Includes digital download</div>
         <button class="pkg-sel-btn-f">Order Canvas</button>
       </div>
-
     </div>
     <div class="step-nav">
       <button class="btn-back" onclick="goToStep(5)">← Back</button>
@@ -516,7 +508,7 @@
     </div>
   </div>
 
-  <!-- STEP 7: CHECKOUT -->
+  <!-- STEP 7 -->
   <div class="step-panel" id="step-7">
     <h2 class="step-heading">Review &amp; <span class="accent">pay</span></h2>
     <p class="step-desc">You'll be taken to Stripe's secure checkout. After payment, we print and ship your masterpiece.</p>
@@ -548,7 +540,7 @@
     </div>
   </div>
 
-</div><!-- /wizard-wrap -->
+</div>
 
 <!-- GALLERY -->
 <div id="gallery" style="background:#0a0805;border-top:1px solid var(--border);padding:5.5rem 1.5rem;">
@@ -695,15 +687,60 @@
 
 <script>
 const STYLES = [
-  { id:'grand-manner',   name:'Grand Manner',   era:'18th Century · Gainsborough', prompt:'formal Grand Manner aristocratic oil painting, subject in rich velvet and silk attire, dramatic draped curtain background, stately pose, warm golden light, in the style of Thomas Gainsborough and Joshua Reynolds' },
-  { id:'storm',          name:'Storm',           era:'Romantic Era · Turner',       prompt:'Romantic era portrait, dramatic stormy sky behind subject, windswept atmosphere, emotional lighting, rich colours, in the style of J.M.W. Turner and Delacroix, passionate and dramatic' },
-  { id:'nobel',          name:'Nobel',           era:'19th Century · Academic',     prompt:'formal 19th century Academic portrait, subject in distinguished attire, neutral dark background, classical composition, precise realist technique, in the style of Léon Bonnat and William-Adolphe Bouguereau' },
-  { id:'velazquez',      name:'Velázquez',       era:'Spanish Baroque · 17th C',    prompt:'Spanish Baroque portrait in the style of Diego Velázquez, subject in dark formal Spanish court attire with white ruff collar, muted dark background, masterful light, loose brushwork, 17th century' },
-  { id:'french-romance', name:'French Romance',  era:'Victorian · Sargent',         prompt:'intimate Victorian era portrait painting, elegant French salon style, soft warm candlelight, in the style of John Singer Sargent, painterly brushwork, rich dark background, romantic atmosphere' },
-  { id:'belle-epoque',   name:'Belle Époque',    era:'Late 19th C · Tissot',        prompt:'Belle Époque portrait in the style of James Tissot, fashionable late 19th century attire, warm interior setting, detailed fabric and texture, elegant and refined, 1880s Paris atmosphere' },
-  { id:'tweed',          name:'Tweed',           era:'Northern European · Dark',    prompt:'dark Northern European portrait, subject in rich tweeds and earthy tones, dark moody background, Flemish-inspired technique, in the style of Franz Hals and Anthony van Dyck, strong chiaroscuro' },
-  { id:'red-forest',     name:'Red Forest',      era:'Romantic · Landscape',        prompt:'romantic portrait with lush red and golden autumn forest landscape behind subject, warm glowing light, painterly technique, in the style of Caspar David Friedrich, nature and nobility combined' },
-  { id:'casati',         name:'Casati',          era:'Theatrical · Opulent',        prompt:'theatrical and opulent portrait, subject in elaborate dramatic costume and jewellery, rich brocade and fur, grand baroque interior background, in the style of Giovanni Boldini, theatrical and expressive' },
+  {
+    id:'grand-manner',
+    name:'Grand Manner Monarch',
+    era:'Baroque · Van Dyck & Rubens',
+    prompt:`Grand Manner Baroque royal oil portrait, CRITICAL: preserve exact facial likeness and unique features of the subject with photorealistic accuracy, subject dressed in opulent European royal regalia — ermine-trimmed crimson robes, jeweled crown or coronet, heavy gold brocade doublet, dramatic studio lighting from upper-left casting soft warm shadows across face, dark warm brown background with draped scarlet curtain and stone column, painted in the style of Sir Peter Paul Rubens and Anthony van Dyck, thick confident impasto brushwork on clothing and background, precise hyper-detailed rendering of face preserving all unique characteristics, dignified commanding regal pose, deep rich colour palette of crimson gold ivory and deep brown, classical aristocratic composition`
+  },
+  {
+    id:'storm',
+    name:'Storm',
+    era:'Romantic Era · Delacroix & Géricault',
+    prompt:`Dramatic Romantic-era oil portrait with violent turbulent storm sky, CRITICAL: preserve exact facial likeness and unique features of the subject with photorealistic accuracy, subject in windswept dramatic 19th-century attire with open collar and flowing cloak, heavy gestural impasto brushstrokes throughout background, dark brooding atmosphere with breaks of warm amber light, palette of storm-grey midnight-blue burnt orange and deep umber, high emotional intensity and passion, dramatic chiaroscuro with strong contrast, in the style of Eugène Delacroix and Théodore Géricault, heroic romantic pose, face rendered with precise photorealistic likeness even as background is loose and expressive`
+  },
+  {
+    id:'nobel',
+    name:'Nobel',
+    era:'19th Century · Academic Realism',
+    prompt:`Formal Academic oil portrait in the Red Crimson Nobility style, CRITICAL: preserve exact facial likeness and unique features of the subject with photorealistic accuracy, subject in magnificent deep crimson velvet ceremonial robes with heavy gold embroidery and regal medallion insignia, dark neutral charcoal background with subtle warm vignette, warm golden directional light from upper right illuminating face with precise academic modelling, painted in the style of William-Adolphe Bouguereau and Léon Bonnat, meticulous smooth blended brushwork with luminous skin tones, rich palette of deep crimson burgundy antique gold and ivory, dignified commanding seated pose, face rendered with exact likeness showing every individual feature`
+  },
+  {
+    id:'velazquez',
+    name:'Velázquez',
+    era:'Spanish Baroque · 17th Century',
+    prompt:`Spanish Baroque court portrait in the precise style of Diego Velázquez, CRITICAL: preserve exact facial likeness and unique features of the subject with photorealistic accuracy, subject in dark formal Spanish court attire — black doublet with starched white ruff collar and cuffs, subtle silver embroidery, muted cool dark grey-green background, masterful sfumato atmospheric lighting, subtle cool grey-green shadow passages on face, loose fluid confident brushwork on clothing contrasting with sharp photorealistic detail on face and hands, dignified composed stoic expression, 17th-century Spanish court atmosphere, rich textural paint quality, palette of near-black charcoal cool grey white ivory and warm skin`
+  },
+  {
+    id:'french-romance',
+    name:'French Romance',
+    era:'Victorian · John Singer Sargent',
+    prompt:`Romantic intimate oil portrait in the style of John Singer Sargent, CRITICAL: preserve exact facial likeness and unique features of the subject with photorealistic accuracy, subject in elegant 19th-century French salon attire — silk evening wear with soft draping, dramatic chiaroscuro lighting from a single warm candle source on one side of face, rich dark background fading to black, thick bravura impasto brushstrokes with fluid confident paint application, warm palette of burnt sienna ivory gold ochre and deep shadow, romantic intensity in the subject's expression and gaze, soft atmospheric loose edges on clothing contrasting with precise detailed rendering of face preserving every unique feature`
+  },
+  {
+    id:'belle-epoque',
+    name:'Belle Époque',
+    era:'Late 19th C · James Tissot',
+    prompt:`Tender intimate 19th-century Belle Époque oil portrait in the style of James Tissot, CRITICAL: preserve exact facial likeness and unique features of the subject with photorealistic accuracy, subject in fashionable late Victorian-era attire with intricate lace trim ribbon details and fine fabric texture, warm intimate indoor setting with soft diffused window light falling gently on face, delicate palette of blush ivory rose navy deep burgundy and warm cream, precise detailed painting technique with luminous warm skin tones, gentle romantic expression and soft gaze, refined elegant composed posture, rich decorative background detail, face rendered with complete photorealistic likeness accuracy`
+  },
+  {
+    id:'tweed',
+    name:'Tweed',
+    era:'Baroque · Anthony van Dyck',
+    prompt:`Baroque aristocratic oil portrait in the style of Anthony van Dyck, CRITICAL: preserve exact facial likeness and unique features of the subject with photorealistic accuracy, subject in dark forest-green and charcoal tweed hunting attire with fine herringbone weave texture, white lace cravat at throat, black velvet lapels and ermine trim accents, dark moody studio background with warm amber glow, dramatic romantic Rembrandt-style side-lighting from upper left illuminating one cheek, rich textural impasto on fabric with precise rendering of face, dignified composed aristocratic pose, warm earthy palette of forest-green charcoal brown ivory and deep shadow, face rendered with exact photorealistic likeness`
+  },
+  {
+    id:'red-forest',
+    name:'Red Forest',
+    era:'Romantic · Landscape Portrait',
+    prompt:`Noble emotive Romantic oil portrait with sweeping autumn forest backdrop, CRITICAL: preserve exact facial likeness and unique features of the subject with photorealistic accuracy, subject in rich 18th-century aristocratic attire — deep burgundy coat and navy waistcoat with gold trim — before lush crimson and golden autumn woodland, warm diffused golden light filtering through forest canopy and softly illuminating face, loose expressive painterly brushwork on background foliage contrasting with precise face rendering, warm rich palette of deep red crimson burnt sienna ochre gold and dark forest green, in the style of Thomas Gainsborough and John Constable, atmospheric depth and romance, face rendered with precise photorealistic likeness`
+  },
+  {
+    id:'casati',
+    name:'Casati',
+    era:'Theatrical · Art-Deco Opulence',
+    prompt:`Theatrical art-deco oil portrait with bold dramatic opulent flair, CRITICAL: preserve exact facial likeness and unique features of the subject with photorealistic accuracy, subject in elaborate exotic costume — feathered headdress jeweled necklaces heavy brocade and luxurious furs — rich jewel-tone palette of deep sapphire midnight-blue crimson and antique gold, painterly bold expressive brushwork, theatrical dark studio backdrop with draped silk fabric and exotic props, in the style of Giovanni Boldini and Tamara de Lempicka, intense dramatic eyes and commanding expression, extravagant opulent atmosphere, face rendered with photorealistic precision preserving all unique features and characteristics exactly`
+  },
 ];
 
 const state = {
@@ -757,6 +794,20 @@ function goToStep(n) {
   });
   document.querySelector('.wizard-wrap').scrollIntoView({behavior:'smooth',block:'start'});
   if (n === 7) populateCheckout();
+  if (n === 3) updateUploadHints();
+}
+
+function updateUploadHints() {
+  const desc = document.getElementById('upload-step-desc');
+  if (state.cat === 'couples' || state.cat === 'family') {
+    desc.textContent = 'Upload one photo with all subjects together, or add separate photos for each person (up to 4). Our AI will compose them into one portrait.';
+    if (state.gender === 'auto' || state.gender === 'male' || state.gender === 'female') {
+      const mixedBtn = document.querySelector('.gender-btn[data-gender="mixed"]');
+      if (mixedBtn) selectGender(mixedBtn);
+    }
+  } else {
+    desc.textContent = 'Upload one or more photos. For groups, add each person separately — our AI will combine them into one portrait.';
+  }
 }
 
 function selectCat(el) {
@@ -803,6 +854,10 @@ function handleFiles(fileList) {
         state.imageBase64s.push(resized.split(',')[1]);
         renderUploadPreviews();
         document.getElementById('btn-next-3').disabled = false;
+        if (state.files.length > 1 && state.gender !== 'mixed') {
+          const mixedBtn = document.querySelector('.gender-btn[data-gender="mixed"]');
+          if (mixedBtn) selectGender(mixedBtn);
+        }
       };
       img.src = e.target.result;
     };
@@ -814,6 +869,10 @@ function removeUploadPhoto(idx) {
   state.files.splice(idx, 1); state.imageDatas.splice(idx, 1); state.imageBase64s.splice(idx, 1);
   renderUploadPreviews();
   if (state.files.length === 0) document.getElementById('btn-next-3').disabled = true;
+  if (state.files.length <= 1 && state.gender === 'mixed') {
+    const autoBtn = document.querySelector('.gender-btn[data-gender="auto"]');
+    if (autoBtn) selectGender(autoBtn);
+  }
 }
 
 function renderUploadPreviews() {
@@ -865,7 +924,6 @@ function startProgressBar() {
   fill.style.transition = 'none';
   fill.style.width = '0%';
   pctEl.textContent = '0';
-
   progressInterval = setInterval(() => {
     progressSecs++;
     const raw = progressSecs / TOTAL_SECS;
@@ -925,12 +983,13 @@ function resetGenUI() {
 }
 
 async function startGeneration() {
-  let imageBase64;
   if (state.imageBase64s.length === 0) return;
-  if (state.imageBase64s.length === 1) {
-    imageBase64 = state.imageBase64s[0];
-  } else {
+  let imageBase64;
+  const isMultiPhoto = state.imageDatas.length > 1;
+  if (isMultiPhoto) {
     imageBase64 = await compositeImages(state.imageDatas);
+  } else {
+    imageBase64 = state.imageBase64s[0];
   }
   goToStep(4); resetGenUI(); state.isFallback = false;
   try {
@@ -938,9 +997,12 @@ async function startGeneration() {
     const t2 = setTimeout(() => setGenStep(2, `Applying ${state.styleLabel} style…`), 6000);
     const t3 = setTimeout(() => { setGenStep(3, 'Painting your portrait…'); document.getElementById('gen-title').textContent = 'Painting your portrait…'; }, 14000);
     const t4 = setTimeout(() => setGenStep(4, 'Applying finishing touches…'), 30000);
-
-    const genderToSend = state.gender === 'auto' ? null : state.gender;
-
+    let genderToSend = state.gender;
+    if (state.cat === 'couples' || state.cat === 'family') {
+      genderToSend = 'mixed';
+    } else if (genderToSend === 'auto') {
+      genderToSend = null;
+    }
     const res = await fetch('/api/generate', {
       method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({
@@ -952,6 +1014,7 @@ async function startGeneration() {
         stylePrompt: state.stylePrompt,
         gender: genderToSend,
         photoCount: state.files.length,
+        isMultiPhoto: isMultiPhoto,
       }),
     });
     clearTimeout(t2); clearTimeout(t3); clearTimeout(t4);
@@ -979,39 +1042,33 @@ async function startGeneration() {
   }
 }
 
-// Crop each photo to face/upper-body (top 65%), tile into equal 512×512 slots
-// so both faces are large and the AI model treats them as equal subjects
 async function compositeImages(dataSrcs) {
   return new Promise(resolve => {
     const imgs = dataSrcs.map(src => { const img = new Image(); img.src = src; return img; });
     Promise.all(imgs.map(img => new Promise(r => {
-      if (img.complete && img.naturalHeight) { r(); } else { img.onload = r; }
+      if (img.complete && img.naturalHeight) r(); else img.onload = r;
     }))).then(() => {
       const n = imgs.length;
-      const TILE = 512;
+      const TILE = 640;
       const canvas = document.createElement('canvas');
-      canvas.width = TILE * n; canvas.height = TILE;
+      canvas.width = TILE * n;
+      canvas.height = TILE;
       const ctx = canvas.getContext('2d');
       ctx.fillStyle = '#0e0a04';
       ctx.fillRect(0, 0, canvas.width, TILE);
-
       imgs.forEach((img, i) => {
         const srcW = img.naturalWidth, srcH = img.naturalHeight;
-        const cropH = Math.round(srcH * 0.65);
-        const cropW = Math.min(srcW, Math.round(cropH));
+        const cropH = Math.round(srcH * 0.70);
+        const cropW = Math.min(srcW, cropH);
         const cropX = Math.round((srcW - cropW) / 2);
-        const cropY = Math.round(srcH * 0.02);
+        const cropY = 0;
         ctx.drawImage(img, cropX, cropY, cropW, cropH, i * TILE, 0, TILE, TILE);
       });
-
-      if (n > 1) {
-        for (let i = 1; i < n; i++) {
-          ctx.fillStyle = 'rgba(0,0,0,0.55)';
-          ctx.fillRect(i * TILE - 2, 0, 4, TILE);
-        }
+      for (let i = 1; i < n; i++) {
+        ctx.fillStyle = 'rgba(0,0,0,0.65)';
+        ctx.fillRect(i * TILE - 1, 0, 2, TILE);
       }
-
-      resolve(canvas.toDataURL('image/jpeg', 0.90).split(',')[1]);
+      resolve(canvas.toDataURL('image/jpeg', 0.92).split(',')[1]);
     });
   });
 }
@@ -1154,7 +1211,9 @@ document.querySelectorAll('.fq').forEach(btn => {
 });
 
 const obs = new IntersectionObserver(entries => {
-  entries.forEach((e,i) => { if (e.isIntersecting) { setTimeout(() => e.target.classList.add('visible'), 80*i); obs.unobserve(e.target); } });
+  entries.forEach((e,i) => {
+    if (e.isIntersecting) { setTimeout(() => e.target.classList.add('visible'), 80*i); obs.unobserve(e.target); }
+  });
 }, {threshold:.1});
 document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 </script>

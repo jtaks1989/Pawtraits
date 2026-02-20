@@ -7,9 +7,9 @@ module.exports = async function handler(req, res) {
     category,
     catLabel,
     style,
-    stylePrompt,   // from frontend STYLES array
-    gender,        // 'male' | 'female' | 'mixed' | null
-    photoCount,    // number of photos uploaded
+    stylePrompt,
+    gender,
+    photoCount,
   } = req.body;
 
   if (!imageBase64 || !category) return res.status(400).json({ error: 'Missing fields: imageBase64 and category are required' });
@@ -17,7 +17,6 @@ module.exports = async function handler(req, res) {
   const REPLICATE_KEY = process.env.REPLICATE_API_KEY;
   if (!REPLICATE_KEY) return res.status(500).json({ error: 'REPLICATE_API_KEY not configured' });
 
-  // ── Gender-aware style prompts ──────────────────────────────────────────────
   function buildPrompt(baseStylePrompt, cat, gen, count) {
     let prompt = baseStylePrompt || getDefaultPrompt(cat, gen, count);
 
@@ -36,7 +35,7 @@ module.exports = async function handler(req, res) {
     }
 
     if (count > 1) {
-      prompt += `. The portrait must include ALL ${count} subjects visible in the reference image as a group composition.`;
+      prompt += `. IMPORTANT: The reference image contains ${count} separate people shown side-by-side. The final portrait MUST show ALL ${count} people together in a single group composition — do not omit anyone. Each person should be visible and given equal prominence in the painting.`;
     }
 
     return prompt;
@@ -99,7 +98,6 @@ module.exports = async function handler(req, res) {
 
     let prediction = await startRes.json();
 
-    // Poll until complete (max 120 seconds)
     const maxWait = 120000;
     const pollInterval = 2000;
     const startTime = Date.now();
@@ -129,7 +127,6 @@ module.exports = async function handler(req, res) {
     const imgBuffer = await imgRes.arrayBuffer();
     const b64 = Buffer.from(imgBuffer).toString('base64');
 
-    // Optional Printify upload
     let printifyImageId = null, printifyImageUrl = null;
     const PK = process.env.PRINTIFY_API_KEY, PS = process.env.PRINTIFY_SHOP_ID;
     if (PK && PS) {

@@ -86,7 +86,6 @@
     .style-selected-badge{position:absolute;top:.5rem;right:.5rem;background:var(--teal);color:var(--black);font-size:.6rem;font-weight:700;padding:.2rem .5rem;border-radius:100px;display:none;z-index:2;}
     .style-card.selected .style-selected-badge{display:block;}
 
-    /* ── GENDER SELECTOR ── */
     .gender-wrap{margin-top:1.5rem;margin-bottom:0;}
     .gender-label{font-size:.72rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.65rem;text-align:center;}
     .gender-btns{display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap;}
@@ -112,18 +111,19 @@
     .upload-add-btn{width:80px;height:80px;border-radius:8px;border:2px dashed rgba(62,207,178,.35);background:rgba(62,207,178,.04);color:var(--teal);font-size:1.5rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:border-color .2s,background .2s;}
     .upload-add-btn:hover{border-color:var(--teal);background:rgba(62,207,178,.1);}
 
-    /* ── GENERATING STEP ── */
     .gen-wrap{text-align:center;padding:2.5rem 0;}
     .gen-spinner{width:72px;height:72px;border-radius:50%;border:3px solid rgba(62,207,178,.15);border-top-color:var(--teal);animation:spin 1s linear infinite;margin:0 auto 2rem;}
     @keyframes spin{to{transform:rotate(360deg);}}
     .gen-title{font-family:'DM Serif Display',serif;font-size:1.5rem;color:var(--white);margin-bottom:.6rem;}
     .gen-status{font-size:.88rem;color:var(--teal);margin-bottom:1.25rem;min-height:1.4em;}
 
-    /* Progress bar */
     .gen-progress-wrap{max-width:380px;margin:0 auto 1.75rem;}
-    .gen-progress-bar{height:4px;border-radius:100px;background:rgba(62,207,178,.12);overflow:hidden;margin-bottom:.5rem;}
+    .gen-progress-pct-row{display:flex;align-items:baseline;justify-content:center;gap:.3rem;margin-bottom:.75rem;}
+    .gen-progress-pct{font-family:'Playfair Display',serif;font-size:3rem;font-weight:900;font-style:italic;line-height:1;color:var(--teal);transition:color .3s;}
+    .gen-progress-pct-sym{font-size:1.4rem;font-weight:700;color:var(--teal);opacity:.7;}
+    .gen-progress-bar{height:6px;border-radius:100px;background:rgba(62,207,178,.12);overflow:hidden;margin-bottom:.5rem;}
     .gen-progress-fill{height:100%;border-radius:100px;background:linear-gradient(90deg,var(--teal-dk),var(--teal));width:0%;transition:width 1s ease;}
-    .gen-progress-eta{font-size:.72rem;color:var(--muted);text-align:right;}
+    .gen-progress-eta{font-size:.72rem;color:var(--muted);text-align:center;}
 
     .gen-steps{display:flex;flex-direction:column;gap:.6rem;max-width:340px;margin:0 auto;}
     .gen-step{display:flex;align-items:center;gap:.75rem;padding:.6rem 1rem;border-radius:8px;background:var(--surface);border:1px solid var(--border);font-size:.84rem;color:var(--muted);text-align:left;transition:all .3s;}
@@ -141,7 +141,6 @@
     .gen-retry-btn{font-size:.82rem;font-weight:600;padding:.55rem 1.25rem;background:var(--red);color:white;border:none;border-radius:6px;cursor:pointer;}
     .gen-skip-btn{font-size:.82rem;font-weight:500;padding:.55rem 1.25rem;background:none;border:1px solid var(--border);border-radius:6px;color:var(--muted);cursor:pointer;}
 
-    /* ── PREVIEW — MUCH LARGER ── */
     .preview-wrap{display:flex;flex-direction:column;align-items:center;gap:1.75rem;}
     .preview-frame{position:relative;display:inline-block;border-radius:12px;overflow:hidden;box-shadow:0 0 0 1px var(--border),0 32px 80px rgba(0,0,0,.75);max-width:680px;width:100%;}
     .preview-frame canvas,.preview-frame img{display:block;width:100%;height:auto;border-radius:12px;}
@@ -349,18 +348,10 @@
     <div class="gender-wrap">
       <div class="gender-label">Who is in the photo?</div>
       <div class="gender-btns">
-        <button class="gender-btn selected" data-gender="auto" onclick="selectGender(this)">
-          <span class="gender-btn-ico">🎭</span> Auto-detect
-        </button>
-        <button class="gender-btn" data-gender="male" onclick="selectGender(this)">
-          <span class="gender-btn-ico">👨</span> Male
-        </button>
-        <button class="gender-btn" data-gender="female" onclick="selectGender(this)">
-          <span class="gender-btn-ico">👩</span> Female
-        </button>
-        <button class="gender-btn" data-gender="mixed" onclick="selectGender(this)">
-          <span class="gender-btn-ico">👫</span> Mixed / Group
-        </button>
+        <button class="gender-btn selected" data-gender="auto" onclick="selectGender(this)"><span class="gender-btn-ico">🎭</span> Auto-detect</button>
+        <button class="gender-btn" data-gender="male" onclick="selectGender(this)"><span class="gender-btn-ico">👨</span> Male</button>
+        <button class="gender-btn" data-gender="female" onclick="selectGender(this)"><span class="gender-btn-ico">👩</span> Female</button>
+        <button class="gender-btn" data-gender="mixed" onclick="selectGender(this)"><span class="gender-btn-ico">👫</span> Mixed / Group</button>
       </div>
     </div>
 
@@ -394,8 +385,11 @@
       <div class="gen-status" id="gen-status">Studying your subject</div>
 
       <div class="gen-progress-wrap">
+        <div class="gen-progress-pct-row">
+          <span class="gen-progress-pct" id="gen-progress-pct">0</span><span class="gen-progress-pct-sym">%</span>
+        </div>
         <div class="gen-progress-bar"><div class="gen-progress-fill" id="gen-progress-fill"></div></div>
-        <div class="gen-progress-eta" id="gen-progress-eta">Estimated: ~40 seconds</div>
+        <div class="gen-progress-eta" id="gen-progress-eta">~40 seconds remaining</div>
       </div>
 
       <div class="gen-steps">
@@ -865,10 +859,12 @@ const TOTAL_SECS = 42;
 function startProgressBar() {
   progressSecs = 0;
   clearInterval(progressInterval);
-  const fill = document.getElementById('gen-progress-fill');
-  const eta = document.getElementById('gen-progress-eta');
+  const fill  = document.getElementById('gen-progress-fill');
+  const eta   = document.getElementById('gen-progress-eta');
+  const pctEl = document.getElementById('gen-progress-pct');
   fill.style.transition = 'none';
   fill.style.width = '0%';
+  pctEl.textContent = '0';
 
   progressInterval = setInterval(() => {
     progressSecs++;
@@ -876,6 +872,7 @@ function startProgressBar() {
     const pct = Math.min(92, Math.round(100 * (1 - Math.pow(1 - raw, 2.2))));
     fill.style.transition = 'width 1s ease';
     fill.style.width = pct + '%';
+    pctEl.textContent = pct;
     const rem = Math.max(0, TOTAL_SECS - progressSecs);
     eta.textContent = rem > 0 ? `~${rem} seconds remaining` : 'Almost done…';
     if (progressSecs >= TOTAL_SECS + 30) clearInterval(progressInterval);
@@ -884,10 +881,12 @@ function startProgressBar() {
 
 function completeProgressBar() {
   clearInterval(progressInterval);
-  const fill = document.getElementById('gen-progress-fill');
-  const eta = document.getElementById('gen-progress-eta');
+  const fill  = document.getElementById('gen-progress-fill');
+  const eta   = document.getElementById('gen-progress-eta');
+  const pctEl = document.getElementById('gen-progress-pct');
   fill.style.transition = 'width .6s ease';
   fill.style.width = '100%';
+  pctEl.textContent = '100';
   eta.textContent = 'Complete ✓';
 }
 
@@ -980,25 +979,39 @@ async function startGeneration() {
   }
 }
 
+// Crop each photo to face/upper-body (top 65%), tile into equal 512×512 slots
+// so both faces are large and the AI model treats them as equal subjects
 async function compositeImages(dataSrcs) {
   return new Promise(resolve => {
     const imgs = dataSrcs.map(src => { const img = new Image(); img.src = src; return img; });
-    Promise.all(imgs.map(img => new Promise(r => { img.onload = r; if(img.complete && img.naturalHeight) r(); }))).then(() => {
-      const h = 768;
-      const widths = imgs.map(img => Math.round(img.naturalWidth * h / img.naturalHeight));
-      const totalW = widths.reduce((a,b) => a+b, 0);
+    Promise.all(imgs.map(img => new Promise(r => {
+      if (img.complete && img.naturalHeight) { r(); } else { img.onload = r; }
+    }))).then(() => {
+      const n = imgs.length;
+      const TILE = 512;
       const canvas = document.createElement('canvas');
-      canvas.width = Math.min(totalW, 1536); canvas.height = h;
-      const scale = canvas.width / totalW;
+      canvas.width = TILE * n; canvas.height = TILE;
       const ctx = canvas.getContext('2d');
-      ctx.fillStyle = '#111'; ctx.fillRect(0, 0, canvas.width, h);
-      let x = 0;
+      ctx.fillStyle = '#0e0a04';
+      ctx.fillRect(0, 0, canvas.width, TILE);
+
       imgs.forEach((img, i) => {
-        const iw = Math.round(widths[i] * scale);
-        ctx.drawImage(img, x, 0, iw, h);
-        x += iw;
+        const srcW = img.naturalWidth, srcH = img.naturalHeight;
+        const cropH = Math.round(srcH * 0.65);
+        const cropW = Math.min(srcW, Math.round(cropH));
+        const cropX = Math.round((srcW - cropW) / 2);
+        const cropY = Math.round(srcH * 0.02);
+        ctx.drawImage(img, cropX, cropY, cropW, cropH, i * TILE, 0, TILE, TILE);
       });
-      resolve(canvas.toDataURL('image/jpeg', 0.88).split(',')[1]);
+
+      if (n > 1) {
+        for (let i = 1; i < n; i++) {
+          ctx.fillStyle = 'rgba(0,0,0,0.55)';
+          ctx.fillRect(i * TILE - 2, 0, 4, TILE);
+        }
+      }
+
+      resolve(canvas.toDataURL('image/jpeg', 0.90).split(',')[1]);
     });
   });
 }

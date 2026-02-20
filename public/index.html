@@ -328,7 +328,7 @@
     <h2 class="step-heading">Upload your <span class="accent">photo</span></h2>
     <p class="step-desc">Upload one or more photos. For groups, add each person separately — our AI will combine them into one portrait.</p>
     <div class="upload-zone" id="upload-zone">
-      <input type="file" id="photo-input" accept="image/*" multiple onchange="handleFiles(this.files)">
+      <input type="file" id="photo-input" accept="image/*" multiple>
       <div class="upload-icon">📸</div>
       <h3 id="upload-h3">Drop your photo here</h3>
       <p id="upload-p">or click to browse · add up to 4 photos</p>
@@ -801,11 +801,13 @@ function renderUploadPreviews() {
   }
 }
 
+// Single event listener only — no onchange in HTML
 const uploadZone = document.getElementById('upload-zone');
+const photoInput = document.getElementById('photo-input');
+photoInput.addEventListener('change', function() { handleFiles(this.files); });
 uploadZone.addEventListener('dragover', e => { e.preventDefault(); uploadZone.classList.add('drag-over'); });
 uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('drag-over'));
 uploadZone.addEventListener('drop', e => { e.preventDefault(); uploadZone.classList.remove('drag-over'); handleFiles(e.dataTransfer.files); });
-document.getElementById('photo-input').addEventListener('change', function() { handleFiles(this.files); });
 
 function setGenStep(n, status) {
   for (let i = 1; i <= 4; i++) {

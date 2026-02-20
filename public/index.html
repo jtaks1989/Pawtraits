@@ -43,7 +43,7 @@
     .stars{color:#00b67a;letter-spacing:.05em;}
     .rsep{width:1px;height:14px;background:var(--bh);}
 
-    .wizard-wrap{max-width:900px;margin:0 auto;padding:0 1.5rem 8rem;}
+    .wizard-wrap{max-width:960px;margin:0 auto;padding:0 1.5rem 8rem;}
 
     .progress-bar{display:flex;align-items:flex-start;margin-bottom:3.5rem;}
     .pb-step{display:flex;flex-direction:column;align-items:center;flex:1;position:relative;}
@@ -86,6 +86,15 @@
     .style-selected-badge{position:absolute;top:.5rem;right:.5rem;background:var(--teal);color:var(--black);font-size:.6rem;font-weight:700;padding:.2rem .5rem;border-radius:100px;display:none;z-index:2;}
     .style-card.selected .style-selected-badge{display:block;}
 
+    /* ── GENDER SELECTOR ── */
+    .gender-wrap{margin-top:1.5rem;margin-bottom:0;}
+    .gender-label{font-size:.72rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.65rem;text-align:center;}
+    .gender-btns{display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap;}
+    .gender-btn{display:flex;align-items:center;gap:.4rem;font-size:.82rem;font-weight:500;padding:.5rem 1.1rem;border:1.5px solid var(--border);border-radius:100px;background:var(--surface);color:var(--muted);cursor:pointer;transition:all .2s;}
+    .gender-btn:hover{border-color:var(--bh);color:var(--white);}
+    .gender-btn.selected{border-color:var(--teal);background:rgba(62,207,178,.08);color:var(--teal);}
+    .gender-btn-ico{font-size:1rem;}
+
     .upload-zone{border:2px dashed rgba(62,207,178,.3);border-radius:16px;background:rgba(62,207,178,.025);padding:3rem 2rem;text-align:center;cursor:pointer;position:relative;transition:border-color .25s,background .25s;}
     .upload-zone:hover,.upload-zone.drag-over{border-color:var(--teal);background:rgba(62,207,178,.065);}
     .upload-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
@@ -103,11 +112,19 @@
     .upload-add-btn{width:80px;height:80px;border-radius:8px;border:2px dashed rgba(62,207,178,.35);background:rgba(62,207,178,.04);color:var(--teal);font-size:1.5rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:border-color .2s,background .2s;}
     .upload-add-btn:hover{border-color:var(--teal);background:rgba(62,207,178,.1);}
 
+    /* ── GENERATING STEP ── */
     .gen-wrap{text-align:center;padding:2.5rem 0;}
     .gen-spinner{width:72px;height:72px;border-radius:50%;border:3px solid rgba(62,207,178,.15);border-top-color:var(--teal);animation:spin 1s linear infinite;margin:0 auto 2rem;}
     @keyframes spin{to{transform:rotate(360deg);}}
     .gen-title{font-family:'DM Serif Display',serif;font-size:1.5rem;color:var(--white);margin-bottom:.6rem;}
-    .gen-status{font-size:.88rem;color:var(--teal);margin-bottom:2rem;min-height:1.4em;}
+    .gen-status{font-size:.88rem;color:var(--teal);margin-bottom:1.25rem;min-height:1.4em;}
+
+    /* Progress bar */
+    .gen-progress-wrap{max-width:380px;margin:0 auto 1.75rem;}
+    .gen-progress-bar{height:4px;border-radius:100px;background:rgba(62,207,178,.12);overflow:hidden;margin-bottom:.5rem;}
+    .gen-progress-fill{height:100%;border-radius:100px;background:linear-gradient(90deg,var(--teal-dk),var(--teal));width:0%;transition:width 1s ease;}
+    .gen-progress-eta{font-size:.72rem;color:var(--muted);text-align:right;}
+
     .gen-steps{display:flex;flex-direction:column;gap:.6rem;max-width:340px;margin:0 auto;}
     .gen-step{display:flex;align-items:center;gap:.75rem;padding:.6rem 1rem;border-radius:8px;background:var(--surface);border:1px solid var(--border);font-size:.84rem;color:var(--muted);text-align:left;transition:all .3s;}
     .gen-step.active{border-color:rgba(62,207,178,.35);color:var(--white);background:rgba(62,207,178,.06);}
@@ -124,11 +141,12 @@
     .gen-retry-btn{font-size:.82rem;font-weight:600;padding:.55rem 1.25rem;background:var(--red);color:white;border:none;border-radius:6px;cursor:pointer;}
     .gen-skip-btn{font-size:.82rem;font-weight:500;padding:.55rem 1.25rem;background:none;border:1px solid var(--border);border-radius:6px;color:var(--muted);cursor:pointer;}
 
+    /* ── PREVIEW — MUCH LARGER ── */
     .preview-wrap{display:flex;flex-direction:column;align-items:center;gap:1.75rem;}
-    .preview-frame{position:relative;display:inline-block;border-radius:12px;overflow:hidden;box-shadow:0 0 0 1px var(--border),0 24px 60px rgba(0,0,0,.6);max-width:400px;width:100%;}
+    .preview-frame{position:relative;display:inline-block;border-radius:12px;overflow:hidden;box-shadow:0 0 0 1px var(--border),0 32px 80px rgba(0,0,0,.75);max-width:680px;width:100%;}
     .preview-frame canvas,.preview-frame img{display:block;width:100%;height:auto;border-radius:12px;}
     .preview-badge{position:absolute;bottom:.85rem;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.72);backdrop-filter:blur(8px);border:1px solid rgba(62,207,178,.3);border-radius:100px;padding:.35rem 1rem;font-size:.68rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);white-space:nowrap;}
-    .preview-info{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.4rem;width:100%;max-width:400px;}
+    .preview-info{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.4rem;width:100%;max-width:500px;}
     .preview-info-title{font-size:.65rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);margin-bottom:.9rem;}
     .preview-row{display:flex;justify-content:space-between;font-size:.86rem;padding:.5rem 0;border-bottom:1px solid var(--border);color:var(--muted);}
     .preview-row:last-child{border-bottom:none;}
@@ -169,17 +187,15 @@
     .pkg-digital-tag{font-size:.72rem;color:var(--teal);text-align:center;margin-bottom:.85rem;opacity:.8;}
     .pkg-sel-btn-f{display:block;width:100%;padding:.85rem;border-radius:10px;font-size:.9rem;font-weight:700;background:var(--white);color:var(--black);border:none;cursor:pointer;text-align:center;transition:background .2s;}
     .pkg-card-f.selected .pkg-sel-btn-f,.pkg-sel-btn-f:hover{background:var(--teal);color:var(--black);}
-    .pkg-view-packs{text-align:center;font-size:.8rem;color:var(--muted);margin-top:.75rem;}
-    .pkg-view-packs a{color:var(--teal);text-decoration:none;}
 
-    .checkout-wrap{max-width:500px;margin:0 auto;}
+    .checkout-wrap{max-width:540px;margin:0 auto;}
     .order-summary{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:1.4rem;}
     .os-header{background:var(--surface);padding:1.1rem 1.5rem;font-size:.68rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);border-bottom:1px solid var(--border);}
     .os-body{padding:1.4rem 1.5rem;display:flex;flex-direction:column;gap:.9rem;}
     .os-row{display:flex;justify-content:space-between;align-items:flex-start;font-size:.88rem;}
     .os-label{color:var(--muted);flex-shrink:0;}
     .os-val{color:var(--white);font-weight:500;text-align:right;max-width:58%;}
-    .os-thumb{width:52px;height:52px;border-radius:8px;object-fit:cover;border:1px solid var(--border);flex-shrink:0;}
+    .os-thumb{width:60px;height:60px;border-radius:8px;object-fit:cover;border:1px solid var(--border);flex-shrink:0;}
     .os-divider{border:none;border-top:1px solid var(--border);}
     .os-total{display:flex;justify-content:space-between;align-items:center;font-size:1rem;font-weight:600;}
     .os-total .os-price{font-size:1.55rem;font-weight:800;color:var(--teal);}
@@ -190,6 +206,7 @@
     .pay-note strong{color:var(--white);font-weight:500;}
     .pay-btn{width:100%;padding:1.05rem;font-family:'Instrument Sans',sans-serif;font-size:.98rem;font-weight:700;background:var(--teal);color:var(--black);border:none;border-radius:10px;cursor:pointer;transition:background .2s,transform .2s;}
     .pay-btn:hover{background:#5de0c8;transform:translateY(-2px);}
+    .pay-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
 
     .step-nav{display:flex;align-items:center;justify-content:space-between;margin-top:2.25rem;gap:1rem;}
     .btn-back{display:flex;align-items:center;gap:.45rem;font-size:.84rem;font-weight:500;color:var(--muted);background:none;border:1px solid var(--border);border-radius:8px;padding:.65rem 1.2rem;cursor:pointer;transition:color .2s,border-color .2s;}
@@ -247,6 +264,7 @@
       nav{padding:.85rem 1.1rem;}
       .wizard-wrap{padding:0 1rem 6rem;}
       .ship-banner{font-size:.72rem;}
+      .preview-frame{max-width:100%;}
     }
   </style>
 </head>
@@ -327,7 +345,26 @@
   <div class="step-panel" id="step-3">
     <h2 class="step-heading">Upload your <span class="accent">photo</span></h2>
     <p class="step-desc">Upload one or more photos. For groups, add each person separately — our AI will combine them into one portrait.</p>
-    <div class="upload-zone" id="upload-zone">
+
+    <div class="gender-wrap">
+      <div class="gender-label">Who is in the photo?</div>
+      <div class="gender-btns">
+        <button class="gender-btn selected" data-gender="auto" onclick="selectGender(this)">
+          <span class="gender-btn-ico">🎭</span> Auto-detect
+        </button>
+        <button class="gender-btn" data-gender="male" onclick="selectGender(this)">
+          <span class="gender-btn-ico">👨</span> Male
+        </button>
+        <button class="gender-btn" data-gender="female" onclick="selectGender(this)">
+          <span class="gender-btn-ico">👩</span> Female
+        </button>
+        <button class="gender-btn" data-gender="mixed" onclick="selectGender(this)">
+          <span class="gender-btn-ico">👫</span> Mixed / Group
+        </button>
+      </div>
+    </div>
+
+    <div class="upload-zone" id="upload-zone" style="margin-top:1.5rem;">
       <input type="file" id="photo-input" accept="image/*" multiple>
       <div class="upload-icon">📸</div>
       <h3 id="upload-h3">Drop your photo here</h3>
@@ -355,6 +392,12 @@
       <div class="gen-spinner" id="gen-spinner"></div>
       <div class="gen-title" id="gen-title">Analysing your photo…</div>
       <div class="gen-status" id="gen-status">Studying your subject</div>
+
+      <div class="gen-progress-wrap">
+        <div class="gen-progress-bar"><div class="gen-progress-fill" id="gen-progress-fill"></div></div>
+        <div class="gen-progress-eta" id="gen-progress-eta">Estimated: ~40 seconds</div>
+      </div>
+
       <div class="gen-steps">
         <div class="gen-step active" id="gstep-1"><span class="gen-step-ico">🔍</span>Analysing subject<span class="gen-step-check" id="gcheck-1" style="display:none">✓</span></div>
         <div class="gen-step" id="gstep-2"><span class="gen-step-ico">🎨</span>Applying <span id="style-label-gen" style="margin-left:.25rem;color:var(--teal)"></span>&nbsp;style<span class="gen-step-check" id="gcheck-2" style="display:none">✓</span></div>
@@ -423,13 +466,12 @@
           <li>Commercial use rights</li>
         </ul>
         <button class="pkg-sel-btn-f">Download Now</button>
-        <div class="pkg-view-packs" style="margin-top:.85rem;"><a href="#">Want more styles &amp; masterpieces?<br>View Packs &amp; Pricing →</a></div>
       </div>
 
       <div class="pkg-card-f" data-pkg="print" data-price="$89" onclick="selectPkg(this)">
         <div class="pkg-icon">📦</div>
         <div class="pkg-name-f">Fine Art Print</div>
-        <div class="pkg-price-wrap"><span class="pkg-price-f">$89</span></div>
+        <div class="pkg-price-wrap"><span class="pkg-price-f" id="print-price-display">$89</span></div>
         <div class="pkg-timer"></div>
         <div class="pkg-desc">Printed on museum-quality archival paper with fade-resistant inks.</div>
         <div class="pkg-size-label">Choose Size</div>
@@ -505,7 +547,7 @@
         <div class="pay-chip">VISA</div><div class="pay-chip">Mastercard</div><div class="pay-chip">AMEX</div><div class="pay-chip">Apple Pay</div><div class="pay-chip">Google Pay</div>
         <div class="pay-secure">🔒 Stripe secured</div>
       </div>
-      <button class="pay-btn" onclick="goToStripe()">Proceed to Secure Checkout</button>
+      <button class="pay-btn" id="pay-btn" onclick="goToStripe()">Proceed to Secure Checkout</button>
       <div class="step-nav" style="margin-top:1rem;">
         <button class="btn-back" onclick="goToStep(6)">← Change package</button>
       </div>
@@ -673,9 +715,11 @@ const STYLES = [
 const state = {
   cat:null, catLabel:null,
   style:null, styleLabel:null, stylePrompt:null,
+  gender:'auto',
   files:[], imageDatas:[], imageBase64s:[],
   generatedImageData:null, generationHistory:[],
   printifyImageId:null, printifyImageUrl:null,
+  portraitImageUrl:null,
   isFallback:false,
   pkg:null, pkgPrice:null, pkgLabel:null, pkgSize:null,
 };
@@ -735,6 +779,12 @@ function selectStyle(el) {
   const found = STYLES.find(s => s.id === el.dataset.style);
   if (found) { state.style = found.id; state.styleLabel = found.name; state.stylePrompt = found.prompt; }
   document.getElementById('btn-next-2').disabled = false;
+}
+
+function selectGender(el) {
+  document.querySelectorAll('.gender-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  state.gender = el.dataset.gender;
 }
 
 function handleFiles(fileList) {
@@ -801,13 +851,45 @@ function renderUploadPreviews() {
   }
 }
 
-// Single event listener only — no onchange in HTML
 const uploadZone = document.getElementById('upload-zone');
 const photoInput = document.getElementById('photo-input');
 photoInput.addEventListener('change', function() { handleFiles(this.files); });
 uploadZone.addEventListener('dragover', e => { e.preventDefault(); uploadZone.classList.add('drag-over'); });
 uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('drag-over'));
 uploadZone.addEventListener('drop', e => { e.preventDefault(); uploadZone.classList.remove('drag-over'); handleFiles(e.dataTransfer.files); });
+
+let progressInterval = null;
+let progressSecs = 0;
+const TOTAL_SECS = 42;
+
+function startProgressBar() {
+  progressSecs = 0;
+  clearInterval(progressInterval);
+  const fill = document.getElementById('gen-progress-fill');
+  const eta = document.getElementById('gen-progress-eta');
+  fill.style.transition = 'none';
+  fill.style.width = '0%';
+
+  progressInterval = setInterval(() => {
+    progressSecs++;
+    const raw = progressSecs / TOTAL_SECS;
+    const pct = Math.min(92, Math.round(100 * (1 - Math.pow(1 - raw, 2.2))));
+    fill.style.transition = 'width 1s ease';
+    fill.style.width = pct + '%';
+    const rem = Math.max(0, TOTAL_SECS - progressSecs);
+    eta.textContent = rem > 0 ? `~${rem} seconds remaining` : 'Almost done…';
+    if (progressSecs >= TOTAL_SECS + 30) clearInterval(progressInterval);
+  }, 1000);
+}
+
+function completeProgressBar() {
+  clearInterval(progressInterval);
+  const fill = document.getElementById('gen-progress-fill');
+  const eta = document.getElementById('gen-progress-eta');
+  fill.style.transition = 'width .6s ease';
+  fill.style.width = '100%';
+  eta.textContent = 'Complete ✓';
+}
 
 function setGenStep(n, status) {
   for (let i = 1; i <= 4; i++) {
@@ -820,6 +902,7 @@ function setGenStep(n, status) {
 }
 
 function showGenError(title, msg) {
+  clearInterval(progressInterval);
   document.getElementById('gen-spinner').style.display = 'none';
   document.getElementById('gen-title').textContent = 'Something went wrong';
   document.getElementById('gen-status').textContent = '';
@@ -839,6 +922,7 @@ function resetGenUI() {
     document.getElementById('gcheck-' + i).style.display = 'none';
   }
   document.getElementById('gstep-1').classList.add('active');
+  startProgressBar();
 }
 
 async function startGeneration() {
@@ -852,26 +936,41 @@ async function startGeneration() {
   goToStep(4); resetGenUI(); state.isFallback = false;
   try {
     setGenStep(1, 'Studying your subject…');
-    const t2 = setTimeout(() => setGenStep(2, `Applying ${state.styleLabel} style…`), 4000);
-    const t3 = setTimeout(() => { setGenStep(3, 'Painting your portrait…'); document.getElementById('gen-title').textContent = 'Painting your portrait…'; }, 8000);
+    const t2 = setTimeout(() => setGenStep(2, `Applying ${state.styleLabel} style…`), 6000);
+    const t3 = setTimeout(() => { setGenStep(3, 'Painting your portrait…'); document.getElementById('gen-title').textContent = 'Painting your portrait…'; }, 14000);
+    const t4 = setTimeout(() => setGenStep(4, 'Applying finishing touches…'), 30000);
+
+    const genderToSend = state.gender === 'auto' ? null : state.gender;
+
     const res = await fetch('/api/generate', {
       method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ imageBase64, imageMimeType:'image/jpeg', category:state.cat, catLabel:state.catLabel, style:state.style, stylePrompt:state.stylePrompt }),
+      body: JSON.stringify({
+        imageBase64,
+        imageMimeType:'image/jpeg',
+        category: state.cat,
+        catLabel: state.catLabel,
+        style: state.style,
+        stylePrompt: state.stylePrompt,
+        gender: genderToSend,
+        photoCount: state.files.length,
+      }),
     });
-    clearTimeout(t2); clearTimeout(t3);
+    clearTimeout(t2); clearTimeout(t3); clearTimeout(t4);
     if (!res.ok) { const err = await res.json().catch(() => ({})); throw new Error(err.error || `Server error ${res.status}`); }
     const data = await res.json();
     state.generatedImageData = data.imageData;
     state.printifyImageId = data.printifyImageId || null;
     state.printifyImageUrl = data.printifyImageUrl || null;
+    state.portraitImageUrl = data.portraitImageUrl || data.printifyImageUrl || null;
     state.generationHistory.unshift(data.imageData);
     if (state.generationHistory.length > 6) state.generationHistory.pop();
+    completeProgressBar();
     setGenStep(4, 'Applying finishing touches…');
-    await delay(700);
+    await delay(600);
     for (let i = 1; i <= 4; i++) { document.getElementById('gstep-'+i).classList.remove('active'); document.getElementById('gstep-'+i).classList.add('done'); document.getElementById('gcheck-'+i).style.display='inline'; }
     document.getElementById('gen-status').textContent = 'Your masterpiece is ready ✦';
     document.getElementById('gen-title').textContent = 'Portrait complete!';
-    await delay(800);
+    await delay(700);
     renderWatermarkedPreview(state.generatedImageData);
     renderGenerationHistory();
     goToStep(5);
@@ -884,17 +983,22 @@ async function startGeneration() {
 async function compositeImages(dataSrcs) {
   return new Promise(resolve => {
     const imgs = dataSrcs.map(src => { const img = new Image(); img.src = src; return img; });
-    Promise.all(imgs.map(img => new Promise(r => { img.onload = r; if(img.complete) r(); }))).then(() => {
-      const h = 512;
-      const totalW = imgs.reduce((sum, img) => sum + Math.round(img.width * h / img.height), 0);
+    Promise.all(imgs.map(img => new Promise(r => { img.onload = r; if(img.complete && img.naturalHeight) r(); }))).then(() => {
+      const h = 768;
+      const widths = imgs.map(img => Math.round(img.naturalWidth * h / img.naturalHeight));
+      const totalW = widths.reduce((a,b) => a+b, 0);
       const canvas = document.createElement('canvas');
-      canvas.width = Math.min(totalW, 1024); canvas.height = h;
+      canvas.width = Math.min(totalW, 1536); canvas.height = h;
+      const scale = canvas.width / totalW;
       const ctx = canvas.getContext('2d');
       ctx.fillStyle = '#111'; ctx.fillRect(0, 0, canvas.width, h);
       let x = 0;
-      const scale = canvas.width / totalW;
-      imgs.forEach(img => { const iw = Math.round(img.width * h / img.height) * scale; ctx.drawImage(img, x, 0, iw, h); x += iw; });
-      resolve(canvas.toDataURL('image/jpeg', 0.85).split(',')[1]);
+      imgs.forEach((img, i) => {
+        const iw = Math.round(widths[i] * scale);
+        ctx.drawImage(img, x, 0, iw, h);
+        x += iw;
+      });
+      resolve(canvas.toDataURL('image/jpeg', 0.88).split(',')[1]);
     });
   });
 }
@@ -911,23 +1015,24 @@ function renderWatermarkedPreview(imageSrc) {
   const img = new Image();
   img.crossOrigin = 'anonymous';
   img.onload = () => {
-    const maxW = 400, scale = Math.min(1, maxW / img.width);
+    const maxW = Math.min(680, window.innerWidth - 60);
+    const scale = Math.min(1, maxW / img.width);
     canvas.width = Math.round(img.width * scale); canvas.height = Math.round(img.height * scale);
     const W = canvas.width, H = canvas.height;
     ctx.drawImage(img, 0, 0, W, H);
     ctx.fillStyle = 'rgba(10,5,0,0.12)'; ctx.fillRect(0, 0, W, H);
     ctx.save();
-    ctx.font = 'bold 13px "Instrument Sans", Arial, sans-serif'; ctx.fillStyle = 'rgba(255,255,255,0.18)';
+    ctx.font = 'bold 14px "Instrument Sans", Arial, sans-serif'; ctx.fillStyle = 'rgba(255,255,255,0.18)';
     ctx.translate(W/2, H/2); ctx.rotate(-Math.PI/6);
-    const step=100, cols=Math.ceil((W*1.5)/step)+3, rows=Math.ceil((H*1.5)/step)+3;
-    for(let r=-rows;r<=rows;r++) for(let c=-cols;c<=cols;c++) ctx.fillText('PAWTRAITS', c*155, r*step);
+    const step=110, cols=Math.ceil((W*1.5)/step)+3, rows=Math.ceil((H*1.5)/step)+3;
+    for(let r=-rows;r<=rows;r++) for(let c=-cols;c<=cols;c++) ctx.fillText('PAWTRAITS', c*165, r*step);
     ctx.restore();
     ctx.save();
     ctx.textAlign='center'; ctx.textBaseline='middle';
-    const cx=W/2, cy=H/2, pw=230, ph=44;
-    ctx.fillStyle='rgba(0,0,0,0.60)'; roundRect(ctx,cx-pw/2,cy-ph/2,pw,ph,22); ctx.fill();
+    const cx=W/2, cy=H/2, pw=240, ph=46;
+    ctx.fillStyle='rgba(0,0,0,0.65)'; roundRect(ctx,cx-pw/2,cy-ph/2,pw,ph,22); ctx.fill();
     ctx.strokeStyle='rgba(62,207,178,0.75)'; ctx.lineWidth=1.5; roundRect(ctx,cx-pw/2,cy-ph/2,pw,ph,22); ctx.stroke();
-    ctx.fillStyle='rgba(62,207,178,0.92)'; ctx.font='bold 12px "Instrument Sans",Arial,sans-serif';
+    ctx.fillStyle='rgba(62,207,178,0.92)'; ctx.font='bold 13px "Instrument Sans",Arial,sans-serif';
     ctx.fillText('✦  PAWTRAITS  ·  PREVIEW ONLY  ✦', cx, cy);
     ctx.restore();
     const vign = ctx.createRadialGradient(W/2,H/2,W*0.35,W/2,H/2,W*0.75);
@@ -973,12 +1078,14 @@ function updatePkgPrice() {
     const sel = document.getElementById('print-size');
     price = '$' + sel.options[sel.selectedIndex].dataset.price;
     state.pkgSize = sel.value;
+    document.getElementById('print-price-display').textContent = price;
   } else if (pkg === 'canvas') {
     const sel = document.getElementById('canvas-size');
     price = '$' + sel.options[sel.selectedIndex].dataset.price;
     document.getElementById('canvas-price-display').textContent = price;
     state.pkgSize = sel.value;
-    selected.dataset.price = price;
+  } else {
+    state.pkgSize = null;
   }
   state.pkg = pkg;
   state.pkgPrice = price;
@@ -998,12 +1105,20 @@ function populateCheckout() {
 }
 
 async function goToStripe() {
-  const btn = document.querySelector('.pay-btn');
+  const btn = document.getElementById('pay-btn');
   btn.textContent = 'Preparing checkout…'; btn.disabled = true;
   try {
     const res = await fetch('/api/checkout', {
       method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ pkg:state.pkg, pkgSize:state.pkgSize, printifyImageId:state.printifyImageId, printifyImageUrl:state.printifyImageUrl, catLabel:state.catLabel }),
+      body: JSON.stringify({
+        pkg: state.pkg,
+        pkgSize: state.pkgSize,
+        pkgPrice: state.pkgPrice,
+        printifyImageId: state.printifyImageId,
+        printifyImageUrl: state.printifyImageUrl,
+        portraitImageUrl: state.portraitImageUrl,
+        catLabel: state.catLabel,
+      }),
     });
     const data = await res.json();
     if (!res.ok || !data.url) throw new Error(data.error || 'Could not create checkout session');

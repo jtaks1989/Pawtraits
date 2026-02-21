@@ -20,119 +20,91 @@ module.exports = async function handler(req, res) {
   const REPLICATE_KEY = process.env.REPLICATE_API_KEY;
   if (!REPLICATE_KEY) return res.status(500).json({ error: 'REPLICATE_API_KEY not configured' });
 
-  // ─── Determine subject context ────────────────────────────────────────────
   const count = photoCount || 1;
-  const isGroup  = category === 'family' || category === 'couples';
-  const isPet    = category === 'pets';
-  const isChild  = category === 'children';
+  const isGroup = category === 'family' || category === 'couples';
+  const isMultiSubject = isGroup || isMultiPhoto || count > 1;
 
-  // Resolve effective gender
-  // - couples/family always → mixed/group (never single-gender override)
-  // - auto/null → let the style prompt and model decide (don't inject gender text)
   const effectiveGender = isGroup ? 'mixed'
     : (gender && gender !== 'auto') ? gender
     : null;
 
-  // ─── Build subject opening line ───────────────────────────────────────────
-  // This goes at the very START of the prompt so the model reads it first.
-  function buildSubjectLine(cat, gen, count, isMulti) {
-    if (cat === 'pets') {
-      return 'A single animal subject (pet).';
-    }
-    if (cat === 'children') {
-      return 'A single child subject.';
-    }
+  function buildSubjectLine(cat, gen, isMulti, count) {
+    if (cat === 'pets' || cat === 'children') return '';
     if (cat === 'couples' || cat === 'family' || isMulti || count > 1) {
       const n = count > 1 ? count : 2;
-      return `CRITICAL: This is a GROUP PORTRAIT of EXACTLY ${n} people. The reference image shows ${n} people side-by-side. The final painting MUST include ALL ${n} people together — both faces must be clearly visible and given equal prominence. Do NOT paint only one person. Do NOT drop any subject. Paint a formal dual-subject / group composition.`;
+      return `group portrait of ${n} people,`;
     }
-    if (gen === 'male') {
-      return 'IMPORTANT: Subject is MALE. Paint as a man with masculine features. Do NOT paint as a woman. Use masculine aristocratic attire: velvet frock coat, breeches, white cravat or jabot — absolutely no dress, gown, or feminine clothing on this subject.';
-    }
-    if (gen === 'female') {
-      return 'IMPORTANT: Subject is FEMALE. Paint as a woman with feminine features. Use feminine aristocratic attire: silk or velvet gown, pearl jewellery, lace trim collar or cuffs.';
-    }
-    // auto/null — no gender injection, let style + image speak
-    return 'A single portrait subject.';
+    if (gen === 'male')   return 'portrait of a man,';
+    if (gen === 'female') return 'portrait of a woman,';
+    return '';
   }
 
-  // ─── Get fallback base prompt (when no stylePrompt passed) ────────────────
   function getDefaultPrompt(cat, gen) {
-    const isMale   = gen === 'male';
-    const isFemale = gen === 'female';
-
-    const attire = isMale
-      ? 'rich velvet frock coat with gold buttons and white cravat, breeches, masculine aristocratic attire'
-      : isFemale
-        ? 'elegant silk brocade gown with pearl jewellery and lace trim, feminine aristocratic attire'
-        : 'appropriate period aristocratic attire';
-
+    const attire = gen === 'male'
+      ? 'dark velvet frock coat, white cravat'
+      : gen === 'female'
+        ? 'silk brocade gown, pearl jewellery, lace trim'
+        : 'period aristocratic attire';
     const prompts = {
-      pets:
-        'regal aristocratic oil painting portrait of this pet, posed on a dark embroidered velvet cushion, draped in an ermine-trimmed royal mantle, dark stone architectural background with a column, painted in the style of George Stubbs, warm directional lighting, museum-quality oil painting, visible brushwork, 18th century masterpiece',
-      family:
-        'formal 18th century aristocratic oil painting group portrait, all subjects wearing period attire — men in embroidered velvet frock coats, women in silk brocade gowns with pearl jewellery and lace trim — rich red velvet curtain background, painted in the style of Joshua Reynolds and Thomas Gainsborough, warm candlelit atmosphere, museum-quality oil painting',
-      children:
-        'formal 18th century aristocratic portrait painting of this child, wearing opulent velvet robes with lace trim and a small gold coronet, soft rosy cheeks, holding a small flower, dark warm background, painted in the style of Thomas Lawrence, warm glowing light, museum-quality oil painting, visible brushwork',
-      couples:
-        'formal Victorian-era aristocratic oil painting portrait of a couple — man in dark formal frock coat with white cravat, woman in rich dark velvet gown with white lace collar and decorative cameo brooch — both subjects clearly visible, dark brown painterly background, painted in the style of John Singer Sargent, warm directional side lighting, museum-quality oil painting',
-      self:
-        `formal 18th century aristocratic oil painting self-portrait, subject wearing ${attire}, three-quarter view, gazing directly at viewer with quiet confidence, dark warm background, painted in the style of Joshua Reynolds and Thomas Gainsborough, warm side lighting, museum-quality oil painting, visible brushwork`,
+      pets:     'regal aristocratic oil painting of a pet, ermine-trimmed royal mantle, dark stone architectural background, style of George Stubbs, warm directional lighting, visible brushwork',
+      family:   'formal 18th century aristocratic group oil painting, velvet frock coats, silk brocade gowns, red velvet curtain background, style of Joshua Reynolds, warm candlelit atmosphere',
+      children: 'formal 18th century aristocratic portrait of a child, opulent velvet robes, lace trim, gold coronet, style of Thomas Lawrence, warm glowing light, visible brushwork',
+      couples:  'formal Victorian aristocratic oil painting of a couple, man in dark frock coat with white cravat, woman in dark velvet gown with lace collar, dark painterly background, style of John Singer Sargent',
+      self:     `formal 18th century aristocratic oil painting, ${attire}, three-quarter view, dark warm background, style of Joshua Reynolds and Gainsborough, warm side lighting, visible brushwork`,
     };
-
     return prompts[cat] || prompts.self;
   }
 
-  // ─── Assemble final prompt ─────────────────────────────────────────────────
   function buildPrompt(baseStylePrompt, cat, gen, count, isMulti) {
-    const subjectLine = buildSubjectLine(cat, gen, count, isMulti);
-    const corestyle   = baseStylePrompt || getDefaultPrompt(cat, gen);
+    const subjectLine = buildSubjectLine(cat, gen, isMulti, count);
+    const coreStyle   = baseStylePrompt || getDefaultPrompt(cat, gen);
 
-    // For multi-subject: append a strong composition instruction at the end too
-    const isMultiSubject = cat === 'couples' || cat === 'family' || isMulti || count > 1;
-    const multiTail = isMultiSubject
-      ? ` The composition must show ALL subjects side by side, both clearly painted with full face detail. This is a double portrait — do not reduce to one person.`
-      : '';
-
-    // For male subjects: append a clothing enforcement line at the end
     const genderTail = (!isMultiSubject && gen === 'male')
-      ? ` The subject must be dressed in masculine attire only — velvet coat, breeches, cravat. Absolutely no dress, skirt, or gown.`
+      ? ', masculine aristocratic attire, dark coat, white cravat, no dress no gown'
       : (!isMultiSubject && gen === 'female')
-        ? ` The subject must be dressed in feminine aristocratic attire — silk or velvet gown, pearls, lace.`
+        ? ', feminine aristocratic attire, silk gown, pearls, lace'
         : '';
 
-    return `${subjectLine} ${corestyle}${multiTail}${genderTail}`;
+    const groupTail = isMultiSubject
+      ? ', both people clearly visible, side by side, equal prominence, full bodies shown'
+      : '';
+
+    return [subjectLine, coreStyle, genderTail, groupTail].filter(Boolean).join(' ');
   }
 
-  // ─── Negative prompt (strong gender + quality enforcement) ─────────────────
   function buildNegativePrompt(gen, isMultiSubject) {
-    const base = 'modern clothing, photograph, photorealistic render, digital art, cartoon, anime, 3d render, ugly, deformed, blurry, low quality, watermark, text, modern background, contemporary setting, casual clothes';
+    const base = [
+      'picture frame', 'ornate frame', 'decorative frame', 'canvas frame', 'painting frame',
+      'border', 'gilded frame', 'frame around painting', 'framed artwork',
+      'modern clothing', 'photograph', 'photorealistic render', 'digital art', 'cartoon',
+      'anime', '3d render', 'ugly', 'deformed', 'blurry', 'low quality', 'watermark', 'text',
+      'modern background', 'contemporary', 'casual clothes',
+    ].join(', ');
+
     const genderNeg = (!isMultiSubject && gen === 'male')
-      ? ', dress on male, gown on male, feminine attire on male subject, skirt on male, woman instead of man'
+      ? ', dress on male, gown on male, feminine clothing on man, woman instead of man'
       : (!isMultiSubject && gen === 'female')
         ? ', masculine attire on female, man instead of woman'
         : '';
-    const multiNeg = isMultiSubject
-      ? ', single person only, one face, solo portrait, cropped to one subject'
-      : '';
+
+    const multiNeg = isMultiSubject ? ', single person only, one face, solo portrait' : '';
+
     return base + genderNeg + multiNeg;
   }
-
-  const isMultiSubject = category === 'couples' || category === 'family' || isMultiPhoto || count > 1;
 
   const prompt         = buildPrompt(stylePrompt, category, effectiveGender, count, isMultiPhoto);
   const negativePrompt = buildNegativePrompt(effectiveGender, isMultiSubject);
 
-  console.log('[generate] category:', category, '| gender:', effectiveGender, '| count:', count, '| isMultiPhoto:', isMultiPhoto);
-  console.log('[generate] prompt:', prompt.substring(0, 200) + '...');
+  console.log('[generate] category:', category, '| gender:', effectiveGender, '| count:', count, '| multi:', isMultiPhoto);
+  console.log('[generate] prompt:', prompt.substring(0, 300));
 
   try {
     const imageDataUrl = `data:${imageMimeType};base64,${imageBase64}`;
 
-    // Tune IP adapter scale:
-    // - Higher (0.9) for single subjects → stronger face transfer
-    // - Slightly lower (0.75) for multi-subject → gives model more room to compose both faces
-    const ipAdapterScale = isMultiSubject ? 0.75 : 0.90;
+    const ipAdapterScale  = isMultiSubject ? 0.55 : 0.85;
+    const controlnetScale = isMultiSubject ? 0.65 : 0.80;
+    const outputWidth     = isMultiSubject ? 1024 : 768;
+    const outputHeight    = isMultiSubject ? 768  : 1024;
 
     const startRes = await fetch('https://api.replicate.com/v1/predictions', {
       method: 'POST',
@@ -148,11 +120,11 @@ module.exports = async function handler(req, res) {
           prompt,
           negative_prompt: negativePrompt,
           ip_adapter_scale: ipAdapterScale,
-          controlnet_conditioning_scale: 0.8,
-          num_inference_steps: 30,
-          guidance_scale: 7.5,
-          width: 768,
-          height: 1024,
+          controlnet_conditioning_scale: controlnetScale,
+          num_inference_steps: 40,
+          guidance_scale: 8.0,
+          width: outputWidth,
+          height: outputHeight,
         },
       }),
     });
@@ -193,7 +165,6 @@ module.exports = async function handler(req, res) {
     const imgBuffer = await imgRes.arrayBuffer();
     const b64 = Buffer.from(imgBuffer).toString('base64');
 
-    // ─── Printify upload (optional) ──────────────────────────────────────────
     let printifyImageId = null, printifyImageUrl = null;
     const PK = process.env.PRINTIFY_API_KEY, PS = process.env.PRINTIFY_SHOP_ID;
     if (PK && PS) {

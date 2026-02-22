@@ -107,7 +107,7 @@
     .gen-status{font-size:.88rem;color:var(--teal);margin-bottom:1.25rem;min-height:1.4em;}
     .gen-progress-wrap{max-width:380px;margin:0 auto 1.75rem;}
     .gen-progress-pct-row{display:flex;align-items:baseline;justify-content:center;gap:.3rem;margin-bottom:.75rem;}
-    .gen-progress-pct{font-family:'Playfair Display',serif;font-size:3rem;font-weight:900;font-style:italic;line-height:1;color:var(--teal);transition:color .3s;}
+    .gen-progress-pct{font-family:'Playfair Display',serif;font-size:3rem;font-weight:900;font-style:italic;line-height:1;color:var(--teal);}
     .gen-progress-pct-sym{font-size:1.4rem;font-weight:700;color:var(--teal);opacity:.7;}
     .gen-progress-bar{height:6px;border-radius:100px;background:rgba(62,207,178,.12);overflow:hidden;margin-bottom:.5rem;}
     .gen-progress-fill{height:100%;border-radius:100px;background:linear-gradient(90deg,var(--teal-dk),var(--teal));width:0%;transition:width 1s ease;}
@@ -322,7 +322,7 @@
   <!-- STEP 3 -->
   <div class="step-panel" id="step-3">
     <h2 class="step-heading">Upload your <span class="accent">photo</span></h2>
-    <p class="step-desc" id="upload-step-desc">Upload one or more photos. For groups, add each person separately — our AI will combine them into one portrait.</p>
+    <p class="step-desc" id="upload-step-desc">Upload a clear photo of your subject. For best results, make sure the face is well-lit and clearly visible.</p>
     <div class="gender-wrap">
       <div class="gender-label">Who is in the photo?</div>
       <div class="gender-btns">
@@ -355,7 +355,7 @@
   <!-- STEP 4 -->
   <div class="step-panel" id="step-4">
     <h2 class="step-heading">Creating your <span class="accent">masterpiece</span></h2>
-    <p class="step-desc">Our AI is painting your portrait. This takes about 20–40 seconds.</p>
+    <p class="step-desc">Our AI is painting your portrait. This takes about 15–25 seconds.</p>
     <div class="gen-wrap">
       <div class="gen-spinner" id="gen-spinner"></div>
       <div class="gen-title" id="gen-title">Analysing your photo…</div>
@@ -365,7 +365,7 @@
           <span class="gen-progress-pct" id="gen-progress-pct">0</span><span class="gen-progress-pct-sym">%</span>
         </div>
         <div class="gen-progress-bar"><div class="gen-progress-fill" id="gen-progress-fill"></div></div>
-        <div class="gen-progress-eta" id="gen-progress-eta">~40 seconds remaining</div>
+        <div class="gen-progress-eta" id="gen-progress-eta">~25 seconds remaining</div>
       </div>
       <div class="gen-steps">
         <div class="gen-step active" id="gstep-1"><span class="gen-step-ico">🔍</span>Analysing subject<span class="gen-step-check" id="gcheck-1" style="display:none">✓</span></div>
@@ -613,7 +613,7 @@
       <div class="how-grid">
         <div class="how-card reveal"><div class="how-num">01</div><div class="how-ico">🖼️</div><div class="how-title">Pick your subject</div><p class="how-desc">Choose from pets, family, couples, children, or a self-portrait.</p></div>
         <div class="how-card reveal"><div class="how-num">02</div><div class="how-ico">🎨</div><div class="how-title">Choose your style</div><p class="how-desc">Pick from 9 distinct art styles — from Grand Manner to French Romance.</p></div>
-        <div class="how-card reveal"><div class="how-num">03</div><div class="how-ico">📸</div><div class="how-title">Upload your photo</div><p class="how-desc">A clear, well-lit photo. Add multiple photos for group portraits.</p></div>
+        <div class="how-card reveal"><div class="how-num">03</div><div class="how-ico">📸</div><div class="how-title">Upload your photo</div><p class="how-desc">A clear, well-lit photo. For couples, one photo with both people works perfectly.</p></div>
         <div class="how-card reveal"><div class="how-num">04</div><div class="how-ico">📦</div><div class="how-title">Print &amp; delivery</div><p class="how-desc">We print your portrait on archival canvas and ship free worldwide in 7–10 days.</p></div>
       </div>
     </div>
@@ -639,9 +639,9 @@
     <p class="stag reveal">FAQ</p>
     <h2 class="sh reveal">Common questions</h2>
     <div class="faq-list">
-      <div class="fi reveal"><button class="fq">How does the AI generation work?</button><div class="fa"><p>We use advanced AI models that take your uploaded photo and transform it into an aristocratic portrait painting while preserving your face and features. The process takes about 20–40 seconds. You can regenerate as many times as you like before purchasing.</p></div></div>
+      <div class="fi reveal"><button class="fq">How does the AI generation work?</button><div class="fa"><p>We use Google's Gemini AI which sees and understands your entire photo — including every person in it. It transforms the image into a stunning aristocratic oil painting in about 15–25 seconds.</p></div></div>
       <div class="fi reveal"><button class="fq">Why is there a watermark on my preview?</button><div class="fa"><p>The watermark is applied so you can see the result before paying. Once you purchase, we remove the watermark and print the full-resolution version.</p></div></div>
-      <div class="fi reveal"><button class="fq">Can I upload multiple photos?</button><div class="fa"><p>Yes! For family and couple portraits, upload up to 4 photos — one per person. Our AI will generate each portrait individually and combine them into one composition. For pets and self-portraits, one photo works best.</p></div></div>
+      <div class="fi reveal"><button class="fq">Can I upload a photo with multiple people?</button><div class="fa"><p>Yes — just upload one photo with everyone in it. Our AI sees all people in the photo and paints them all. For couples and families this is the easiest approach. You can also upload separate photos per person if you prefer.</p></div></div>
       <div class="fi reveal"><button class="fq">Can I change the art style?</button><div class="fa"><p>Absolutely. After seeing your preview, click "Change Style" to go back and pick a different style, then regenerate. You can also click "Regenerate" for a different interpretation of the same style.</p></div></div>
       <div class="fi reveal"><button class="fq">How long does delivery take?</button><div class="fa"><p>All prints ship free worldwide. Orders ship within 7–10 business days. You'll receive full tracking once your portrait ships.</p></div></div>
       <div class="fi reveal"><button class="fq">What size should I choose?</button><div class="fa"><p>For a desk or small wall, 20×25 cm is perfect. For a statement piece, 45×60 cm or larger. Large canvases (60×90 cm and above) are stunning gallery pieces and make exceptional gifts.</p></div></div>
@@ -664,91 +664,36 @@
 </footer>
 
 <script>
-// ─── STYLE DEFINITIONS ─────────────────────────────────────────────────────
-// IP-Adapter handles face transfer via the uploaded image.
-// These prompts control STYLE, ATTIRE, LIGHTING and BACKGROUND only.
 const STYLES = [
-  {
-    id:'grand-manner',
-    name:'Grand Manner Monarch',
-    era:'Baroque · Van Dyck & Rubens',
-    prompt:`oil painting portrait, opulent European royal regalia, ermine-trimmed crimson velvet robes, jeweled crown, heavy gold brocade doublet, dramatic lighting from upper left, dark warm background with draped scarlet curtain and stone column, style of Rubens and Van Dyck, thick confident impasto brushwork, dignified regal pose, crimson gold ivory deep brown palette, museum-quality old master painting`
-  },
-  {
-    id:'storm',
-    name:'Storm',
-    era:'Romantic Era · Delacroix & Géricault',
-    prompt:`dramatic Romantic era oil painting portrait, turbulent storm sky, windswept 19th century attire with open collar and flowing cloak, heavy gestural impasto brushstrokes, dark brooding atmosphere with breaks of warm amber light, style of Delacroix and Géricault, heroic pose, storm-grey midnight-blue burnt orange umber palette, strong chiaroscuro contrast, museum-quality Romantic oil painting`
-  },
-  {
-    id:'nobel',
-    name:'Nobel',
-    era:'19th Century · Academic Realism',
-    prompt:`formal Academic oil painting portrait, deep crimson velvet ceremonial robes with heavy gold embroidery and regal medallion, dark charcoal background with warm vignette, warm golden directional light from upper right, style of Bouguereau and Bonnat, meticulous smooth blended brushwork, luminous warm skin tones, crimson burgundy antique gold ivory palette, dignified commanding pose`
-  },
-  {
-    id:'velazquez',
-    name:'Velázquez',
-    era:'Spanish Baroque · 17th Century',
-    prompt:`Spanish Baroque court oil painting portrait, style of Diego Velázquez, dark formal Spanish court attire, black doublet with starched white ruff collar and cuffs, subtle silver embroidery, cool dark grey-green background, sfumato atmospheric lighting, loose fluid confident brushwork on clothing, dignified stoic expression, near-black charcoal cool grey white ivory skin palette, 17th century masterpiece`
-  },
-  {
-    id:'french-romance',
-    name:'French Romance',
-    era:'Victorian · John Singer Sargent',
-    prompt:`intimate oil painting portrait style of John Singer Sargent, elegant 19th century French salon attire, silk evening wear with soft draping, dramatic chiaroscuro lighting from single warm candle source, rich dark background fading to black, thick bravura impasto brushstrokes, fluid confident paint application, burnt sienna ivory gold ochre deep shadow palette, romantic intensity, loose expressive brushwork`
-  },
-  {
-    id:'belle-epoque',
-    name:'Belle Époque',
-    era:'Late 19th C · James Tissot',
-    prompt:`tender 19th century Belle Époque oil painting portrait, style of James Tissot, fashionable late Victorian attire with intricate lace trim and ribbon details, warm soft diffused window light, blush ivory rose navy deep burgundy warm cream palette, precise detailed painting technique, luminous warm skin tones, gentle romantic expression, refined elegant posture, museum-quality Victorian oil painting`
-  },
-  {
-    id:'tweed',
-    name:'Tweed',
-    era:'Baroque · Anthony van Dyck',
-    prompt:`Baroque aristocratic oil painting portrait, style of Anthony van Dyck, dark forest-green and charcoal tweed hunting attire with herringbone texture, white lace cravat at throat, black velvet lapels, dark moody studio background with warm amber glow, dramatic Rembrandt side-lighting from upper left, rich textural impasto, dignified aristocratic pose, forest-green charcoal brown ivory deep shadow palette`
-  },
-  {
-    id:'red-forest',
-    name:'Red Forest',
-    era:'Romantic · Landscape Portrait',
-    prompt:`Romantic oil painting portrait with sweeping autumn forest backdrop, style of Gainsborough and Constable, deep burgundy coat and navy waistcoat with gold trim, lush crimson and golden autumn woodland background, warm golden light filtering through forest canopy, loose expressive brushwork on foliage, deep red crimson burnt sienna ochre gold forest green palette, atmospheric depth and romance`
-  },
-  {
-    id:'casati',
-    name:'Casati',
-    era:'Theatrical · Art-Deco Opulence',
-    prompt:`theatrical art-deco oil painting portrait, style of Boldini and de Lempicka, elaborate exotic costume with feathered headdress, jeweled necklaces, heavy brocade and luxurious furs, theatrical dark studio backdrop with draped silk, deep sapphire midnight-blue crimson antique gold jewel-tone palette, bold expressive brushwork, commanding dramatic expression, extravagant opulent atmosphere`
-  },
+  { id:'grand-manner', name:'Grand Manner Monarch', era:'Baroque · Van Dyck & Rubens', prompt:`oil painting portrait, opulent European royal regalia, ermine-trimmed crimson velvet robes, jeweled crown, heavy gold brocade doublet, dramatic lighting from upper left, dark warm background with draped scarlet curtain and stone column, style of Rubens and Van Dyck, thick confident impasto brushwork, dignified regal pose, crimson gold ivory deep brown palette, museum-quality old master painting` },
+  { id:'storm', name:'Storm', era:'Romantic Era · Delacroix & Géricault', prompt:`dramatic Romantic era oil painting portrait, turbulent storm sky, windswept 19th century attire with open collar and flowing cloak, heavy gestural impasto brushstrokes, dark brooding atmosphere with breaks of warm amber light, style of Delacroix and Géricault, heroic pose, storm-grey midnight-blue burnt orange umber palette, strong chiaroscuro contrast, museum-quality Romantic oil painting` },
+  { id:'nobel', name:'Nobel', era:'19th Century · Academic Realism', prompt:`formal Academic oil painting portrait, deep crimson velvet ceremonial robes with heavy gold embroidery and regal medallion, dark charcoal background with warm vignette, warm golden directional light from upper right, style of Bouguereau and Bonnat, meticulous smooth blended brushwork, luminous warm skin tones, crimson burgundy antique gold ivory palette, dignified commanding pose` },
+  { id:'velazquez', name:'Velázquez', era:'Spanish Baroque · 17th Century', prompt:`Spanish Baroque court oil painting portrait, style of Diego Velázquez, dark formal Spanish court attire, black doublet with starched white ruff collar and cuffs, subtle silver embroidery, cool dark grey-green background, sfumato atmospheric lighting, loose fluid confident brushwork, dignified stoic expression, near-black charcoal cool grey white ivory skin palette, 17th century masterpiece` },
+  { id:'french-romance', name:'French Romance', era:'Victorian · John Singer Sargent', prompt:`intimate oil painting portrait style of John Singer Sargent, elegant 19th century French salon attire, silk evening wear with soft draping, dramatic chiaroscuro lighting from single warm candle source, rich dark background fading to black, thick bravura impasto brushstrokes, fluid confident paint application, burnt sienna ivory gold ochre deep shadow palette, romantic intensity` },
+  { id:'belle-epoque', name:'Belle Époque', era:'Late 19th C · James Tissot', prompt:`tender 19th century Belle Époque oil painting portrait, style of James Tissot, fashionable late Victorian attire with intricate lace trim and ribbon details, warm soft diffused window light, blush ivory rose navy deep burgundy warm cream palette, precise detailed painting technique, luminous warm skin tones, gentle romantic expression, refined elegant posture` },
+  { id:'tweed', name:'Tweed', era:'Baroque · Anthony van Dyck', prompt:`Baroque aristocratic oil painting portrait, style of Anthony van Dyck, dark forest-green and charcoal tweed hunting attire with herringbone texture, white lace cravat at throat, black velvet lapels, dark moody studio background with warm amber glow, dramatic Rembrandt side-lighting from upper left, rich textural impasto, dignified aristocratic pose` },
+  { id:'red-forest', name:'Red Forest', era:'Romantic · Landscape Portrait', prompt:`Romantic oil painting portrait with sweeping autumn forest backdrop, style of Gainsborough and Constable, deep burgundy coat and navy waistcoat with gold trim, lush crimson and golden autumn woodland background, warm golden light filtering through forest canopy, loose expressive brushwork on foliage, deep red crimson burnt sienna ochre gold forest green palette` },
+  { id:'casati', name:'Casati', era:'Theatrical · Art-Deco Opulence', prompt:`theatrical art-deco oil painting portrait, style of Boldini and de Lempicka, elaborate exotic costume with feathered headdress, jeweled necklaces, heavy brocade and luxurious furs, theatrical dark studio backdrop with draped silk, deep sapphire midnight-blue crimson antique gold jewel-tone palette, bold expressive brushwork, commanding dramatic expression` },
 ];
 
 const state = {
-  cat:null, catLabel:null,
-  style:null, styleLabel:null, stylePrompt:null,
-  gender:'auto',
-  files:[], imageDatas:[], imageBase64s:[],
+  cat:null, catLabel:null, style:null, styleLabel:null, stylePrompt:null,
+  gender:'auto', files:[], imageDatas:[], imageBase64s:[],
   generatedImageData:null, generationHistory:[],
-  printifyImageId:null, printifyImageUrl:null,
-  portraitImageUrl:null,
-  isFallback:false,
+  printifyImageId:null, printifyImageUrl:null, portraitImageUrl:null, isFallback:false,
   pkg:null, pkgPrice:null, pkgLabel:null, pkgSize:null,
 };
-
 const catLabels = { pets:'Pet Portrait', family:'Family Portrait', children:"Children's Portrait", couples:'Couple Portrait', self:'Self-Portrait' };
 const pkgDetails = {
-  digital:{ includes:'High-res digital file, no watermark', shipping:'Instant download' },
-  print:  { includes:'Fine art print + digital file',       shipping:'Free · 7–10 business days' },
-  canvas: { includes:'Gallery canvas + digital file',       shipping:'Free · 7–10 business days' },
+  digital:{ includes:'High-res digital file, no watermark' },
+  print:  { includes:'Fine art print + digital file' },
+  canvas: { includes:'Gallery canvas + digital file' },
 };
 
 function renderStyleGrid() {
   document.getElementById('style-grid').innerHTML = STYLES.map(s => `
     <div class="style-card" data-style="${s.id}" onclick="selectStyle(this)">
-      <div class="style-thumb">
-        <img class="style-thumb-img" src="/style-${s.id}.jpg" alt="${s.name}" loading="lazy">
-      </div>
+      <div class="style-thumb"><img class="style-thumb-img" src="/style-${s.id}.jpg" alt="${s.name}" loading="lazy"></div>
       <div class="style-info"><div class="style-name">${s.name}</div><div class="style-era">${s.era}</div></div>
       <div class="style-selected-badge">✓ Selected</div>
     </div>`).join('');
@@ -761,7 +706,7 @@ setInterval(() => {
   countdownSecs--;
   const m = Math.floor(countdownSecs / 60), s = countdownSecs % 60;
   const el = document.getElementById('countdown');
-  if (el) el.textContent = `${m}:${s.toString().padStart(2,'0')}`;
+  if (el) el.textContent = m + ':' + String(s).padStart(2,'0');
 }, 1000);
 
 function goToStep(n) {
@@ -781,11 +726,9 @@ function goToStep(n) {
 function updateUploadHints() {
   const desc = document.getElementById('upload-step-desc');
   if (state.cat === 'couples' || state.cat === 'family') {
-    desc.textContent = 'Upload one photo per person (up to 4). Our AI generates each portrait individually then combines them into one composition.';
-    if (state.gender === 'auto' || state.gender === 'male' || state.gender === 'female') {
-      const mixedBtn = document.querySelector('.gender-btn[data-gender="mixed"]');
-      if (mixedBtn) selectGender(mixedBtn);
-    }
+    desc.textContent = 'Upload one photo with everyone in it — our AI sees all people and paints them all. Or upload separate photos per person if you prefer.';
+    const mixedBtn = document.querySelector('.gender-btn[data-gender="mixed"]');
+    if (mixedBtn && state.gender !== 'mixed') selectGender(mixedBtn);
   } else {
     desc.textContent = 'Upload a clear photo of your subject. For best results, make sure the face is well-lit and clearly visible.';
   }
@@ -847,13 +790,9 @@ function handleFiles(fileList) {
 }
 
 function removeUploadPhoto(idx) {
-  state.files.splice(idx, 1); state.imageDatas.splice(idx, 1); state.imageBase64s.splice(idx, 1);
+  state.files.splice(idx,1); state.imageDatas.splice(idx,1); state.imageBase64s.splice(idx,1);
   renderUploadPreviews();
   if (state.files.length === 0) document.getElementById('btn-next-3').disabled = true;
-  if (state.files.length <= 1 && state.gender === 'mixed') {
-    const autoBtn = document.querySelector('.gender-btn[data-gender="auto"]');
-    if (autoBtn) selectGender(autoBtn);
-  }
 }
 
 function renderUploadPreviews() {
@@ -863,20 +802,20 @@ function renderUploadPreviews() {
   state.imageDatas.forEach((src, i) => {
     const wrap = document.createElement('div');
     wrap.className = 'upload-thumb-wrap';
-    wrap.innerHTML = `<img class="upload-thumb" src="${src}"><button class="upload-thumb-remove" onclick="removeUploadPhoto(${i})">×</button>`;
+    wrap.innerHTML = '<img class="upload-thumb" src="' + src + '"><button class="upload-thumb-remove" onclick="removeUploadPhoto(' + i + ')">×</button>';
     container.appendChild(wrap);
   });
   if (state.files.length < 4) {
     const addBtn = document.createElement('label');
     addBtn.className = 'upload-add-btn'; addBtn.innerHTML = '+'; addBtn.htmlFor = 'photo-input-extra';
     const inp = document.createElement('input');
-    inp.type = 'file'; inp.accept = 'image/*'; inp.multiple = true; inp.id = 'photo-input-extra'; inp.style.display = 'none';
+    inp.type='file'; inp.accept='image/*'; inp.multiple=true; inp.id='photo-input-extra'; inp.style.display='none';
     inp.onchange = () => handleFiles(inp.files);
     container.appendChild(addBtn); container.appendChild(inp);
   }
   const h3 = document.getElementById('upload-h3'), p = document.getElementById('upload-p');
   if (state.files.length > 0) {
-    h3.textContent = `✓  ${state.files.length} photo${state.files.length > 1 ? 's' : ''} ready`;
+    h3.textContent = '✓  ' + state.files.length + ' photo' + (state.files.length > 1 ? 's' : '') + ' ready';
     p.textContent = state.files.length < 4 ? 'Click + to add more photos' : 'Maximum 4 photos reached';
     zone.style.borderColor = 'var(--teal)'; zone.style.background = 'rgba(62,207,178,.04)';
   } else {
@@ -894,7 +833,7 @@ uploadZone.addEventListener('drop', e => { e.preventDefault(); uploadZone.classL
 
 let progressInterval = null;
 let progressSecs = 0;
-const TOTAL_SECS = 42;
+const TOTAL_SECS = 25;
 
 function startProgressBar() {
   progressSecs = 0;
@@ -907,15 +846,14 @@ function startProgressBar() {
   pctEl.textContent = '0';
   progressInterval = setInterval(() => {
     progressSecs++;
-    const raw = progressSecs / TOTAL_SECS;
-    // FIX: clamp base to prevent NaN from negative^decimal
-    const pct = Math.min(92, Math.round(100 * (1 - Math.pow(Math.max(0, 1 - raw), 2.2))));
+    // Pure integer linear math — impossible to produce NaN under any condition
+    const pct = progressSecs >= TOTAL_SECS ? 92 : Math.floor((progressSecs / TOTAL_SECS) * 92);
     fill.style.transition = 'width 1s ease';
     fill.style.width = pct + '%';
-    pctEl.textContent = pct;
+    pctEl.textContent = String(pct);
     const rem = Math.max(0, TOTAL_SECS - progressSecs);
-    eta.textContent = rem > 0 ? `~${rem} seconds remaining` : 'Almost done…';
-    if (progressSecs >= TOTAL_SECS + 30) clearInterval(progressInterval);
+    eta.textContent = rem > 0 ? '~' + rem + ' seconds remaining' : 'Almost done…';
+    if (progressSecs >= TOTAL_SECS + 120) clearInterval(progressInterval);
   }, 1000);
 }
 
@@ -968,115 +906,83 @@ async function startGeneration() {
   if (state.imageBase64s.length === 0) return;
   goToStep(4); resetGenUI(); state.isFallback = false;
   try {
-    // COUPLES / FAMILY with multiple separate photos:
-    // Generate each person individually, then composite the painted results.
-    // IP-Adapter cannot handle 2 faces in one image — this is the correct approach.
+    // Multiple separate photos for couples/family: generate each individually then composite
     if (state.imageDatas.length > 1 && (state.cat === 'couples' || state.cat === 'family')) {
       await generateGroupPortrait();
       return;
     }
-    // Single photo generation
+    // Single photo — Gemini sees ALL people in the image naturally
     setGenStep(1, 'Studying your subject…');
-    const t2 = setTimeout(() => setGenStep(2, `Applying ${state.styleLabel} style…`), 6000);
-    const t3 = setTimeout(() => { setGenStep(3, 'Painting your portrait…'); document.getElementById('gen-title').textContent = 'Painting your portrait…'; }, 14000);
-    const t4 = setTimeout(() => setGenStep(4, 'Applying finishing touches…'), 30000);
+    const t2 = setTimeout(() => setGenStep(2, 'Applying ' + state.styleLabel + ' style…'), 5000);
+    const t3 = setTimeout(() => { setGenStep(3, 'Painting your portrait…'); document.getElementById('gen-title').textContent = 'Painting your portrait…'; }, 10000);
+    const t4 = setTimeout(() => setGenStep(4, 'Applying finishing touches…'), 18000);
 
     let genderToSend = state.gender;
-    if (state.cat === 'couples' || state.cat === 'family') {
-      genderToSend = 'mixed';
-    } else if (genderToSend === 'auto') {
-      genderToSend = null;
-    }
+    if (state.cat === 'couples' || state.cat === 'family') genderToSend = 'mixed';
+    else if (genderToSend === 'auto') genderToSend = null;
 
     const res = await fetch('/api/generate', {
       method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({
         imageBase64: state.imageBase64s[0],
-        imageMimeType:'image/jpeg',
-        category: state.cat,
-        catLabel: state.catLabel,
-        style: state.style,
-        stylePrompt: state.stylePrompt,
+        imageMimeType: 'image/jpeg',
+        category: state.cat, catLabel: state.catLabel,
+        style: state.style, stylePrompt: state.stylePrompt,
         gender: genderToSend,
         photoCount: state.files.length,
         isMultiPhoto: false,
       }),
     });
     clearTimeout(t2); clearTimeout(t3); clearTimeout(t4);
-    if (!res.ok) { const err = await res.json().catch(() => ({})); throw new Error(err.error || `Server error ${res.status}`); }
+    if (!res.ok) { const err = await res.json().catch(() => ({})); throw new Error(err.error || 'Server error ' + res.status); }
     const data = await res.json();
     await handleGenerationSuccess(data);
-  } catch (err) {
+  } catch(err) {
     console.error('Generation error:', err);
     showGenError('Generation failed', err.message || 'An unexpected error occurred.');
   }
 }
 
-// Generate each person separately, then composite the painted portraits side-by-side
 async function generateGroupPortrait() {
   const n = state.imageDatas.length;
-  document.getElementById('gen-title').textContent = `Painting ${n} portraits…`;
-  startProgressBar();
-
+  document.getElementById('gen-title').textContent = 'Painting ' + n + ' portraits…';
   const portraits = [];
   for (let i = 0; i < n; i++) {
-    const stepMsg = `Painting portrait ${i + 1} of ${n}…`;
+    const stepMsg = 'Painting portrait ' + (i + 1) + ' of ' + n + '…';
     setGenStep(Math.min(i + 1, 4), stepMsg);
     document.getElementById('gen-status').textContent = stepMsg;
-
     const res = await fetch('/api/generate', {
       method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({
-        imageBase64: state.imageBase64s[i],
-        imageMimeType:'image/jpeg',
-        category: state.cat,
-        catLabel: state.catLabel,
-        style: state.style,
-        stylePrompt: state.stylePrompt,
-        gender: 'mixed',
-        photoCount: 1,
-        isMultiPhoto: false,
+        imageBase64: state.imageBase64s[i], imageMimeType: 'image/jpeg',
+        category: state.cat, catLabel: state.catLabel,
+        style: state.style, stylePrompt: state.stylePrompt,
+        gender: 'mixed', photoCount: 1, isMultiPhoto: false,
       }),
     });
-    if (!res.ok) { const err = await res.json().catch(() => ({})); throw new Error(err.error || `Server error ${res.status}`); }
-    const data = await res.json();
-    portraits.push(data.imageData);
+    if (!res.ok) { const err = await res.json().catch(() => ({})); throw new Error(err.error || 'Server error ' + res.status); }
+    portraits.push((await res.json()).imageData);
   }
-
   setGenStep(4, 'Composing group portrait…');
   document.getElementById('gen-title').textContent = 'Composing group portrait…';
-
   const composited = await compositePaintedPortraits(portraits);
-  await handleGenerationSuccess({ imageData: composited, printifyImageId: null, printifyImageUrl: null, portraitImageUrl: null });
+  await handleGenerationSuccess({ imageData: composited, printifyImageId:null, printifyImageUrl:null, portraitImageUrl:null });
 }
 
-// Composite already-painted portrait images side-by-side with a soft divider
 async function compositePaintedPortraits(dataUrls) {
   return new Promise(resolve => {
     const imgs = dataUrls.map(src => { const img = new Image(); img.src = src; return img; });
-    Promise.all(imgs.map(img => new Promise(r => {
-      if (img.complete && img.naturalHeight) r(); else img.onload = r;
-    }))).then(() => {
-      const n = imgs.length;
-      const tileW = imgs[0].naturalWidth;
-      const tileH = imgs[0].naturalHeight;
+    Promise.all(imgs.map(img => new Promise(r => { if (img.complete && img.naturalHeight) r(); else img.onload = r; }))).then(() => {
+      const n = imgs.length, tileW = imgs[0].naturalWidth, tileH = imgs[0].naturalHeight;
       const canvas = document.createElement('canvas');
-      canvas.width  = tileW * n;
-      canvas.height = tileH;
+      canvas.width = tileW * n; canvas.height = tileH;
       const ctx = canvas.getContext('2d');
-      ctx.fillStyle = '#0e0a04';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      imgs.forEach((img, i) => {
-        ctx.drawImage(img, i * tileW, 0, tileW, tileH);
-      });
-      // Soft gradient divider between portraits
+      ctx.fillStyle = '#0e0a04'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+      imgs.forEach((img, i) => ctx.drawImage(img, i * tileW, 0, tileW, tileH));
       for (let i = 1; i < n; i++) {
-        const grad = ctx.createLinearGradient(i * tileW - 10, 0, i * tileW + 10, 0);
-        grad.addColorStop(0, 'rgba(0,0,0,0)');
-        grad.addColorStop(0.5, 'rgba(0,0,0,0.55)');
-        grad.addColorStop(1, 'rgba(0,0,0,0)');
-        ctx.fillStyle = grad;
-        ctx.fillRect(i * tileW - 10, 0, 20, tileH);
+        const grad = ctx.createLinearGradient(i*tileW-12, 0, i*tileW+12, 0);
+        grad.addColorStop(0,'rgba(0,0,0,0)'); grad.addColorStop(0.5,'rgba(0,0,0,0.6)'); grad.addColorStop(1,'rgba(0,0,0,0)');
+        ctx.fillStyle = grad; ctx.fillRect(i*tileW-12, 0, 24, tileH);
       }
       resolve(canvas.toDataURL('image/jpeg', 0.93));
     });
@@ -1087,20 +993,20 @@ async function handleGenerationSuccess(data) {
   state.generatedImageData = data.imageData;
   state.printifyImageId    = data.printifyImageId  || null;
   state.printifyImageUrl   = data.printifyImageUrl || null;
-  state.portraitImageUrl   = data.portraitImageUrl || data.printifyImageUrl || null;
+  state.portraitImageUrl   = data.portraitImageUrl || null;
   state.generationHistory.unshift(data.imageData);
   if (state.generationHistory.length > 6) state.generationHistory.pop();
   completeProgressBar();
   setGenStep(4, 'Applying finishing touches…');
-  await delay(600);
+  await delay(500);
   for (let i = 1; i <= 4; i++) {
     document.getElementById('gstep-'+i).classList.remove('active');
     document.getElementById('gstep-'+i).classList.add('done');
-    document.getElementById('gcheck-'+i).style.display='inline';
+    document.getElementById('gcheck-'+i).style.display = 'inline';
   }
   document.getElementById('gen-status').textContent = 'Your masterpiece is ready ✦';
   document.getElementById('gen-title').textContent = 'Portrait complete!';
-  await delay(700);
+  await delay(600);
   renderWatermarkedPreview(state.generatedImageData);
   renderGenerationHistory();
   goToStep(5);
@@ -1123,12 +1029,12 @@ function renderWatermarkedPreview(imageSrc) {
     canvas.width = Math.round(img.width * scale); canvas.height = Math.round(img.height * scale);
     const W = canvas.width, H = canvas.height;
     ctx.drawImage(img, 0, 0, W, H);
-    ctx.fillStyle = 'rgba(10,5,0,0.12)'; ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = 'rgba(10,5,0,0.12)'; ctx.fillRect(0,0,W,H);
     ctx.save();
-    ctx.font = 'bold 14px "Instrument Sans", Arial, sans-serif'; ctx.fillStyle = 'rgba(255,255,255,0.18)';
-    ctx.translate(W/2, H/2); ctx.rotate(-Math.PI/6);
+    ctx.font = 'bold 14px "Instrument Sans",Arial,sans-serif'; ctx.fillStyle = 'rgba(255,255,255,0.18)';
+    ctx.translate(W/2,H/2); ctx.rotate(-Math.PI/6);
     const step=110, cols=Math.ceil((W*1.5)/step)+3, rows=Math.ceil((H*1.5)/step)+3;
-    for(let r=-rows;r<=rows;r++) for(let c=-cols;c<=cols;c++) ctx.fillText('PAWTRAITS', c*165, r*step);
+    for(let r=-rows;r<=rows;r++) for(let c=-cols;c<=cols;c++) ctx.fillText('PAWTRAITS',c*165,r*step);
     ctx.restore();
     ctx.save();
     ctx.textAlign='center'; ctx.textBaseline='middle';
@@ -1136,9 +1042,9 @@ function renderWatermarkedPreview(imageSrc) {
     ctx.fillStyle='rgba(0,0,0,0.65)'; roundRect(ctx,cx-pw/2,cy-ph/2,pw,ph,22); ctx.fill();
     ctx.strokeStyle='rgba(62,207,178,0.75)'; ctx.lineWidth=1.5; roundRect(ctx,cx-pw/2,cy-ph/2,pw,ph,22); ctx.stroke();
     ctx.fillStyle='rgba(62,207,178,0.92)'; ctx.font='bold 13px "Instrument Sans",Arial,sans-serif';
-    ctx.fillText('✦  PAWTRAITS  ·  PREVIEW ONLY  ✦', cx, cy);
+    ctx.fillText('✦  PAWTRAITS  ·  PREVIEW ONLY  ✦',cx,cy);
     ctx.restore();
-    const vign = ctx.createRadialGradient(W/2,H/2,W*0.35,W/2,H/2,W*0.75);
+    const vign=ctx.createRadialGradient(W/2,H/2,W*0.35,W/2,H/2,W*0.75);
     vign.addColorStop(0,'transparent'); vign.addColorStop(1,'rgba(0,0,0,0.35)');
     ctx.fillStyle=vign; ctx.fillRect(0,0,W,H);
   };
@@ -1151,8 +1057,8 @@ function renderGenerationHistory() {
   const container = document.getElementById('gen-history'), grid = document.getElementById('gen-history-grid');
   if (state.generationHistory.length <= 1) { container.style.display = 'none'; return; }
   container.style.display = 'block';
-  grid.innerHTML = state.generationHistory.map((src, i) =>
-    `<img class="gen-history-thumb ${i===0?'active':''}" src="${src}" title="Generation ${i+1}" onclick="switchGeneration(${i},this)">`).join('');
+  grid.innerHTML = state.generationHistory.map((src,i) =>
+    '<img class="gen-history-thumb ' + (i===0?'active':'') + '" src="' + src + '" title="Generation ' + (i+1) + '" onclick="switchGeneration(' + i + ',this)">').join('');
 }
 
 function switchGeneration(idx, el) {
@@ -1187,22 +1093,19 @@ function updatePkgPrice() {
     price = '$' + sel.options[sel.selectedIndex].dataset.price;
     document.getElementById('canvas-price-display').textContent = price;
     state.pkgSize = sel.value;
-  } else {
-    state.pkgSize = null;
-  }
-  state.pkg = pkg;
-  state.pkgPrice = price;
+  } else { state.pkgSize = null; }
+  state.pkg = pkg; state.pkgPrice = price;
   state.pkgLabel = selected.querySelector('.pkg-name-f').textContent;
 }
 
 function populateCheckout() {
   const canvas = document.getElementById('preview-canvas');
-  if (canvas.width > 0) document.getElementById('checkout-thumb').src = canvas.toDataURL('image/jpeg', 0.65);
+  if (canvas.width > 0) document.getElementById('checkout-thumb').src = canvas.toDataURL('image/jpeg',0.65);
   document.getElementById('checkout-cat').textContent = state.catLabel || '—';
   document.getElementById('checkout-style').textContent = state.styleLabel || '—';
   document.getElementById('checkout-pkg').textContent = state.pkgLabel || '—';
   const d = pkgDetails[state.pkg] || {};
-  const sizeStr = state.pkgSize ? ` (${state.pkgSize.replace('x',' × ')} cm)` : '';
+  const sizeStr = state.pkgSize ? ' (' + state.pkgSize.replace('x',' × ') + ' cm)' : '';
   document.getElementById('checkout-includes').textContent = (d.includes || '—') + sizeStr;
   document.getElementById('checkout-price').textContent = state.pkgPrice || '—';
 }
@@ -1213,15 +1116,7 @@ async function goToStripe() {
   try {
     const res = await fetch('/api/checkout', {
       method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({
-        pkg: state.pkg,
-        pkgSize: state.pkgSize,
-        pkgPrice: state.pkgPrice,
-        printifyImageId: state.printifyImageId,
-        printifyImageUrl: state.printifyImageUrl,
-        portraitImageUrl: state.portraitImageUrl,
-        catLabel: state.catLabel,
-      }),
+      body: JSON.stringify({ pkg:state.pkg, pkgSize:state.pkgSize, pkgPrice:state.pkgPrice, printifyImageId:state.printifyImageId, printifyImageUrl:state.printifyImageUrl, portraitImageUrl:state.portraitImageUrl, catLabel:state.catLabel }),
     });
     const data = await res.json();
     if (!res.ok || !data.url) throw new Error(data.error || 'Could not create checkout session');
@@ -1233,7 +1128,7 @@ async function goToStripe() {
   }
 }
 
-function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+function delay(ms) { return new Promise(r => setTimeout(r,ms)); }
 
 document.querySelectorAll('.fq').forEach(btn => {
   btn.addEventListener('click', () => {
@@ -1244,9 +1139,7 @@ document.querySelectorAll('.fq').forEach(btn => {
 });
 
 const obs = new IntersectionObserver(entries => {
-  entries.forEach((e,i) => {
-    if (e.isIntersecting) { setTimeout(() => e.target.classList.add('visible'), 80*i); obs.unobserve(e.target); }
-  });
+  entries.forEach((e,i) => { if (e.isIntersecting) { setTimeout(() => e.target.classList.add('visible'), 80*i); obs.unobserve(e.target); } });
 }, {threshold:.1});
 document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 </script>

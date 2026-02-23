@@ -20,7 +20,7 @@ module.exports = async function handler(req, res) {
   const ASTRIA_KEY = process.env.ASTRIA_API_KEY;
   if (!ASTRIA_KEY) return res.status(500).json({ error: 'ASTRIA_API_KEY not configured' });
 
-  const BASE_TUNE_ID = '1504944'; // Flux.1 dev — confirmed working in Astria UI
+  const BASE_TUNE_ID = '1504944';
 
   const isGroup = category === 'family' || category === 'couples';
   const isMultiSubject = isGroup || isMultiPhoto || (photoCount || 1) > 1;
@@ -51,7 +51,6 @@ module.exports = async function handler(req, res) {
     if (gen === 'female') {
       return `${faceToken} hyperrealistic classical oil painting portrait of a woman, wearing an elegant empire-waist silk gown with delicate lace trim at the décolletage, pearl drop earrings, hair pinned up with soft curls framing the face, lush romantic landscape background with trees and golden atmospheric sky, warm soft diffused lighting from the left, painted in the style of Elisabeth Vigée Le Brun and Thomas Gainsborough, photorealistic face, luminous glowing skin, cream ivory sage green warm gold palette, museum-quality masterpiece, 8k`;
     }
-    // male — explicit masculine clothing first to prevent feminine output
     return `${faceToken} hyperrealistic classical oil painting portrait of a man, wearing a dark navy wool tailcoat with velvet lapels and a crisp white linen cravat tied at the throat, masculine aristocratic attire, dramatic rocky forest landscape background with atmospheric depth and moody dark sky, Rembrandt side lighting from upper left casting deep warm amber shadows, painted in the masterful style of Sir Thomas Lawrence and Joshua Reynolds, photorealistic face and skin, luminous warm skin tones, confident half-body three-quarter pose, museum-quality masterpiece, 8k`;
   }
 
@@ -68,19 +67,16 @@ module.exports = async function handler(req, res) {
   console.log('[generate] category:', category, '| gender:', effectiveGender);
 
   try {
-    const imageBuffer = Buffer.from(imageBase64, 'base64');
+    // ── STEP 1: Create FaceID tune using image_urls (data URL) ────────────────
+    console.log('[generate] creating FaceID tune...');
+    const imageDataUrl = `data:${imageMimeType};base64,${imageBase64}`;
 
-    // ── STEP 1: Create FaceID tune from uploaded photo ────────────────────────
-    console.log('[generate] creating FaceID tune on Flux.1 dev...');
     const tuneForm = new FormData();
     tuneForm.append('tune[title]', `pawtraits-${genderWord}-${Date.now()}`);
     tuneForm.append('tune[name]', genderWord);
     tuneForm.append('tune[model_type]', 'faceid');
     tuneForm.append('tune[base_tune_id]', BASE_TUNE_ID);
-    tuneForm.append('tune[images][]', imageBuffer, {
-      filename: 'face.jpg',
-      contentType: imageMimeType,
-    });
+    tuneForm.append('tune[image_urls][]', imageDataUrl);
 
     const tuneRes = await fetch('https://api.astria.ai/tunes', {
       method: 'POST',
@@ -151,7 +147,6 @@ module.exports = async function handler(req, res) {
         const imgBuffer = await imgRes.arrayBuffer();
         const b64 = Buffer.from(imgBuffer).toString('base64');
 
-        // Printify upload (optional)
         let printifyImageId = null, printifyImageUrl = null;
         const PK = process.env.PRINTIFY_API_KEY, PS = process.env.PRINTIFY_SHOP_ID;
         if (PK && PS) {
@@ -195,6 +190,7 @@ module.exports = async function handler(req, res) {
     return res.status(500).json({ error: err.message });
   }
 };
+
 module.exports.config = {
   api: {
     bodyParser: {

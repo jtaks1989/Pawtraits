@@ -29,27 +29,6 @@ module.exports = async function handler(req, res) {
 
   const genderWord = effectiveGender === 'female' ? 'woman' : 'man';
 
-  function buildPrompt(styleCore, cat, gen, isMulti, faceIdTuneId) {
-    const faceToken = `<faceid:${faceIdTuneId}:1.0>`;
-    if (styleCore) return `${faceToken} ${styleCore}`;
-    if (isMulti || cat === 'couples') {
-      return `${faceToken} hyperrealistic classical oil painting portrait of a man and a woman couple, man wearing dark double-breasted wool frock coat with white cravat and high collar, woman wearing elegant period silk gown with lace trim at neckline, seated together in intimate pose, lush dark forest landscape background with rocky outcrops and moody dramatic sky, warm candlelit chiaroscuro lighting, painted in the masterful style of Joshua Reynolds and John Constable, photorealistic faces and skin, luminous glowing skin tones, rich deep charcoal amber ivory gold palette, museum-quality oil painting, 8k`;
-    }
-    if (cat === 'family') {
-      return `${faceToken} hyperrealistic classical oil painting family group portrait, men wearing dark formal frock coats with white cravats, women wearing elegant silk brocade gowns with lace trim, grand interior with rich red velvet drapes and warm candlelight, painted in the style of Joshua Reynolds, photorealistic faces, luminous skin tones, museum-quality masterpiece, 8k`;
-    }
-    if (cat === 'pets') {
-      return `${faceToken} hyperrealistic classical oil painting portrait of a noble pet wearing a miniature ermine-trimmed royal mantle, dark stone architectural background with warm amber directional lighting, painted in the style of George Stubbs, museum-quality masterpiece, 8k`;
-    }
-    if (cat === 'children') {
-      return `${faceToken} hyperrealistic classical oil painting portrait of a child wearing opulent velvet robes with intricate lace trim and a small gold coronet, dark warm background with soft glowing light, painted in the style of Thomas Lawrence, photorealistic face, museum-quality masterpiece, 8k`;
-    }
-    if (gen === 'female') {
-      return `${faceToken} hyperrealistic classical oil painting portrait of a woman, wearing an elegant empire-waist silk gown with delicate lace trim at the décolletage, pearl drop earrings, hair pinned up with soft curls framing the face, lush romantic landscape background with trees and golden atmospheric sky, warm soft diffused lighting from the left, painted in the style of Elisabeth Vigée Le Brun and Thomas Gainsborough, photorealistic face, luminous glowing skin, cream ivory sage green warm gold palette, museum-quality masterpiece, 8k`;
-    }
-    return `${faceToken} hyperrealistic classical oil painting portrait of a man, wearing a dark navy wool tailcoat with velvet lapels and a crisp white linen cravat tied at the throat, masculine aristocratic attire, dramatic rocky forest landscape background with atmospheric depth and moody dark sky, Rembrandt side lighting from upper left casting deep warm amber shadows, painted in the masterful style of Sir Thomas Lawrence and Joshua Reynolds, photorealistic face and skin, luminous warm skin tones, confident half-body three-quarter pose, museum-quality masterpiece, 8k`;
-  }
-
   function extractImageUrl(images) {
     if (!images || images.length === 0) return null;
     const first = images[0];
@@ -114,12 +93,12 @@ module.exports = async function handler(req, res) {
     const faceIdTuneId = tuneData.id;
     console.log('[generate] FaceID tune created, id:', faceIdTuneId);
 
-    // ── STEP 3: Generate portrait — minimal params to avoid 500 ──────────────
-    const prompt = buildPrompt(stylePrompt, category, effectiveGender, isMultiSubject, faceIdTuneId);
-    console.log('[generate] prompt:', prompt.substring(0, 200));
+    // ── STEP 3: Test with minimal prompt ─────────────────────────────────────
+    const testPrompt = `<faceid:${faceIdTuneId}:1.0> ${genderWord} in renaissance oil painting`;
+    console.log('[generate] prompt:', testPrompt);
 
     const promptForm = new FormData();
-    promptForm.append('prompt[text]', prompt);
+    promptForm.append('prompt[text]', testPrompt);
     promptForm.append('prompt[num_images]', '1');
     promptForm.append('prompt[steps]', '30');
 

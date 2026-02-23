@@ -78,8 +78,7 @@
     .style-card { position: relative; overflow: hidden; aspect-ratio: 1/1; cursor: pointer; }
     .style-card img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.5s ease; filter: brightness(0.85); }
     .style-card:hover img { transform: scale(1.06); filter: brightness(1); }
-    .style-card-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.1) 50%, transparent 100%); transition: background 0.3s; }
-    .style-card:hover .style-card-overlay { background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.2) 60%, transparent 100%); }
+    .style-card-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.1) 50%, transparent 100%); }
     .style-card-name { position: absolute; bottom: 0; left: 0; right: 0; padding: 20px 18px 18px; font-family: 'Cinzel', serif; font-size: 13px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold-light); text-align: center; }
     .style-card-tag { display: inline-block; font-size: 10px; letter-spacing: 3px; color: rgba(201,169,110,0.6); margin-bottom: 4px; font-family: 'Cinzel', serif; }
 
@@ -102,28 +101,34 @@
     .review-date { font-size: 12px; color: var(--text-muted); font-style: italic; }
     .review-verified { font-size: 11px; color: #00b67a; margin-top: 2px; }
 
-    /* PACKAGES */
-    .packages { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 2px; margin-bottom: 60px; }
-    .package { background: var(--bg-2); border: 1px solid var(--border); padding: 40px 32px; text-align: center; transition: all 0.3s ease; position: relative; overflow: hidden; }
-    .package::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(to right, transparent, var(--gold), transparent); opacity: 0; transition: opacity 0.3s; }
-    .package:hover { border-color: rgba(201,169,110,0.4); }
-    .package:hover::before { opacity: 1; }
-    .package.featured { background: var(--bg-3); border-color: rgba(201,169,110,0.4); }
-    .package.featured::before { opacity: 1; }
-    .package-badge { font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: 4px; text-transform: uppercase; color: var(--gold); background: rgba(201,169,110,0.1); border: 1px solid rgba(201,169,110,0.3); padding: 4px 12px; display: inline-block; margin-bottom: 20px; }
-    .package-icon { font-size: 36px; margin-bottom: 14px; display: block; }
-    .package-name { font-family: 'Cinzel', serif; font-size: 18px; font-weight: 500; color: var(--text); margin-bottom: 8px; }
-    .package-desc { font-size: 15px; color: var(--text-muted); font-style: italic; margin-bottom: 20px; line-height: 1.6; }
-    .package-price { font-family: 'Cormorant Garamond', serif; font-size: 42px; font-weight: 300; color: var(--gold-light); line-height: 1; margin-bottom: 4px; }
-    .package-price sup { font-size: 20px; vertical-align: top; margin-top: 8px; }
-    .package-currency { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
-    .package-features { list-style: none; text-align: left; margin-bottom: 28px; }
-    .package-features li { font-size: 14px; color: var(--text-muted); padding: 6px 0; padding-left: 20px; position: relative; border-bottom: 1px solid rgba(255,255,255,0.04); }
-    .package-features li::before { content: '—'; position: absolute; left: 0; color: var(--gold); font-size: 12px; }
-    .package-cta { display: block; width: 100%; background: transparent; border: 1px solid rgba(201,169,110,0.5); color: var(--gold-light); font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; text-decoration: none; padding: 14px 24px; text-align: center; cursor: pointer; transition: all 0.3s ease; }
-    .package-cta:hover { background: var(--gold); color: var(--bg); border-color: var(--gold); }
-    .package.featured .package-cta { background: var(--gold); color: var(--bg); border-color: var(--gold); }
-    .package.featured .package-cta:hover { background: var(--gold-light); border-color: var(--gold-light); }
+    /* PACKAGES — NEW 3-TIER */
+    .packages-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; }
+    .pkg { background: var(--bg-2); border: 1px solid var(--border); padding: 44px 36px; text-align: center; position: relative; transition: border-color 0.3s; display: flex; flex-direction: column; }
+    .pkg:hover { border-color: rgba(201,169,110,0.4); }
+    .pkg.featured { background: var(--bg-3); border-color: rgba(201,169,110,0.5); }
+    .pkg-top-badge { position: absolute; top: -1px; left: 50%; transform: translateX(-50%); font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: 3px; text-transform: uppercase; padding: 5px 16px; white-space: nowrap; }
+    .pkg.popular .pkg-top-badge { background: #25D366; color: #fff; }
+    .pkg.gift .pkg-top-badge { background: var(--gold); color: var(--bg); }
+    .pkg-icon { font-size: 32px; margin-bottom: 16px; margin-top: 16px; display: block; }
+    .pkg-name { font-family: 'Cinzel', serif; font-size: 22px; font-weight: 400; color: var(--text); margin-bottom: 6px; }
+    .pkg-tagline { font-size: 14px; color: var(--text-muted); font-style: italic; margin-bottom: 28px; line-height: 1.5; }
+    .pkg-price-wrap { margin-bottom: 24px; min-height: 64px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .pkg-price { font-family: 'Cormorant Garamond', serif; font-size: 56px; font-weight: 300; color: var(--gold-light); line-height: 1; }
+    .pkg-price sup { font-size: 24px; vertical-align: top; margin-top: 10px; }
+    .pkg-price-note { font-size: 12px; color: var(--text-muted); font-style: italic; margin-top: 4px; font-family: 'Cinzel', serif; letter-spacing: 1px; }
+    .pkg-select-label { font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--text-muted); text-align: left; margin-bottom: 8px; display: block; }
+    .pkg-select { width: 100%; background: var(--bg); border: 1px solid var(--border); color: var(--text); font-family: 'Cormorant Garamond', serif; font-size: 16px; padding: 11px 36px 11px 14px; outline: none; cursor: pointer; transition: border-color 0.2s; margin-bottom: 20px; -webkit-appearance: none; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238a7d68' stroke-width='1.5'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; }
+    .pkg-select:focus { border-color: rgba(201,169,110,0.6); }
+    .pkg-select option { background: #1c1915; }
+    .pkg-features { list-style: none; text-align: left; margin-bottom: 28px; flex: 1; }
+    .pkg-features li { font-size: 14px; color: var(--text-muted); padding: 7px 0; padding-left: 22px; position: relative; border-bottom: 1px solid rgba(255,255,255,0.04); }
+    .pkg-features li::before { content: '✓'; position: absolute; left: 0; color: #00b67a; font-size: 12px; }
+    .pkg-shipping { background: rgba(37,211,102,0.06); border: 1px solid rgba(37,211,102,0.15); padding: 10px 14px; margin-bottom: 24px; font-size: 13px; color: #4ecb7a; font-style: italic; }
+    .pkg-cta { display: block; width: 100%; background: transparent; border: 1px solid rgba(201,169,110,0.5); color: var(--gold-light); font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; text-decoration: none; padding: 16px 24px; text-align: center; cursor: pointer; transition: all 0.3s ease; }
+    .pkg-cta:hover { background: var(--gold); color: var(--bg); border-color: var(--gold); }
+    .pkg.featured .pkg-cta { background: var(--gold); color: var(--bg); border-color: var(--gold); }
+    .pkg.featured .pkg-cta:hover { background: var(--gold-light); }
+    .pkg-digital-note { font-size: 12px; color: var(--text-muted); font-style: italic; margin-top: 14px; text-align: center; }
 
     /* BOTTOM CTA */
     .bottom-cta { padding: 80px 24px; text-align: center; position: relative; overflow: hidden; }
@@ -140,12 +145,13 @@
     .gold-line { width: 60px; height: 1px; background: var(--gold); margin: 24px auto; opacity: 0.6; }
 
     /* RESPONSIVE */
+    @media (max-width: 860px) { .packages-grid { grid-template-columns: 1fr; max-width: 480px; margin: 0 auto; } }
     @media (max-width: 600px) {
       .top-bar { gap: 16px; font-size: 10px; }
       .top-bar-dot { display: none; }
       .trust-strip { gap: 24px; }
       .section { padding: 60px 16px; }
-      .step, .package { padding: 32px 20px; }
+      .step { padding: 32px 20px; }
       .styles-grid { grid-template-columns: repeat(2, 1fr); }
       .reviews-grid { grid-template-columns: 1fr; }
       .examples-grid { grid-template-columns: 1fr; }
@@ -196,46 +202,42 @@
       <p class="section-label">From Our Studio</p>
       <h2 class="section-title">Real Portraits, Real Customers</h2>
       <div class="examples-grid">
-
         <div class="example-card">
           <div class="example-img-wrap">
             <img src="/portrait-couple.webp" alt="Couples Portrait" loading="lazy" />
             <div class="example-overlay">
-              <a href="https://wa.me/971567481702?text=Hi%21%20I%27d%20like%20a%20Couples%20Portrait%20(%24199)" class="example-cta" target="_blank">Order This Style</a>
+              <a href="https://wa.me/971567481702?text=Hi%21%20I%27d%20like%20a%20Couples%20Portrait" class="example-cta" target="_blank">Order This Style</a>
             </div>
           </div>
           <div class="example-meta">
             <div class="example-label">Couples Portrait</div>
-            <div class="example-sub">Belle Époque · 40×50cm Canvas</div>
+            <div class="example-sub">Belle Époque · Canvas Print</div>
           </div>
         </div>
-
         <div class="example-card">
           <div class="example-img-wrap">
             <img src="/portrait-family.webp" alt="Family Portrait" loading="lazy" />
             <div class="example-overlay">
-              <a href="https://wa.me/971567481702?text=Hi%21%20I%27d%20like%20a%20Family%20Portrait%20(%24249)" class="example-cta" target="_blank">Order This Style</a>
+              <a href="https://wa.me/971567481702?text=Hi%21%20I%27d%20like%20a%20Family%20Portrait" class="example-cta" target="_blank">Order This Style</a>
             </div>
           </div>
           <div class="example-meta">
             <div class="example-label">Family Portrait</div>
-            <div class="example-sub">Grand Monarch · 50×60cm Canvas</div>
+            <div class="example-sub">Grand Monarch · Canvas Print</div>
           </div>
         </div>
-
         <div class="example-card">
           <div class="example-img-wrap">
             <img src="/portrait-pet.jpg" alt="Pet Portrait" loading="lazy" />
             <div class="example-overlay">
-              <a href="https://wa.me/971567481702?text=Hi%21%20I%27d%20like%20a%20Pet%20Portrait%20(%2499)" class="example-cta" target="_blank">Order This Style</a>
+              <a href="https://wa.me/971567481702?text=Hi%21%20I%27d%20like%20a%20Pet%20Portrait" class="example-cta" target="_blank">Order This Style</a>
             </div>
           </div>
           <div class="example-meta">
             <div class="example-label">Pet Portrait</div>
-            <div class="example-sub">Noble Style · 30×40cm Canvas</div>
+            <div class="example-sub">Noble Style · Canvas Print</div>
           </div>
         </div>
-
       </div>
     </div>
   </section>
@@ -288,85 +290,36 @@
         <p class="reviews-meta"><strong>Excellent · 4.9 out of 5</strong> &nbsp;·&nbsp; Based on verified customer reviews</p>
       </div>
       <div class="reviews-grid">
-
         <div class="review-card">
           <div class="review-stars">★★★★★</div>
           <p class="review-text">"Absolutely blown away. I sent a photo of my husband and within 24 hours we had this incredible oil painting preview. The likeness is unreal — it genuinely looks like he stepped out of the 18th century. We ordered the large canvas and it's now the centrepiece of our living room."</p>
-          <div class="review-author">
-            <div class="review-avatar">S</div>
-            <div>
-              <div class="review-name">Sarah M.</div>
-              <div class="review-date">Dubai, UAE · 2 weeks ago</div>
-              <div class="review-verified">✓ Verified purchase</div>
-            </div>
-          </div>
+          <div class="review-author"><div class="review-avatar">S</div><div><div class="review-name">Sarah M.</div><div class="review-date">Dubai, UAE · 2 weeks ago</div><div class="review-verified">✓ Verified purchase</div></div></div>
         </div>
-
         <div class="review-card">
           <div class="review-stars">★★★★★</div>
           <p class="review-text">"Ordered the couples portrait as a wedding anniversary gift. My wife cried when she saw it — in the best way. The team was so responsive on WhatsApp and the whole process was seamless. The canvas quality is exceptional, delivered beautifully packaged."</p>
-          <div class="review-author">
-            <div class="review-avatar">K</div>
-            <div>
-              <div class="review-name">Khalid A.</div>
-              <div class="review-date">Riyadh, KSA · 1 month ago</div>
-              <div class="review-verified">✓ Verified purchase</div>
-            </div>
-          </div>
+          <div class="review-author"><div class="review-avatar">K</div><div><div class="review-name">Khalid A.</div><div class="review-date">Riyadh, KSA · 1 month ago</div><div class="review-verified">✓ Verified purchase</div></div></div>
         </div>
-
         <div class="review-card">
           <div class="review-stars">★★★★★</div>
-          <p class="review-text">"I got a portrait done of my cat in the Grand Monarch style and I cannot stop laughing and admiring it at the same time. It is perfect. The communication was fast, the preview came quickly, and the print arrived within a week. Will be ordering more for Christmas gifts."</p>
-          <div class="review-author">
-            <div class="review-avatar">L</div>
-            <div>
-              <div class="review-name">Laura T.</div>
-              <div class="review-date">London, UK · 3 weeks ago</div>
-              <div class="review-verified">✓ Verified purchase</div>
-            </div>
-          </div>
+          <p class="review-text">"I got a portrait done of my cat in the Grand Monarch style and I cannot stop laughing and admiring it at the same time. The communication was fast, the preview came quickly, and the print arrived within a week. Will be ordering more for Christmas gifts."</p>
+          <div class="review-author"><div class="review-avatar">L</div><div><div class="review-name">Laura T.</div><div class="review-date">London, UK · 3 weeks ago</div><div class="review-verified">✓ Verified purchase</div></div></div>
         </div>
-
         <div class="review-card">
           <div class="review-stars">★★★★★</div>
           <p class="review-text">"Gifted this to my parents for their 30th anniversary — a family portrait in the Velázquez style. My mother said it was the most thoughtful gift she'd ever received. The faces are so accurate it's almost eerie. Outstanding quality from start to finish."</p>
-          <div class="review-author">
-            <div class="review-avatar">N</div>
-            <div>
-              <div class="review-name">Nour H.</div>
-              <div class="review-date">Beirut, Lebanon · 1 month ago</div>
-              <div class="review-verified">✓ Verified purchase</div>
-            </div>
-          </div>
+          <div class="review-author"><div class="review-avatar">N</div><div><div class="review-name">Nour H.</div><div class="review-date">Beirut, Lebanon · 1 month ago</div><div class="review-verified">✓ Verified purchase</div></div></div>
         </div>
-
         <div class="review-card">
           <div class="review-stars">★★★★★</div>
           <p class="review-text">"The preview arrived faster than expected and it was stunning. Loved the Belle Époque style — so romantic and detailed. The free delivery was a bonus I wasn't expecting. Already recommended to three friends."</p>
-          <div class="review-author">
-            <div class="review-avatar">A</div>
-            <div>
-              <div class="review-name">Amira F.</div>
-              <div class="review-date">Cairo, Egypt · 2 months ago</div>
-              <div class="review-verified">✓ Verified purchase</div>
-            </div>
-          </div>
+          <div class="review-author"><div class="review-avatar">A</div><div><div class="review-name">Amira F.</div><div class="review-date">Cairo, Egypt · 2 months ago</div><div class="review-verified">✓ Verified purchase</div></div></div>
         </div>
-
         <div class="review-card">
           <div class="review-stars">★★★★★</div>
-          <p class="review-text">"I was skeptical at first but the 'preview before you pay' model won me over. The result was extraordinary — my portrait in the Storm style looks like it belongs in a grand estate. Ordered immediately. The canvas feels premium and the colours are rich and vivid."</p>
-          <div class="review-author">
-            <div class="review-avatar">J</div>
-            <div>
-              <div class="review-name">James R.</div>
-              <div class="review-date">Manchester, UK · 3 weeks ago</div>
-              <div class="review-verified">✓ Verified purchase</div>
-            </div>
-          </div>
+          <p class="review-text">"I was skeptical at first but the 'preview before you pay' model won me over. The result was extraordinary — my portrait in the Storm style looks like it belongs in a grand estate. The canvas feels premium and the colours are rich and vivid."</p>
+          <div class="review-author"><div class="review-avatar">J</div><div><div class="review-name">James R.</div><div class="review-date">Manchester, UK · 3 weeks ago</div><div class="review-verified">✓ Verified purchase</div></div></div>
         </div>
-
       </div>
     </div>
   </div>
@@ -376,55 +329,81 @@
   <!-- PACKAGES -->
   <section class="section">
     <div class="section-inner">
-      <p class="section-label">Packages</p>
-      <h2 class="section-title">Commission Your Masterpiece</h2>
-      <div class="packages">
-        <div class="package">
-          <span class="package-icon">🧑</span>
-          <div class="package-name">Solo Portrait</div>
-          <p class="package-desc">A single subject rendered in timeless aristocratic splendour</p>
-          <div class="package-price"><sup>$</sup>79</div>
-          <div class="package-currency">Digital — Instant delivery</div>
-          <ul class="package-features"><li>1 subject portrait</li><li>Your choice of style</li><li>High-res digital file</li><li>Watermark-free download</li></ul>
-          <a href="https://wa.me/971567481702?text=Hi%21%20I%27d%20like%20a%20Solo%20Portrait%20(Digital%20%2479)" class="package-cta" target="_blank">Order via WhatsApp</a>
+      <p class="section-label">Pricing</p>
+      <h2 class="section-title">Choose Your Format</h2>
+      <div class="packages-grid">
+
+        <!-- DIGITAL -->
+        <div class="pkg popular">
+          <div class="pkg-top-badge">Most Popular</div>
+          <span class="pkg-icon">⬇️</span>
+          <div class="pkg-name">Digital Download</div>
+          <p class="pkg-tagline">Instant high-resolution file — perfect for sharing, printing yourself, or keeping forever</p>
+          <div class="pkg-price-wrap">
+            <div class="pkg-price"><sup>$</sup>29</div>
+            <div class="pkg-price-note">One-time payment</div>
+          </div>
+          <ul class="pkg-features">
+            <li>High-resolution digital file</li>
+            <li>No watermark</li>
+            <li>Instant delivery via WhatsApp</li>
+            <li>All portrait styles available</li>
+          </ul>
+          <a href="https://wa.me/971567481702?text=Hi%21%20I%27d%20like%20a%20Digital%20Download%20portrait%20(%2429)" class="pkg-cta" target="_blank">Order via WhatsApp</a>
         </div>
-        <div class="package featured">
-          <div class="package-badge">Most Popular</div>
-          <span class="package-icon">🖼️</span>
-          <div class="package-name">Solo Canvas Print</div>
-          <p class="package-desc">Your portrait printed on museum-quality canvas, ready to hang</p>
-          <div class="package-price"><sup>$</sup>149</div>
-          <div class="package-currency">Printed &amp; Free Delivery</div>
-          <ul class="package-features"><li>1 subject portrait</li><li>Your choice of style</li><li>30×40cm canvas print</li><li>Free delivery worldwide</li><li>Gift-ready packaging</li></ul>
-          <a href="https://wa.me/971567481702?text=Hi%21%20I%27d%20like%20a%20Solo%20Canvas%20Print%20(%24149)" class="package-cta" target="_blank">Order via WhatsApp</a>
+
+        <!-- FINE ART PRINT -->
+        <div class="pkg featured">
+          <span class="pkg-icon">🖼️</span>
+          <div class="pkg-name">Fine Art Print</div>
+          <p class="pkg-tagline">Printed on museum-quality archival paper with fade-resistant inks</p>
+          <div class="pkg-price-wrap">
+            <div class="pkg-price" id="printPrice"><sup>$</sup>89</div>
+            <div class="pkg-price-note">Free worldwide shipping</div>
+          </div>
+          <span class="pkg-select-label">Choose Size</span>
+          <select class="pkg-select" id="printSelect" onchange="updatePrice('print', this)">
+            <option value="89" data-size="20×25cm">20×25cm — $89</option>
+            <option value="119" data-size="30×40cm">30×40cm — $119</option>
+            <option value="199" data-size="45×60cm">45×60cm — $199</option>
+          </select>
+          <ul class="pkg-features">
+            <li>Museum-quality archival paper</li>
+            <li>Fade-resistant inks</li>
+            <li>Made to last decades</li>
+            <li>Includes digital download</li>
+          </ul>
+          <div class="pkg-shipping">🚚 Free Shipping · Delivery 7–10 days</div>
+          <a href="https://wa.me/971567481702?text=Hi%21%20I%27d%20like%20a%20Fine%20Art%20Print%20portrait" class="pkg-cta" id="printCta" target="_blank">Order via WhatsApp</a>
         </div>
-        <div class="package">
-          <span class="package-icon">👫</span>
-          <div class="package-name">Couples Portrait</div>
-          <p class="package-desc">Two subjects immortalised together in classical romantic style</p>
-          <div class="package-price"><sup>$</sup>199</div>
-          <div class="package-currency">Printed &amp; Free Delivery</div>
-          <ul class="package-features"><li>2 subjects portrait</li><li>Your choice of style</li><li>40×50cm canvas print</li><li>Free delivery worldwide</li><li>Gift-ready packaging</li></ul>
-          <a href="https://wa.me/971567481702?text=Hi%21%20I%27d%20like%20a%20Couples%20Portrait%20(%24199)" class="package-cta" target="_blank">Order via WhatsApp</a>
+
+        <!-- LARGE CANVAS -->
+        <div class="pkg gift">
+          <div class="pkg-top-badge">The Perfect Gift 🎁</div>
+          <span class="pkg-icon">🏛️</span>
+          <div class="pkg-name">Large Canvas</div>
+          <p class="pkg-tagline">Gallery-quality canvas on wood — arrives ready to hang on your wall</p>
+          <div class="pkg-price-wrap">
+            <div class="pkg-price" id="canvasPrice"><sup>$</sup>299</div>
+            <div class="pkg-price-note">Free worldwide shipping</div>
+          </div>
+          <span class="pkg-select-label">Choose Size</span>
+          <select class="pkg-select" id="canvasSelect" onchange="updatePrice('canvas', this)">
+            <option value="299" data-size="30×40cm">30×40cm — $299</option>
+            <option value="399" data-size="45×60cm">45×60cm — $399</option>
+            <option value="499" data-size="60×90cm">60×90cm — $499</option>
+            <option value="899" data-size="100×150cm">100×150cm — $899</option>
+          </select>
+          <ul class="pkg-features">
+            <li>Cotton-blend canvas, 3cm thick</li>
+            <li>Ready to hang — mounting included</li>
+            <li>Gallery-quality colour reproduction</li>
+            <li>Includes digital download</li>
+          </ul>
+          <div class="pkg-shipping">🚚 Free Shipping · Delivery 7–10 days</div>
+          <a href="https://wa.me/971567481702?text=Hi%21%20I%27d%20like%20a%20Large%20Canvas%20portrait" class="pkg-cta" id="canvasCta" target="_blank">Order via WhatsApp</a>
         </div>
-        <div class="package">
-          <span class="package-icon">👨‍👩‍👧‍👦</span>
-          <div class="package-name">Family Portrait</div>
-          <p class="package-desc">Your entire family immortalised in a grand aristocratic composition</p>
-          <div class="package-price"><sup>$</sup>249</div>
-          <div class="package-currency">Printed &amp; Free Delivery</div>
-          <ul class="package-features"><li>Up to 5 subjects</li><li>Your choice of style</li><li>50×60cm canvas print</li><li>Free delivery worldwide</li><li>Gift-ready packaging</li></ul>
-          <a href="https://wa.me/971567481702?text=Hi%21%20I%27d%20like%20a%20Family%20Portrait%20(%24249)" class="package-cta" target="_blank">Order via WhatsApp</a>
-        </div>
-        <div class="package">
-          <span class="package-icon">🐾</span>
-          <div class="package-name">Pet Portrait</div>
-          <p class="package-desc">Your noble companion portrayed in regal aristocratic grandeur</p>
-          <div class="package-price"><sup>$</sup>99</div>
-          <div class="package-currency">Printed &amp; Free Delivery</div>
-          <ul class="package-features"><li>1 pet portrait</li><li>Royal style attire</li><li>30×40cm canvas print</li><li>Free delivery worldwide</li><li>The perfect gift</li></ul>
-          <a href="https://wa.me/971567481702?text=Hi%21%20I%27d%20like%20a%20Pet%20Portrait%20(%2499)" class="package-cta" target="_blank">Order via WhatsApp</a>
-        </div>
+
       </div>
     </div>
   </section>
@@ -445,6 +424,20 @@
     <div class="footer-brand">PAWTRAITS</div>
     <p>Bespoke AI Portrait Studio &nbsp;·&nbsp; Free Worldwide Delivery &nbsp;·&nbsp; Secured by Stripe</p>
   </footer>
+
+  <script>
+    function updatePrice(type, select) {
+      const price = select.value;
+      const size = select.options[select.selectedIndex].dataset.size;
+      if (type === 'print') {
+        document.getElementById('printPrice').innerHTML = '<sup>$</sup>' + price;
+        document.getElementById('printCta').href = 'https://wa.me/971567481702?text=Hi%21%20I%27d%20like%20a%20Fine%20Art%20Print%20' + encodeURIComponent(size) + '%20(%24' + price + ')';
+      } else {
+        document.getElementById('canvasPrice').innerHTML = '<sup>$</sup>' + price;
+        document.getElementById('canvasCta').href = 'https://wa.me/971567481702?text=Hi%21%20I%27d%20like%20a%20Large%20Canvas%20' + encodeURIComponent(size) + '%20(%24' + price + ')';
+      }
+    }
+  </script>
 
 </body>
 </html>

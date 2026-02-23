@@ -33,9 +33,7 @@ module.exports = async function handler(req, res) {
 
   function buildPrompt(styleCore, cat, gen, isMulti, faceIdTuneId) {
     const faceToken = `<faceid:${faceIdTuneId}:1.0>`;
-
     if (styleCore) return `${faceToken} ${styleCore}`;
-
     if (isMulti || cat === 'couples') {
       return `${faceToken} hyperrealistic classical oil painting portrait of a man and a woman couple, man wearing dark double-breasted wool frock coat with white cravat and high collar, woman wearing elegant period silk gown with lace trim at neckline, seated together in intimate pose, lush dark forest landscape background with rocky outcrops and moody dramatic sky, warm candlelit chiaroscuro lighting, painted in the masterful style of Joshua Reynolds and John Constable, photorealistic faces and skin, luminous glowing skin tones, rich deep charcoal amber ivory gold palette, museum-quality oil painting, 8k`;
     }
@@ -67,16 +65,39 @@ module.exports = async function handler(req, res) {
   console.log('[generate] category:', category, '| gender:', effectiveGender);
 
   try {
-    // ── STEP 1: Create FaceID tune using image_urls (data URL) ────────────────
-    console.log('[generate] creating FaceID tune...');
-    const imageDataUrl = `data:${imageMimeType};base64,${imageBase64}`;
+    // ── STEP 1: Upload image to imgur to get a real HTTP URL ──────────────────
+    console.log('[generate] uploading image to imgur...');
+    const imgurRes = await fetch('https://api.imgur.com/3/image', {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Client-ID 546c25a59c58ad7',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        image: imageBase64,
+        type: 'base64',
+      }),
+    });
 
+    if (!imgurRes.ok) {
+      const e = await imgurRes.text();
+      console.error('[generate] imgur upload error:', e);
+      throw new Error('Image upload failed: ' + imgurRes.status);
+    }
+
+    const imgurData = await imgurRes.json();
+    const imageUrl = imgurData?.data?.link;
+    if (!imageUrl) throw new Error('No image URL from imgur');
+    console.log('[generate] image uploaded:', imageUrl);
+
+    // ── STEP 2: Create FaceID tune using real HTTP URL ────────────────────────
+    console.log('[generate] creating FaceID tune...');
     const tuneForm = new FormData();
     tuneForm.append('tune[title]', `pawtraits-${genderWord}-${Date.now()}`);
     tuneForm.append('tune[name]', genderWord);
     tuneForm.append('tune[model_type]', 'faceid');
     tuneForm.append('tune[base_tune_id]', BASE_TUNE_ID);
-    tuneForm.append('tune[image_urls][]', imageDataUrl);
+    tuneForm.append('tune[image_urls][]', imageUrl);
 
     const tuneRes = await fetch('https://api.astria.ai/tunes', {
       method: 'POST',
@@ -97,7 +118,7 @@ module.exports = async function handler(req, res) {
     const faceIdTuneId = tuneData.id;
     console.log('[generate] FaceID tune created, id:', faceIdTuneId);
 
-    // ── STEP 2: Generate portrait ─────────────────────────────────────────────
+    // ── STEP 3: Generate portrait ─────────────────────────────────────────────
     const prompt = buildPrompt(stylePrompt, category, effectiveGender, isMultiSubject, faceIdTuneId);
     console.log('[generate] prompt:', prompt.substring(0, 200));
 
@@ -132,17 +153,17 @@ module.exports = async function handler(req, res) {
     let promptData = await promptRes.json();
     console.log('[generate] prompt created id:', promptData.id);
 
-    // ── STEP 3: Poll for result ───────────────────────────────────────────────
+    // ── STEP 4: Poll for result ───────────────────────────────────────────────
     const maxWait = 50000;
     const startTime = Date.now();
 
     while (true) {
-      const imageUrl = extractImageUrl(promptData.images || []);
+      const generatedUrl = extractImageUrl(promptData.images || []);
 
-      if (imageUrl) {
-        console.log('[generate] got image URL:', imageUrl.substring(0, 80));
+      if (generatedUrl) {
+        console.log('[generate] got image URL:', generatedUrl.substring(0, 80));
 
-        const imgRes = await fetch(imageUrl);
+        const imgRes = await fetch(generatedUrl);
         if (!imgRes.ok) throw new Error('Failed to fetch generated image');
         const imgBuffer = await imgRes.arrayBuffer();
         const b64 = Buffer.from(imgBuffer).toString('base64');

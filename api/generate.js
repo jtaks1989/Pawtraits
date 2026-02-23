@@ -85,7 +85,7 @@ module.exports = async function handler(req, res) {
     if (!uploadedImageUrl) throw new Error('No image URL from imgur');
     console.log('[generate] image uploaded:', uploadedImageUrl);
 
-    // ── STEP 2: Create FaceID tune via JSON ───────────────────────────────────
+    // ── STEP 2: Create FaceID tune ────────────────────────────────────────────
     console.log('[generate] creating FaceID tune...');
     const tuneRes = await fetch('https://api.astria.ai/tunes', {
       method: 'POST',
@@ -114,18 +114,13 @@ module.exports = async function handler(req, res) {
     const faceIdTuneId = tuneData.id;
     console.log('[generate] FaceID tune created, id:', faceIdTuneId);
 
-    // ── STEP 3: Generate portrait ─────────────────────────────────────────────
+    // ── STEP 3: Generate portrait — minimal params to avoid 500 ──────────────
     const prompt = buildPrompt(stylePrompt, category, effectiveGender, isMultiSubject, faceIdTuneId);
     console.log('[generate] prompt:', prompt.substring(0, 200));
 
     const promptForm = new FormData();
     promptForm.append('prompt[text]', prompt);
     promptForm.append('prompt[num_images]', '1');
-    promptForm.append('prompt[face_correct]', 'true');
-    promptForm.append('prompt[super_resolution]', 'true');
-    promptForm.append('prompt[face_swap]', 'true');
-    promptForm.append('prompt[w]', '512');
-    promptForm.append('prompt[h]', '768');
     promptForm.append('prompt[steps]', '30');
 
     const promptRes = await fetch(
@@ -148,6 +143,7 @@ module.exports = async function handler(req, res) {
 
     let promptData = await promptRes.json();
     console.log('[generate] prompt created id:', promptData.id);
+    console.log('[generate] prompt raw response:', JSON.stringify(promptData).substring(0, 300));
 
     // ── STEP 4: Poll for result ───────────────────────────────────────────────
     const maxWait = 50000;

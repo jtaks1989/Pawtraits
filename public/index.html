@@ -101,7 +101,7 @@
     .review-date { font-size: 12px; color: var(--text-muted); font-style: italic; }
     .review-verified { font-size: 11px; color: #00b67a; margin-top: 2px; }
 
-    /* PACKAGES — NEW 3-TIER */
+    /* PACKAGES */
     .packages-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; }
     .pkg { background: var(--bg-2); border: 1px solid var(--border); padding: 44px 36px; text-align: center; position: relative; transition: border-color 0.3s; display: flex; flex-direction: column; }
     .pkg:hover { border-color: rgba(201,169,110,0.4); }
@@ -112,10 +112,15 @@
     .pkg-icon { font-size: 32px; margin-bottom: 16px; margin-top: 16px; display: block; }
     .pkg-name { font-family: 'Cinzel', serif; font-size: 22px; font-weight: 400; color: var(--text); margin-bottom: 6px; }
     .pkg-tagline { font-size: 14px; color: var(--text-muted); font-style: italic; margin-bottom: 28px; line-height: 1.5; }
-    .pkg-price-wrap { margin-bottom: 24px; min-height: 64px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .pkg-price-wrap { margin-bottom: 20px; min-height: 72px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
     .pkg-price { font-family: 'Cormorant Garamond', serif; font-size: 56px; font-weight: 300; color: var(--gold-light); line-height: 1; }
     .pkg-price sup { font-size: 24px; vertical-align: top; margin-top: 10px; }
+    .pkg-price-was { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 300; color: var(--text-muted); text-decoration: line-through; opacity: 0.55; margin-right: 10px; }
+    .pkg-price-row { display: flex; align-items: baseline; justify-content: center; gap: 8px; }
     .pkg-price-note { font-size: 12px; color: var(--text-muted); font-style: italic; margin-top: 4px; font-family: 'Cinzel', serif; letter-spacing: 1px; }
+    .countdown-box { background: rgba(201,169,110,0.08); border: 1px solid rgba(201,169,110,0.25); padding: 12px 16px; margin-bottom: 20px; text-align: center; }
+    .countdown-label { font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: 4px; }
+    .countdown-timer { font-family: 'Cinzel', serif; font-size: 24px; color: var(--gold-light); letter-spacing: 4px; }
     .pkg-select-label { font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--text-muted); text-align: left; margin-bottom: 8px; display: block; }
     .pkg-select { width: 100%; background: var(--bg); border: 1px solid var(--border); color: var(--text); font-family: 'Cormorant Garamond', serif; font-size: 16px; padding: 11px 36px 11px 14px; outline: none; cursor: pointer; transition: border-color 0.2s; margin-bottom: 20px; -webkit-appearance: none; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238a7d68' stroke-width='1.5'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; }
     .pkg-select:focus { border-color: rgba(201,169,110,0.6); }
@@ -128,7 +133,6 @@
     .pkg-cta:hover { background: var(--gold); color: var(--bg); border-color: var(--gold); }
     .pkg.featured .pkg-cta { background: var(--gold); color: var(--bg); border-color: var(--gold); }
     .pkg.featured .pkg-cta:hover { background: var(--gold-light); }
-    .pkg-digital-note { font-size: 12px; color: var(--text-muted); font-style: italic; margin-top: 14px; text-align: center; }
 
     /* BOTTOM CTA */
     .bottom-cta { padding: 80px 24px; text-align: center; position: relative; overflow: hidden; }
@@ -197,7 +201,7 @@
   <div class="divider"><span class="divider-icon">✦</span></div>
 
   <!-- CUSTOMER EXAMPLES -->
-  <section class="section" style="padding-top: 80px; padding-bottom: 80px;">
+  <section class="section" style="padding-top:80px;padding-bottom:80px;">
     <div class="section-inner">
       <p class="section-label">From Our Studio</p>
       <h2 class="section-title">Real Portraits, Real Customers</h2>
@@ -340,8 +344,15 @@
           <div class="pkg-name">Digital Download</div>
           <p class="pkg-tagline">Instant high-resolution file — perfect for sharing, printing yourself, or keeping forever</p>
           <div class="pkg-price-wrap">
-            <div class="pkg-price"><sup>$</sup>29</div>
-            <div class="pkg-price-note">One-time payment</div>
+            <div class="pkg-price-row">
+              <div class="pkg-price-was">$59</div>
+              <div class="pkg-price"><sup>$</sup>39</div>
+            </div>
+            <div class="pkg-price-note">Limited time offer</div>
+          </div>
+          <div class="countdown-box">
+            <div class="countdown-label">Offer expires in</div>
+            <div class="countdown-timer" id="countdown">10:00</div>
           </div>
           <ul class="pkg-features">
             <li>High-resolution digital file</li>
@@ -349,7 +360,7 @@
             <li>Instant delivery via WhatsApp</li>
             <li>All portrait styles available</li>
           </ul>
-          <a href="https://wa.me/971567481702?text=Hi%21%20I%27d%20like%20a%20Digital%20Download%20portrait%20(%2429)" class="pkg-cta" target="_blank">Order via WhatsApp</a>
+          <a href="https://wa.me/971567481702?text=Hi%21%20I%27d%20like%20a%20Digital%20Download%20portrait%20(%2439)" class="pkg-cta" target="_blank">Order via WhatsApp</a>
         </div>
 
         <!-- FINE ART PRINT -->
@@ -374,7 +385,7 @@
             <li>Includes digital download</li>
           </ul>
           <div class="pkg-shipping">🚚 Free Shipping · Delivery 7–10 days</div>
-          <a href="https://wa.me/971567481702?text=Hi%21%20I%27d%20like%20a%20Fine%20Art%20Print%20portrait" class="pkg-cta" id="printCta" target="_blank">Order via WhatsApp</a>
+          <a href="https://wa.me/971567481702?text=Hi%21%20I%27d%20like%20a%20Fine%20Art%20Print%2020%C3%9725cm%20(%2489)" class="pkg-cta" id="printCta" target="_blank">Order via WhatsApp</a>
         </div>
 
         <!-- LARGE CANVAS -->
@@ -401,7 +412,7 @@
             <li>Includes digital download</li>
           </ul>
           <div class="pkg-shipping">🚚 Free Shipping · Delivery 7–10 days</div>
-          <a href="https://wa.me/971567481702?text=Hi%21%20I%27d%20like%20a%20Large%20Canvas%20portrait" class="pkg-cta" id="canvasCta" target="_blank">Order via WhatsApp</a>
+          <a href="https://wa.me/971567481702?text=Hi%21%20I%27d%20like%20a%20Large%20Canvas%2030%C3%9740cm%20(%24299)" class="pkg-cta" id="canvasCta" target="_blank">Order via WhatsApp</a>
         </div>
 
       </div>
@@ -426,6 +437,7 @@
   </footer>
 
   <script>
+    // Size dropdowns — update price + WhatsApp link
     function updatePrice(type, select) {
       const price = select.value;
       const size = select.options[select.selectedIndex].dataset.size;
@@ -437,6 +449,29 @@
         document.getElementById('canvasCta').href = 'https://wa.me/971567481702?text=Hi%21%20I%27d%20like%20a%20Large%20Canvas%20' + encodeURIComponent(size) + '%20(%24' + price + ')';
       }
     }
+
+    // Countdown — 10 min, persists across refreshes via localStorage
+    (function() {
+      const key = 'pawtraits_timer_end';
+      let end = localStorage.getItem(key);
+      if (!end || Date.now() > parseInt(end)) {
+        end = Date.now() + 10 * 60 * 1000;
+        localStorage.setItem(key, end);
+      }
+      function tick() {
+        const diff = Math.max(0, parseInt(end) - Date.now());
+        const m = String(Math.floor(diff / 60000)).padStart(2, '0');
+        const s = String(Math.floor((diff % 60000) / 1000)).padStart(2, '0');
+        const el = document.getElementById('countdown');
+        if (el) el.textContent = m + ':' + s;
+        if (diff > 0) setTimeout(tick, 1000);
+        else if (el) {
+          el.textContent = 'EXPIRED';
+          el.style.color = 'var(--text-muted)';
+        }
+      }
+      tick();
+    })();
   </script>
 
 </body>

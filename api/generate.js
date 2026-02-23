@@ -15,8 +15,11 @@ module.exports = async function handler(req, res) {
     return res.status(400).json({ error: 'Missing fields' });
   }
 
-  const REPLICATE_KEY = process.env.REPLICATE_API_KEY;
-  if (!REPLICATE_KEY) return res.status(500).json({ error: 'REPLICATE_API_KEY not configured' });
+  const ASTRIA_KEY = process.env.ASTRIA_API_KEY;
+  if (!ASTRIA_KEY) return res.status(500).json({ error: 'ASTRIA_API_KEY not configured' });
+
+  // Astria Flux base model tune ID — verify this at astria.ai/gallery
+  const FLUX_TUNE_ID = process.env.ASTRIA_TUNE_ID || '1504944';
 
   const isGroup = category === 'family' || category === 'couples';
   const isMultiSubject = isGroup || isMultiPhoto || (photoCount || 1) > 1;
@@ -27,26 +30,26 @@ module.exports = async function handler(req, res) {
     if (styleCore) return styleCore;
 
     if (isMulti || cat === 'couples') {
-      return `hyperrealistic classical oil painting portrait of a couple, man wearing dark double-breasted frock coat with white cravat and high collar, woman wearing elegant period silk gown with lace trim at neckline, seated together in intimate pose, lush dark forest landscape with rocky outcrops and moody dramatic sky with golden light breaking through clouds, warm candlelit chiaroscuro lighting, painted in the masterful style of Joshua Reynolds and John Constable, photorealistic faces and skin, luminous glowing skin tones, rich jewel-tone palette deep charcoal amber ivory gold, museum-quality oil painting, 8k ultra detailed`;
+      return `a hyperrealistic classical oil painting portrait of a couple, man wearing dark double-breasted frock coat with white cravat and high collar, woman wearing elegant period silk gown with lace trim at neckline, seated together in intimate pose, lush dark forest landscape background with rocky outcrops and moody dramatic sky with golden light breaking through clouds, warm candlelit chiaroscuro lighting, painted in the masterful style of Joshua Reynolds and John Constable, photorealistic faces and skin, luminous glowing skin tones, rich deep charcoal amber ivory gold palette, museum-quality oil painting, 8k ultra detailed`;
     }
 
     if (cat === 'family') {
-      return `hyperrealistic classical oil painting family group portrait, men wearing dark formal frock coats with white cravats, women wearing elegant silk brocade gowns with lace trim, grand interior with rich red velvet drapes and warm candlelight, painted in the style of Joshua Reynolds, photorealistic faces, luminous skin tones, museum-quality masterpiece, 8k`;
+      return `a hyperrealistic classical oil painting family group portrait, men wearing dark formal frock coats with white cravats, women wearing elegant silk brocade gowns with lace trim, grand interior with rich red velvet drapes and warm candlelight, painted in the style of Joshua Reynolds, photorealistic faces, luminous skin tones, museum-quality masterpiece, 8k`;
     }
 
     if (cat === 'pets') {
-      return `hyperrealistic classical oil painting portrait of a noble pet wearing a miniature ermine-trimmed royal mantle, dark stone architectural background with warm amber directional lighting, dramatic side lighting, painted in the style of George Stubbs and Edwin Landseer, rich warm palette deep brown gold ivory, museum-quality masterpiece, 8k`;
+      return `a hyperrealistic classical oil painting portrait of a noble pet wearing a miniature ermine-trimmed royal mantle, dark stone architectural background with warm amber directional lighting, dramatic side lighting, painted in the style of George Stubbs and Edwin Landseer, rich warm palette deep brown gold ivory, museum-quality masterpiece, 8k`;
     }
 
     if (cat === 'children') {
-      return `hyperrealistic classical oil painting portrait of a child wearing opulent velvet robes with intricate lace trim and a small gold coronet, dark warm background with soft glowing light, painted in the style of Thomas Lawrence, photorealistic face, luminous skin tones, museum-quality masterpiece, 8k`;
+      return `a hyperrealistic classical oil painting portrait of a child wearing opulent velvet robes with intricate lace trim and a small gold coronet, dark warm background with soft glowing light, painted in the style of Thomas Lawrence, photorealistic face, luminous skin tones, museum-quality masterpiece, 8k`;
     }
 
     if (gen === 'female') {
-      return `hyperrealistic classical oil painting portrait of a woman wearing an elegant empire-waist silk gown with delicate lace trim at the décolletage, pearl drop earrings, hair pinned up with soft curls framing the face, lush romantic landscape background with trees and golden atmospheric sky, warm soft diffused lighting from the left, deep rich shadows, painted in the exquisite style of Elisabeth Vigée Le Brun and Thomas Gainsborough, photorealistic face, luminous glowing skin, cream ivory sage green warm gold palette, museum-quality masterpiece, 8k`;
+      return `a hyperrealistic classical oil painting portrait of a woman wearing an elegant empire-waist silk gown with delicate lace trim at the décolletage, pearl drop earrings, hair pinned up with soft curls framing the face, lush romantic landscape background with trees and golden atmospheric sky, warm soft diffused lighting from the left, deep rich shadows, painted in the exquisite style of Elisabeth Vigée Le Brun and Thomas Gainsborough, photorealistic face, luminous glowing skin, cream ivory sage green warm gold palette, museum-quality masterpiece, 8k`;
     }
 
-    return `hyperrealistic classical oil painting portrait of a man wearing a dark navy wool tailcoat with velvet lapels and a crisp white linen cravat tied at the throat, dramatic rocky forest landscape background with atmospheric depth and moody dark sky, dramatic Rembrandt side lighting from upper left casting deep warm amber shadows, painted in the masterful style of Sir Thomas Lawrence and Joshua Reynolds, photorealistic face and skin, luminous warm skin tones, confident half-body three-quarter pose, deep forest green umber charcoal palette, museum-quality masterpiece, 8k`;
+    return `a hyperrealistic classical oil painting portrait of a man wearing a dark navy wool tailcoat with velvet lapels and a crisp white linen cravat tied at the throat, dramatic rocky forest landscape background with atmospheric depth and moody dark sky, dramatic Rembrandt side lighting from upper left casting deep warm amber shadows, painted in the masterful style of Sir Thomas Lawrence and Joshua Reynolds, photorealistic face and skin, luminous warm skin tones, confident half-body three-quarter pose, deep forest green umber charcoal palette, museum-quality masterpiece, 8k`;
   }
 
   function buildNegative(gen, isMulti) {
@@ -66,71 +69,72 @@ module.exports = async function handler(req, res) {
   const prompt = buildPrompt(stylePrompt, category, effectiveGender, isMultiSubject);
   const negativePrompt = buildNegative(effectiveGender, isMultiSubject);
 
-  console.log('[generate] category:', category, '| gender:', effectiveGender, '| multi:', isMultiSubject);
-  console.log('[generate] prompt:', prompt.substring(0, 250));
+  console.log('[generate] category:', category, '| gender:', effectiveGender);
+  console.log('[generate] prompt:', prompt.substring(0, 200));
 
   try {
-    const imageDataUrl = `data:${imageMimeType};base64,${imageBase64}`;
+    // Convert base64 to a Buffer for multipart upload
+    const imageBuffer = Buffer.from(imageBase64, 'base64');
 
-    // Using confirmed-working IP-Adapter version hash with improved prompts
-    const startRes = await fetch('https://api.replicate.com/v1/predictions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${REPLICATE_KEY}`,
-        'Prefer': 'wait=60',
-      },
-      body: JSON.stringify({
-        version: '9cad10c7870bac9d6b587f406aef28208f964454abff5c4152f7dec9b0212a9a',
-        input: {
-          image: imageDataUrl,
-          prompt,
-          negative_prompt: negativePrompt,
-          ip_adapter_scale: 0.85,
-          controlnet_conditioning_scale: 0.75,
-          num_inference_steps: 40,
-          guidance_scale: 8.5,
-          width: 768,
-          height: 1024,
-        },
-      }),
+    // Astria single-shot: POST to base flux model with face image
+    // The face image is passed as form data — Astria uses it for face reference
+    const FormData = (await import('node:form-data')).default;
+    const form = new FormData();
+    form.append('prompt[text]', prompt);
+    form.append('prompt[negative_prompt]', negativePrompt);
+    form.append('prompt[num_images]', '1');
+    form.append('prompt[w]', '832');
+    form.append('prompt[h]', '1216');
+    form.append('prompt[cfg_scale]', '7');
+    form.append('prompt[steps]', '30');
+    form.append('prompt[face_swap]', imageBuffer, {
+      filename: 'face.jpg',
+      contentType: imageMimeType,
     });
 
-    if (!startRes.ok) {
-      const e = await startRes.json().catch(() => ({}));
-      throw new Error(e?.detail || e?.error || 'Replicate HTTP ' + startRes.status);
+    const astriaRes = await fetch(
+      `https://api.astria.ai/tunes/${FLUX_TUNE_ID}/prompts`,
+      {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${ASTRIA_KEY}`,
+          ...form.getHeaders(),
+        },
+        body: form,
+      }
+    );
+
+    if (!astriaRes.ok) {
+      const e = await astriaRes.json().catch(() => ({}));
+      throw new Error(e?.error || e?.message || 'Astria API HTTP ' + astriaRes.status);
     }
 
-    let prediction = await startRes.json();
-    console.log('[generate] prediction started:', prediction.id, prediction.status);
+    let promptData = await astriaRes.json();
+    console.log('[generate] Astria prompt created:', promptData.id);
 
+    // Poll until images are ready
     const maxWait = 180000;
     const startTime = Date.now();
-    while (
-      prediction.status !== 'succeeded' &&
-      prediction.status !== 'failed' &&
-      prediction.status !== 'canceled'
-    ) {
+
+    while (!promptData.images || promptData.images.length === 0) {
       if (Date.now() - startTime > maxWait) throw new Error('Generation timed out. Please try again.');
-      await new Promise(r => setTimeout(r, 2500));
-      const pollRes = await fetch(`https://api.replicate.com/v1/predictions/${prediction.id}`, {
-        headers: { 'Authorization': `Bearer ${REPLICATE_KEY}` },
-      });
-      prediction = await pollRes.json();
-      console.log('[generate] poll:', prediction.status);
+      await new Promise(r => setTimeout(r, 3000));
+      const pollRes = await fetch(
+        `https://api.astria.ai/tunes/${FLUX_TUNE_ID}/prompts/${promptData.id}`,
+        { headers: { 'Authorization': `Bearer ${ASTRIA_KEY}` } }
+      );
+      promptData = await pollRes.json();
+      console.log('[generate] poll — images ready:', (promptData.images || []).length);
     }
 
-    if (prediction.status !== 'succeeded') {
-      throw new Error(prediction.error || 'Generation failed');
-    }
+    const imageUrl = promptData.images[0].url;
+    if (!imageUrl) throw new Error('No image URL returned from Astria');
 
-    const imageUrl = Array.isArray(prediction.output) ? prediction.output[0] : prediction.output;
-    if (!imageUrl) throw new Error('No image returned');
-
+    // Fetch and convert to base64
     const imgRes = await fetch(imageUrl);
     if (!imgRes.ok) throw new Error('Failed to fetch generated image');
-    const imgBuffer = await imgRes.arrayBuffer();
-    const b64 = Buffer.from(imgBuffer).toString('base64');
+    const imgBuffer2 = await imgRes.arrayBuffer();
+    const b64 = Buffer.from(imgBuffer2).toString('base64');
 
     // Printify upload (optional)
     let printifyImageId = null, printifyImageUrl = null;
@@ -162,3 +166,4 @@ module.exports = async function handler(req, res) {
     return res.status(500).json({ error: err.message });
   }
 };
+```

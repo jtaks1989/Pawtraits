@@ -1,5 +1,3 @@
-const FormData = require('form-data');
-
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
@@ -17,124 +15,96 @@ module.exports = async function handler(req, res) {
     return res.status(400).json({ error: 'Missing fields' });
   }
 
-  const ASTRIA_KEY = process.env.ASTRIA_API_KEY;
-  if (!ASTRIA_KEY) return res.status(500).json({ error: 'ASTRIA_API_KEY not configured' });
-
-  const FACEID_BASE_TUNE_ID = 690204;  // Realistic Vision — for FaceID tune creation
-  const FLUX_TUNE_ID = 1504944;        // Flux.1 dev — for prompt generation
+  const FAL_KEY = process.env.FAL_API_KEY;
+  if (!FAL_KEY) return res.status(500).json({ error: 'FAL_API_KEY not configured' });
 
   const isGroup = category === 'family' || category === 'couples';
   const isMultiSubject = isGroup || isMultiPhoto || (photoCount || 1) > 1;
   const effectiveGender = isGroup ? 'mixed'
     : (gender && gender !== 'auto') ? gender : null;
 
-  const genderWord = effectiveGender === 'female' ? 'woman' : 'man';
-
-  function extractImageUrl(images) {
-    if (!images || images.length === 0) return null;
-    const first = images[0];
-    if (typeof first === 'string') return first;
-    if (first && typeof first === 'object') {
-      return first.url || first.src || first.image_url || first.uri || Object.values(first)[0] || null;
+  function buildPrompt(styleCore, cat, gen, isMulti) {
+    if (styleCore) return styleCore;
+    if (isMulti || cat === 'couples') {
+      return `aristocratic couple portrait, man wearing dark double-breasted frock coat with white cravat, woman wearing elegant period silk gown with lace trim, seated together in intimate pose, lush dark forest landscape background, warm candlelit chiaroscuro lighting, classical oil painting style of Joshua Reynolds, photorealistic faces, luminous skin tones, rich charcoal amber ivory gold palette, museum-quality masterpiece`;
     }
-    return null;
+    if (cat === 'family') {
+      return `aristocratic family group portrait, men wearing dark formal frock coats with white cravats, women wearing elegant silk brocade gowns, grand interior with red velvet drapes and warm candlelight, classical oil painting style of Joshua Reynolds, photorealistic faces, luminous skin tones, museum-quality masterpiece`;
+    }
+    if (cat === 'pets') {
+      return `noble pet portrait wearing miniature ermine-trimmed royal mantle, dark stone architectural background with warm amber lighting, classical oil painting style of George Stubbs, museum-quality masterpiece`;
+    }
+    if (cat === 'children') {
+      return `aristocratic child portrait wearing opulent velvet robes with lace trim and small gold coronet, dark warm background with soft glowing light, classical oil painting style of Thomas Lawrence, photorealistic face, museum-quality masterpiece`;
+    }
+    if (gen === 'female') {
+      return `aristocratic woman portrait wearing elegant empire-waist silk gown with lace trim at décolletage, pearl drop earrings, hair pinned up with soft curls, romantic landscape background with golden atmospheric sky, soft diffused lighting, classical oil painting style of Elisabeth Vigée Le Brun, photorealistic face, luminous glowing skin, museum-quality masterpiece`;
+    }
+    return `aristocratic man portrait wearing dark navy wool tailcoat with velvet lapels and crisp white linen cravat, dramatic rocky forest landscape background, Rembrandt side lighting, classical oil painting style of Sir Thomas Lawrence and Joshua Reynolds, photorealistic face, luminous warm skin tones, confident half-body three-quarter pose, museum-quality masterpiece`;
   }
 
-  console.log('[generate] category:', category, '| gender:', effectiveGender, '| genderWord:', genderWord);
+  const prompt = buildPrompt(stylePrompt, category, effectiveGender, isMultiSubject);
+  console.log('[generate] category:', category, '| gender:', effectiveGender);
+  console.log('[generate] prompt:', prompt.substring(0, 150));
 
   try {
-    // ── STEP 1: Upload image to imgur ─────────────────────────────────────────
-    console.log('[generate] uploading image to imgur...');
-    const imgurRes = await fetch('https://api.imgur.com/3/image', {
+    const imageUrl = `data:${imageMimeType};base64,${imageBase64}`;
+
+    // ── Submit to fal.ai InstantID ────────────────────────────────────────────
+    console.log('[generate] submitting to fal.ai...');
+    const submitRes = await fetch('https://queue.fal.run/fal-ai/instantid', {
       method: 'POST',
       headers: {
-        'Authorization': 'Client-ID 546c25a59c58ad7',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ image: imageBase64, type: 'base64' }),
-    });
-
-    if (!imgurRes.ok) {
-      const e = await imgurRes.text();
-      console.error('[generate] imgur error:', e);
-      throw new Error('Image upload failed: ' + imgurRes.status);
-    }
-
-    const imgurData = await imgurRes.json();
-    const uploadedImageUrl = imgurData?.data?.link;
-    if (!uploadedImageUrl) throw new Error('No image URL from imgur');
-    console.log('[generate] image uploaded:', uploadedImageUrl);
-
-    // ── STEP 2: Create FaceID tune on Realistic Vision ────────────────────────
-    console.log('[generate] creating FaceID tune...');
-    const tuneRes = await fetch('https://api.astria.ai/tunes', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${ASTRIA_KEY}`,
+        'Authorization': `Key ${FAL_KEY}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        tune: {
-          title: `pawtraits-${genderWord}-${Date.now()}`,
-          name: genderWord,
-          model_type: 'faceid',
-          base_tune_id: FACEID_BASE_TUNE_ID,
-          image_urls: [uploadedImageUrl],
-        },
+        face_image_url: imageUrl,
+        prompt: prompt,
+        negative_prompt: 'cartoon, anime, sketch, drawing, modern clothing, photo, photograph, ugly, deformed, blurry, low quality',
+        num_inference_steps: 30,
+        guidance_scale: 7,
+        controlnet_conditioning_scale: 0.8,
+        ip_adapter_scale: 0.8,
+        num_images: 1,
+        enable_safety_checker: false,
       }),
     });
 
-    if (!tuneRes.ok) {
-      const rawText = await tuneRes.text().catch(() => 'unreadable');
-      console.error('[generate] FaceID tune error:', tuneRes.status, rawText);
-      throw new Error('FaceID tune failed ' + tuneRes.status + ': ' + rawText);
+    if (!submitRes.ok) {
+      const rawText = await submitRes.text().catch(() => 'unreadable');
+      console.error('[generate] fal submit error:', submitRes.status, rawText);
+      throw new Error('fal.ai submit failed ' + submitRes.status + ': ' + rawText);
     }
 
-    const tuneData = await tuneRes.json();
-    const faceIdTuneId = tuneData.id;
-    console.log('[generate] FaceID tune created, id:', faceIdTuneId);
+    const submitData = await submitRes.json();
+    const requestId = submitData.request_id;
+    console.log('[generate] fal request_id:', requestId);
 
-    // ── STEP 3: Generate portrait on Flux.1 dev ───────────────────────────────
-    const testPrompt = `<faceid:${faceIdTuneId}:1.0> ${genderWord} in renaissance oil painting`;
-    console.log('[generate] prompt:', testPrompt);
-
-    const promptForm = new FormData();
-    promptForm.append('prompt[text]', testPrompt);
-    promptForm.append('prompt[num_images]', '1');
-    promptForm.append('prompt[steps]', '30');
-
-    const promptRes = await fetch(
-      `https://api.astria.ai/tunes/${FLUX_TUNE_ID}/prompts`,
-      {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${ASTRIA_KEY}`,
-          ...promptForm.getHeaders(),
-        },
-        body: promptForm,
-      }
-    );
-
-    if (!promptRes.ok) {
-      const rawText = await promptRes.text().catch(() => 'unreadable');
-      console.error('[generate] prompt error:', promptRes.status, rawText);
-      throw new Error('Prompt failed ' + promptRes.status + ': ' + rawText);
-    }
-
-    let promptData = await promptRes.json();
-    console.log('[generate] prompt created id:', promptData.id);
-    console.log('[generate] prompt raw response:', JSON.stringify(promptData).substring(0, 300));
-
-    // ── STEP 4: Poll for result on Flux.1 dev ─────────────────────────────────
+    // ── Poll for result ───────────────────────────────────────────────────────
     const maxWait = 50000;
     const startTime = Date.now();
 
     while (true) {
-      const generatedUrl = extractImageUrl(promptData.images || []);
+      await new Promise(r => setTimeout(r, 3000));
 
-      if (generatedUrl) {
+      const statusRes = await fetch(`https://queue.fal.run/fal-ai/instantid/requests/${requestId}/status`, {
+        headers: { 'Authorization': `Key ${FAL_KEY}` },
+      });
+      const statusData = await statusRes.json();
+      console.log('[generate] status:', statusData.status, '| elapsed:', Math.round((Date.now() - startTime) / 1000) + 's');
+
+      if (statusData.status === 'COMPLETED') {
+        const resultRes = await fetch(`https://queue.fal.run/fal-ai/instantid/requests/${requestId}`, {
+          headers: { 'Authorization': `Key ${FAL_KEY}` },
+        });
+        const result = await resultRes.json();
+        console.log('[generate] result:', JSON.stringify(result).substring(0, 200));
+
+        const generatedUrl = result?.images?.[0]?.url || result?.image?.url || null;
+        if (!generatedUrl) throw new Error('No image URL in fal.ai result');
+
         console.log('[generate] got image URL:', generatedUrl.substring(0, 80));
-
         const imgRes = await fetch(generatedUrl);
         if (!imgRes.ok) throw new Error('Failed to fetch generated image');
         const imgBuffer = await imgRes.arrayBuffer();
@@ -165,17 +135,13 @@ module.exports = async function handler(req, res) {
         });
       }
 
+      if (statusData.status === 'FAILED') {
+        throw new Error('fal.ai generation failed: ' + JSON.stringify(statusData));
+      }
+
       if (Date.now() - startTime > maxWait) {
         throw new Error('Generation is taking longer than expected. Please retry.');
       }
-
-      await new Promise(r => setTimeout(r, 3000));
-      const pollRes = await fetch(
-        `https://api.astria.ai/tunes/${FLUX_TUNE_ID}/prompts/${promptData.id}`,
-        { headers: { 'Authorization': `Bearer ${ASTRIA_KEY}` } }
-      );
-      promptData = await pollRes.json();
-      console.log('[generate] poll — images:', (promptData.images || []).length, '| elapsed:', Math.round((Date.now() - startTime) / 1000) + 's');
     }
 
   } catch (err) {

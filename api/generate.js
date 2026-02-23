@@ -34,7 +34,6 @@ module.exports = async function handler(req, res) {
     return styles[cat] || styles.self;
   }
 
-  // PhotoMaker requires "img" token in the prompt to know where to place the face
   function buildPrompt(styleCore, cat, gen, isMulti) {
     const styleBase = styleCore || getDefaultStyle(cat, gen);
     const genderWord = gen === 'male' ? 'man' : gen === 'female' ? 'woman' : 'person';
@@ -53,13 +52,10 @@ module.exports = async function handler(req, res) {
   console.log('[generate] prompt:', prompt.substring(0, 200));
 
   try {
-    // Upload image to a temp URL first (PhotoMaker needs a URL, not base64)
-    // We encode as data URL which Replicate accepts
     const imageDataUrl = `data:${imageMimeType};base64,${imageBase64}`;
 
-    // PhotoMaker — preserves face likeness while applying art style
-    // tencentarc/photomaker-style is the style-focused variant, perfect for portraits
-    const startRes = await fetch('https://api.replicate.com/v1/predictions', {
+    // Use model endpoint directly — no version hash needed, always uses latest
+    const startRes = await fetch('https://api.replicate.com/v1/models/tencentarc/photomaker-style/predictions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -67,7 +63,6 @@ module.exports = async function handler(req, res) {
         'Prefer': 'wait=60',
       },
       body: JSON.stringify({
-        version: 'b26b6a5e9490d2f7611433a3f67bba9e8fe7bb58403b2d1e34cfc51af2d63cbc',
         input: {
           prompt,
           negative_prompt: negativePrompt,
@@ -89,7 +84,7 @@ module.exports = async function handler(req, res) {
 
     let prediction = await startRes.json();
 
-    // Poll if not done yet
+    // Poll until done
     const maxWait = 120000;
     const startTime = Date.now();
     while (
@@ -112,7 +107,7 @@ module.exports = async function handler(req, res) {
     const imageUrl = Array.isArray(prediction.output) ? prediction.output[0] : prediction.output;
     if (!imageUrl) throw new Error('No image returned');
 
-    // Fetch the image and convert to base64
+    // Fetch image and convert to base64
     const imgRes = await fetch(imageUrl);
     if (!imgRes.ok) throw new Error('Failed to fetch generated image');
     const imgBuffer = await imgRes.arrayBuffer();

@@ -23,48 +23,99 @@ module.exports = async function handler(req, res) {
   const effectiveGender = isGroup ? 'mixed'
     : (gender && gender !== 'auto') ? gender : null;
 
-  function getDefaultStyle(cat, gen) {
-    const styles = {
-      pets:     'regal oil painting portrait, style of George Stubbs, ermine-trimmed royal mantle, dark stone architectural background, warm directional lighting, visible impasto brushwork, museum-quality',
-      family:   'formal 18th century oil painting, style of Joshua Reynolds, men in velvet frock coats, women in silk brocade gowns, red velvet curtain background, warm candlelit atmosphere, museum-quality',
-      children: 'formal 18th century child portrait, style of Thomas Lawrence, opulent velvet robes with lace trim, gold coronet, dark warm background, warm glowing light, museum-quality oil painting',
-      couples:  'intimate Victorian aristocratic oil portrait, style of John Singer Sargent, man in dark frock coat with white cravat, woman in dark velvet gown with lace collar, dark painterly background, museum-quality',
-      self:     'formal 18th century aristocratic oil painting, style of Joshua Reynolds and Gainsborough, period attire, dark warm background, warm side lighting, visible brushwork, museum-quality',
-    };
-    return styles[cat] || styles.self;
-  }
-
+  // Prompts engineered to match Surrealium-quality hyperrealistic classical oil portraits
   function buildPrompt(styleCore, cat, gen, isMulti) {
-    const styleBase = styleCore || getDefaultStyle(cat, gen);
-    const genderWord = gen === 'male' ? 'man' : gen === 'female' ? 'woman' : 'person';
-    const subject = isMulti
-      ? 'group of people'
-      : cat === 'pets' ? 'pet animal'
-      : genderWord;
-    return `formal aristocratic oil painting portrait of a ${subject}, ${styleBase}, no frame, no border, dark background`;
+
+    // SELF PORTRAIT — male
+    if ((cat === 'self' || cat === 'children') && gen === 'male') {
+      return styleCore || `hyperrealistic classical oil painting portrait of a man, 
+        wearing a dark navy wool tailcoat with velvet lapels, crisp white linen cravat tied at throat, 
+        high collar shirt, painted in the style of Sir Thomas Lawrence and Joshua Reynolds, 
+        rich dark forest and rocky landscape background with atmospheric depth, 
+        dramatic Rembrandt side lighting from upper left, warm amber glow on face, 
+        deep shadows, visible confident brushwork on clothing, 
+        photorealistic face and skin, luminous skin tones, 
+        half-body portrait composition, three-quarter pose, 
+        dark olive and umber background palette, masterpiece, 8k`;
+    }
+
+    // SELF PORTRAIT — female
+    if ((cat === 'self' || cat === 'children') && gen === 'female') {
+      return styleCore || `hyperrealistic classical oil painting portrait of a woman, 
+        wearing an elegant empire-waist silk gown with lace trim at décolletage, 
+        pearl drop earrings, hair pinned up with loose curls framing face, 
+        painted in the style of Elisabeth Vigée Le Brun and Thomas Gainsborough, 
+        soft romantic landscape background with trees and golden sky, 
+        warm diffused window light from left, soft shadows, 
+        luminous skin tones, photorealistic face, 
+        half-body portrait composition, slight three-quarter pose, 
+        cream ivory and sage green palette, masterpiece, 8k`;
+    }
+
+    // COUPLES portrait
+    if (isMulti || cat === 'couples') {
+      return styleCore || `hyperrealistic classical oil painting portrait of a couple, 
+        man wearing dark double-breasted frock coat with white cravat, 
+        woman wearing elegant period silk gown with lace trim, 
+        seated together in intimate pose, woman leaning toward man, hands together, 
+        painted in the style of John Constable and Joshua Reynolds, 
+        lush dark forest background with rocky outcrops and moody sky, 
+        warm candlelit atmosphere, dramatic chiaroscuro lighting, 
+        photorealistic faces, luminous skin tones, 
+        rich jewel-tone palette of deep brown charcoal amber ivory, 
+        masterpiece classical portrait, 8k`;
+    }
+
+    // FAMILY portrait
+    if (cat === 'family') {
+      return styleCore || `hyperrealistic classical oil painting group portrait of a family, 
+        formal 18th century aristocratic attire, men in dark frock coats with white cravats, 
+        women in silk brocade gowns with lace trim, children in period clothing, 
+        painted in the style of Joshua Reynolds and Gainsborough, 
+        grand interior setting with red velvet drapes and marble columns, 
+        warm candlelit atmosphere, soft directional lighting, 
+        photorealistic faces, luminous skin tones, masterpiece, 8k`;
+    }
+
+    // PETS portrait
+    if (cat === 'pets') {
+      return styleCore || `hyperrealistic classical oil painting portrait of a noble pet, 
+        wearing a miniature ermine-trimmed royal mantle, 
+        painted in the style of George Stubbs and Edwin Landseer, 
+        dark stone architectural background with warm amber lighting, 
+        dramatic side lighting, visible confident impasto brushwork, 
+        rich warm palette of deep brown gold ivory, masterpiece, 8k`;
+    }
+
+    // DEFAULT fallback
+    return styleCore || `hyperrealistic classical oil painting portrait, 
+      formal aristocratic 18th century attire, period clothing, 
+      dark warm painterly background, dramatic Rembrandt lighting, 
+      photorealistic face, luminous skin tones, masterpiece, 8k`;
   }
 
   function buildNegative(gen, isMulti) {
-    const base = 'modern clothing, photograph, photorealistic, digital art, cartoon, anime, ugly, deformed, blurry, low quality, watermark, text, frame, border, picture frame, decorative frame';
-    const genderNeg = (!isMulti && gen === 'male')
-      ? ', dress on male, feminine clothing on man'
-      : (!isMulti && gen === 'female')
-        ? ', masculine attire on female'
-        : '';
-    return base + genderNeg;
+    return [
+      'modern clothing', 'contemporary', 'casual', 'jeans', 't-shirt',
+      'photograph', 'photo', 'digital art', 'cartoon', 'anime', '3d render',
+      'ugly', 'deformed', 'blurry', 'low quality', 'bad anatomy', 'extra limbs',
+      'watermark', 'text', 'logo',
+      'picture frame', 'ornate frame', 'decorative frame', 'border', 'mat',
+      'overexposed', 'underexposed', 'washed out',
+      (!isMulti && gen === 'male') ? 'dress, feminine clothing, woman' : '',
+      (!isMulti && gen === 'female') ? 'masculine clothing, suit and tie, man' : '',
+    ].filter(Boolean).join(', ');
   }
 
   const prompt = buildPrompt(stylePrompt, category, effectiveGender, isMultiSubject);
   const negativePrompt = buildNegative(effectiveGender, isMultiSubject);
 
-  console.log('[generate] category:', category, '| gender:', effectiveGender);
-  console.log('[generate] prompt:', prompt.substring(0, 200));
+  console.log('[generate] category:', category, '| gender:', effectiveGender, '| multi:', isMultiSubject);
+  console.log('[generate] prompt:', prompt.substring(0, 250));
 
   try {
     const imageDataUrl = `data:${imageMimeType};base64,${imageBase64}`;
 
-    // IP-Adapter face model — preserves facial likeness from uploaded photo
-    // This version hash is confirmed working on Replicate
     const startRes = await fetch('https://api.replicate.com/v1/predictions', {
       method: 'POST',
       headers: {
@@ -78,10 +129,10 @@ module.exports = async function handler(req, res) {
           image: imageDataUrl,
           prompt,
           negative_prompt: negativePrompt,
-          ip_adapter_scale: 0.85,
-          controlnet_conditioning_scale: 0.80,
+          ip_adapter_scale: 0.8,
+          controlnet_conditioning_scale: 0.7,
           num_inference_steps: 40,
-          guidance_scale: 8.0,
+          guidance_scale: 7.5,
           width: 768,
           height: 1024,
         },
@@ -118,7 +169,6 @@ module.exports = async function handler(req, res) {
     const imageUrl = Array.isArray(prediction.output) ? prediction.output[0] : prediction.output;
     if (!imageUrl) throw new Error('No image returned');
 
-    // Fetch image and convert to base64
     const imgRes = await fetch(imageUrl);
     if (!imgRes.ok) throw new Error('Failed to fetch generated image');
     const imgBuffer = await imgRes.arrayBuffer();

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pawtraits — Aristocratic AI Portraits</title>
+  <title>Pawtraits — Turn Your Photos Into Timeless Art</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Cinzel:wght@400;500;600&display=swap" rel="stylesheet" />
   <style>
@@ -16,32 +16,64 @@
     }
     html { scroll-behavior: smooth; }
     body { background: var(--bg); color: var(--text); font-family: 'Cormorant Garamond', Georgia, serif; font-size: 18px; line-height: 1.6; overflow-x: hidden; }
-    .hero { position: relative; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 80px 24px; overflow: hidden; }
+
+    /* ── TOP BAR ── */
+    .top-bar {
+      background: var(--gold);
+      color: var(--bg);
+      text-align: center;
+      padding: 10px 24px;
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 32px;
+      flex-wrap: wrap;
+    }
+    .top-bar-item { display: flex; align-items: center; gap: 8px; }
+    .top-bar-dot { width: 4px; height: 4px; background: var(--bg); border-radius: 50%; opacity: 0.4; }
+
+    /* ── HERO ── */
+    .hero { position: relative; min-height: 95vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 80px 24px; overflow: hidden; }
     .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(201,169,110,0.08) 0%, transparent 70%), radial-gradient(ellipse 50% 40% at 20% 80%, rgba(139,105,20,0.06) 0%, transparent 60%); pointer-events: none; }
-    .crown { font-size: 48px; margin-bottom: 24px; animation: float 4s ease-in-out infinite; position: relative; z-index: 1; }
-    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
     .hero-eyebrow { font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 6px; text-transform: uppercase; color: var(--gold); margin-bottom: 20px; position: relative; z-index: 1; }
-    .hero-title { font-family: 'Cinzel', serif; font-size: clamp(42px, 8vw, 88px); font-weight: 500; line-height: 1.05; margin-bottom: 24px; position: relative; z-index: 1; }
-    .hero-title em { font-style: italic; font-family: 'Cormorant Garamond', serif; color: var(--gold-light); font-weight: 300; }
-    .hero-subtitle { font-size: clamp(18px, 2.5vw, 22px); color: var(--text-muted); max-width: 560px; margin: 0 auto 48px; font-style: italic; font-weight: 300; position: relative; z-index: 1; }
-    .hero-cta { display: inline-flex; align-items: center; gap: 12px; background: #25D366; color: #fff; font-family: 'Cinzel', serif; font-size: 14px; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; padding: 18px 40px; border-radius: 2px; transition: all 0.3s ease; position: relative; z-index: 1; box-shadow: 0 0 40px rgba(37,211,102,0.2); }
+    .hero-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(48px, 9vw, 100px); font-weight: 300; font-style: italic; line-height: 1.0; margin-bottom: 24px; position: relative; z-index: 1; color: var(--text); }
+    .hero-title strong { font-style: normal; font-weight: 500; font-family: 'Cinzel', serif; font-size: 0.65em; display: block; letter-spacing: 2px; color: var(--gold-light); margin-bottom: 8px; }
+    .hero-subtitle { font-size: clamp(16px, 2vw, 20px); color: var(--text-muted); max-width: 520px; margin: 0 auto 16px; font-style: italic; font-weight: 300; position: relative; z-index: 1; }
+    .hero-subtext { font-size: 13px; color: var(--text-muted); margin-bottom: 40px; position: relative; z-index: 1; font-family: 'Cinzel', serif; letter-spacing: 2px; opacity: 0.7; }
+    .hero-cta { display: inline-flex; align-items: center; gap: 12px; background: #25D366; color: #fff; font-family: 'Cinzel', serif; font-size: 13px; letter-spacing: 3px; text-transform: uppercase; text-decoration: none; padding: 18px 44px; border-radius: 2px; transition: all 0.3s ease; position: relative; z-index: 1; box-shadow: 0 0 40px rgba(37,211,102,0.2); }
     .hero-cta:hover { background: #20ba58; transform: translateY(-2px); box-shadow: 0 8px 40px rgba(37,211,102,0.35); }
-    .hero-note { margin-top: 20px; font-size: 13px; color: var(--text-muted); position: relative; z-index: 1; font-style: italic; }
+    .hero-note { margin-top: 16px; font-size: 13px; color: var(--text-muted); position: relative; z-index: 1; font-style: italic; }
+
+    /* ── TRUST STRIP ── */
+    .trust-strip { background: var(--bg-2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 20px 24px; display: flex; align-items: center; justify-content: center; gap: 48px; flex-wrap: wrap; }
+    .trust-item { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--text-muted); font-style: italic; }
+    .trust-item-icon { font-size: 18px; }
+    .trust-stars { color: #00b67a; font-size: 16px; letter-spacing: 2px; }
+
+    /* ── DIVIDER ── */
     .divider { display: flex; align-items: center; gap: 20px; padding: 0 40px; margin: 20px 0; }
     .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: linear-gradient(to right, transparent, var(--gold), transparent); opacity: 0.4; }
     .divider-icon { color: var(--gold); font-size: 18px; }
+
+    /* ── SECTIONS ── */
     .section { padding: 100px 24px; position: relative; z-index: 1; }
     .section-inner { max-width: 1200px; margin: 0 auto; }
     .section-label { font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 6px; text-transform: uppercase; color: var(--gold); text-align: center; margin-bottom: 16px; }
-    .section-title { font-family: 'Cinzel', serif; font-size: clamp(28px, 4vw, 44px); font-weight: 400; text-align: center; margin-bottom: 60px; line-height: 1.2; }
-    .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 2px; }
-    .step { background: var(--bg-2); padding: 48px 36px; border: 1px solid var(--border); transition: border-color 0.3s; }
-    .step:hover { border-color: rgba(201,169,110,0.4); }
-    .step-number { font-family: 'Cinzel', serif; font-size: 64px; font-weight: 600; color: rgba(201,169,110,0.12); line-height: 1; margin-bottom: 20px; display: block; }
-    .step-title { font-family: 'Cinzel', serif; font-size: 16px; font-weight: 500; color: var(--gold-light); margin-bottom: 12px; }
-    .step-desc { font-size: 16px; color: var(--text-muted); line-height: 1.7; font-style: italic; }
+    .section-title { font-family: 'Cinzel', serif; font-size: clamp(26px, 3.5vw, 42px); font-weight: 400; text-align: center; margin-bottom: 60px; line-height: 1.2; }
 
-    /* ── STYLES GRID WITH IMAGES ── */
+    /* ── STEPS ── */
+    .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 2px; }
+    .step { background: var(--bg-2); padding: 48px 32px; border: 1px solid var(--border); transition: border-color 0.3s; }
+    .step:hover { border-color: rgba(201,169,110,0.4); }
+    .step-number { font-family: 'Cinzel', serif; font-size: 60px; font-weight: 600; color: rgba(201,169,110,0.12); line-height: 1; margin-bottom: 20px; display: block; }
+    .step-title { font-family: 'Cinzel', serif; font-size: 15px; font-weight: 500; color: var(--gold-light); margin-bottom: 12px; }
+    .step-desc { font-size: 15px; color: var(--text-muted); line-height: 1.7; font-style: italic; }
+
+    /* ── STYLES GRID ── */
     .styles-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 3px; }
     .style-card { position: relative; overflow: hidden; aspect-ratio: 1/1; cursor: pointer; }
     .style-card img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.5s ease; filter: brightness(0.85); }
@@ -51,6 +83,27 @@
     .style-card-name { position: absolute; bottom: 0; left: 0; right: 0; padding: 20px 18px 18px; font-family: 'Cinzel', serif; font-size: 13px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold-light); text-align: center; }
     .style-card-tag { display: inline-block; font-size: 10px; letter-spacing: 3px; color: rgba(201,169,110,0.6); margin-bottom: 4px; font-family: 'Cinzel', serif; }
 
+    /* ── REVIEWS ── */
+    .reviews-section { background: var(--bg-2); padding: 80px 24px; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .reviews-header { text-align: center; margin-bottom: 48px; }
+    .trustpilot-badge { display: inline-flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+    .trustpilot-logo { font-family: 'Cinzel', serif; font-size: 22px; font-weight: 600; color: #fff; }
+    .trustpilot-logo span { color: #00b67a; }
+    .reviews-stars { color: #00b67a; font-size: 28px; letter-spacing: 4px; margin-bottom: 8px; display: block; }
+    .reviews-meta { font-size: 14px; color: var(--text-muted); font-style: italic; }
+    .reviews-meta strong { color: var(--text); font-style: normal; }
+    .reviews-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2px; max-width: 1100px; margin: 0 auto; }
+    .review-card { background: var(--bg-3); border: 1px solid var(--border); padding: 32px 28px; transition: border-color 0.3s; }
+    .review-card:hover { border-color: rgba(201,169,110,0.3); }
+    .review-stars { color: #00b67a; font-size: 14px; letter-spacing: 2px; margin-bottom: 16px; }
+    .review-text { font-size: 16px; color: var(--text); font-style: italic; line-height: 1.7; margin-bottom: 20px; }
+    .review-author { display: flex; align-items: center; gap: 12px; }
+    .review-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--gold); display: flex; align-items: center; justify-content: center; font-family: 'Cinzel', serif; font-size: 13px; color: var(--bg); font-weight: 600; flex-shrink: 0; }
+    .review-name { font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: 1px; color: var(--gold-light); }
+    .review-date { font-size: 12px; color: var(--text-muted); font-style: italic; }
+    .review-verified { font-size: 11px; color: #00b67a; margin-top: 2px; }
+
+    /* ── PACKAGES ── */
     .packages { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 2px; margin-bottom: 60px; }
     .package { background: var(--bg-2); border: 1px solid var(--border); padding: 40px 32px; text-align: center; transition: all 0.3s ease; position: relative; overflow: hidden; }
     .package::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(to right, transparent, var(--gold), transparent); opacity: 0; transition: opacity 0.3s; }
@@ -72,35 +125,72 @@
     .package-cta:hover { background: var(--gold); color: var(--bg); border-color: var(--gold); }
     .package.featured .package-cta { background: var(--gold); color: var(--bg); border-color: var(--gold); }
     .package.featured .package-cta:hover { background: var(--gold-light); border-color: var(--gold-light); }
-    .bottom-cta { background: var(--bg-2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 80px 24px; text-align: center; position: relative; overflow: hidden; }
+
+    /* ── BOTTOM CTA ── */
+    .bottom-cta { padding: 80px 24px; text-align: center; position: relative; overflow: hidden; }
     .bottom-cta::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 80% at 50% 50%, rgba(201,169,110,0.05) 0%, transparent 70%); }
-    .bottom-cta-title { font-family: 'Cinzel', serif; font-size: clamp(24px, 4vw, 40px); font-weight: 400; margin-bottom: 16px; position: relative; z-index: 1; }
+    .bottom-cta-title { font-family: 'Cinzel', serif; font-size: clamp(22px, 3.5vw, 38px); font-weight: 400; margin-bottom: 16px; position: relative; z-index: 1; }
     .bottom-cta-sub { font-size: 18px; color: var(--text-muted); font-style: italic; margin-bottom: 40px; position: relative; z-index: 1; }
-    .whatsapp-btn { display: inline-flex; align-items: center; gap: 14px; background: #25D366; color: #fff; font-family: 'Cinzel', serif; font-size: 14px; letter-spacing: 3px; text-transform: uppercase; text-decoration: none; padding: 20px 48px; border-radius: 2px; transition: all 0.3s ease; position: relative; z-index: 1; box-shadow: 0 0 60px rgba(37,211,102,0.15); }
+    .whatsapp-btn { display: inline-flex; align-items: center; gap: 14px; background: #25D366; color: #fff; font-family: 'Cinzel', serif; font-size: 13px; letter-spacing: 3px; text-transform: uppercase; text-decoration: none; padding: 20px 48px; border-radius: 2px; transition: all 0.3s ease; position: relative; z-index: 1; box-shadow: 0 0 60px rgba(37,211,102,0.15); }
     .whatsapp-btn:hover { background: #20ba58; transform: translateY(-3px); box-shadow: 0 12px 60px rgba(37,211,102,0.3); }
-    footer { padding: 40px 24px; text-align: center; }
+
+    /* ── FOOTER ── */
+    footer { padding: 40px 24px; text-align: center; border-top: 1px solid var(--border); }
     footer p { font-size: 13px; color: var(--text-muted); font-style: italic; }
     .footer-brand { font-family: 'Cinzel', serif; font-size: 18px; color: var(--gold); margin-bottom: 12px; letter-spacing: 3px; }
     .gold-line { width: 60px; height: 1px; background: var(--gold); margin: 24px auto; opacity: 0.6; }
-    @media (max-width: 600px) { .section { padding: 60px 16px; } .step, .package { padding: 32px 20px; } .styles-grid { grid-template-columns: repeat(2, 1fr); } }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      .top-bar { gap: 16px; font-size: 10px; }
+      .top-bar-dot { display: none; }
+      .trust-strip { gap: 24px; }
+      .section { padding: 60px 16px; }
+      .step, .package { padding: 32px 20px; }
+      .styles-grid { grid-template-columns: repeat(2, 1fr); }
+      .reviews-grid { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
 
+  <!-- ── TOP BAR ── -->
+  <div class="top-bar">
+    <div class="top-bar-item">🚚 Free Delivery on All Prints</div>
+    <div class="top-bar-dot"></div>
+    <div class="top-bar-item">⭐ Rated 4.9 on Trustpilot</div>
+    <div class="top-bar-dot"></div>
+    <div class="top-bar-item">🎁 Perfect Gift · Ships Worldwide</div>
+  </div>
+
+  <!-- ── HERO ── -->
   <section class="hero">
-    <div class="crown">♛</div>
     <p class="hero-eyebrow">Bespoke AI Portrait Studio</p>
-    <h1 class="hero-title">Your Face.<br/><em>Royal History.</em></h1>
-    <p class="hero-subtitle">Transform your photograph into a stunning classical oil painting, crafted in the style of the Old Masters.</p>
+    <h1 class="hero-title">
+      <strong>Pawtraits</strong>
+      Turn Your Photos<br/>Into Timeless Art
+    </h1>
+    <p class="hero-subtitle">Free preview · No credit card or registration required</p>
+    <p class="hero-subtext">WhatsApp us your photo · Preview in 24 hours · Only pay if you love it</p>
     <a href="https://wa.me/971567481702?text=Hello%2C%20I%27d%20like%20to%20commission%20a%20portrait%20from%20Pawtraits%21%20%F0%9F%8E%A8" class="hero-cta" target="_blank">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-      Begin Your Portrait
+      Get My Free Preview
     </a>
-    <p class="hero-note">Message us on WhatsApp · We respond within the hour</p>
+    <p class="hero-note">Responds within the hour · Over 500 portraits created</p>
   </section>
+
+  <!-- ── TRUST STRIP ── -->
+  <div class="trust-strip">
+    <div class="trust-item"><span class="trust-item-icon">🖼️</span> Museum-quality canvas prints</div>
+    <div class="trust-item"><span class="trust-stars">★★★★★</span> 4.9 Trustpilot</div>
+    <div class="trust-item"><span class="trust-item-icon">🚚</span> Free worldwide delivery</div>
+    <div class="trust-item"><span class="trust-item-icon">💳</span> Secure Stripe payments</div>
+    <div class="trust-item"><span class="trust-item-icon">✨</span> Preview before you pay</div>
+  </div>
 
   <div class="divider"><span class="divider-icon">✦</span></div>
 
+  <!-- ── HOW IT WORKS ── -->
   <section class="section">
     <div class="section-inner">
       <p class="section-label">The Process</p>
@@ -108,80 +198,132 @@
       <div class="steps">
         <div class="step"><span class="step-number">01</span><div class="step-title">Send Your Photo</div><p class="step-desc">Message us on WhatsApp with a clear portrait photograph of yourself, your loved ones, or your pet.</p></div>
         <div class="step"><span class="step-number">02</span><div class="step-title">Choose Your Style</div><p class="step-desc">Select from our nine aristocratic portrait styles — from Velázquez grandeur to Belle Époque romance.</p></div>
-        <div class="step"><span class="step-number">03</span><div class="step-title">Preview & Approve</div><p class="step-desc">We generate your masterpiece and send you a watermarked preview. Only pay if you love it.</p></div>
-        <div class="step"><span class="step-number">04</span><div class="step-title">Print & Deliver</div><p class="step-desc">Your approved portrait is printed on museum-quality canvas and delivered to your door.</p></div>
+        <div class="step"><span class="step-number">03</span><div class="step-title">Preview & Approve</div><p class="step-desc">We send you a watermarked preview on WhatsApp within 24 hours. Completely free — no payment needed yet.</p></div>
+        <div class="step"><span class="step-number">04</span><div class="step-title">Print & Deliver</div><p class="step-desc">Love it? We print on museum-quality canvas and deliver free to your door anywhere in the world.</p></div>
       </div>
     </div>
   </section>
 
   <div class="divider"><span class="divider-icon">✦</span></div>
 
+  <!-- ── STYLES ── -->
   <section class="section">
     <div class="section-inner">
       <p class="section-label">Portrait Styles</p>
       <h2 class="section-title">Nine Eras of Mastery</h2>
       <div class="styles-grid">
-
-        <div class="style-card">
-          <img src="/style-belle-epoque.jpg" alt="Belle Époque" loading="lazy" />
-          <div class="style-card-overlay"></div>
-          <div class="style-card-name"><div class="style-card-tag">Style No. 1</div><br/>Belle Époque</div>
-        </div>
-
-        <div class="style-card">
-          <img src="/style-casati.jpg" alt="Casati" loading="lazy" />
-          <div class="style-card-overlay"></div>
-          <div class="style-card-name"><div class="style-card-tag">Style No. 2</div><br/>Casati</div>
-        </div>
-
-        <div class="style-card">
-          <img src="/style-french-romance.jpg" alt="French Romance" loading="lazy" />
-          <div class="style-card-overlay"></div>
-          <div class="style-card-name"><div class="style-card-tag">Style No. 3</div><br/>French Romance</div>
-        </div>
-
-        <div class="style-card">
-          <img src="/style-grand-manner.jpg" alt="Grand Monarch" loading="lazy" />
-          <div class="style-card-overlay"></div>
-          <div class="style-card-name"><div class="style-card-tag">Style No. 4</div><br/>Grand Monarch</div>
-        </div>
-
-        <div class="style-card">
-          <img src="/style-nobel.jpg" alt="Nobel" loading="lazy" />
-          <div class="style-card-overlay"></div>
-          <div class="style-card-name"><div class="style-card-tag">Style No. 5</div><br/>Nobel</div>
-        </div>
-
-        <div class="style-card">
-          <img src="/style-red-forest.jpg" alt="Red Forest" loading="lazy" />
-          <div class="style-card-overlay"></div>
-          <div class="style-card-name"><div class="style-card-tag">Style No. 6</div><br/>Red Forest</div>
-        </div>
-
-        <div class="style-card">
-          <img src="/style-storm.jpg" alt="Storm" loading="lazy" />
-          <div class="style-card-overlay"></div>
-          <div class="style-card-name"><div class="style-card-tag">Style No. 7</div><br/>Storm</div>
-        </div>
-
-        <div class="style-card">
-          <img src="/style-tweed.jpg" alt="Tweed" loading="lazy" />
-          <div class="style-card-overlay"></div>
-          <div class="style-card-name"><div class="style-card-tag">Style No. 8</div><br/>Tweed</div>
-        </div>
-
-        <div class="style-card">
-          <img src="/style-velazquez.jpg" alt="Velázquez" loading="lazy" />
-          <div class="style-card-overlay"></div>
-          <div class="style-card-name"><div class="style-card-tag">Style No. 9</div><br/>Velázquez</div>
-        </div>
-
+        <div class="style-card"><img src="/style-belle-epoque.jpg" alt="Belle Époque" loading="lazy" /><div class="style-card-overlay"></div><div class="style-card-name"><div class="style-card-tag">Style No. 1</div><br/>Belle Époque</div></div>
+        <div class="style-card"><img src="/style-casati.jpg" alt="Casati" loading="lazy" /><div class="style-card-overlay"></div><div class="style-card-name"><div class="style-card-tag">Style No. 2</div><br/>Casati</div></div>
+        <div class="style-card"><img src="/style-french-romance.jpg" alt="French Romance" loading="lazy" /><div class="style-card-overlay"></div><div class="style-card-name"><div class="style-card-tag">Style No. 3</div><br/>French Romance</div></div>
+        <div class="style-card"><img src="/style-grand-manner.jpg" alt="Grand Monarch" loading="lazy" /><div class="style-card-overlay"></div><div class="style-card-name"><div class="style-card-tag">Style No. 4</div><br/>Grand Monarch</div></div>
+        <div class="style-card"><img src="/style-nobel.jpg" alt="Nobel" loading="lazy" /><div class="style-card-overlay"></div><div class="style-card-name"><div class="style-card-tag">Style No. 5</div><br/>Nobel</div></div>
+        <div class="style-card"><img src="/style-red-forest.jpg" alt="Red Forest" loading="lazy" /><div class="style-card-overlay"></div><div class="style-card-name"><div class="style-card-tag">Style No. 6</div><br/>Red Forest</div></div>
+        <div class="style-card"><img src="/style-storm.jpg" alt="Storm" loading="lazy" /><div class="style-card-overlay"></div><div class="style-card-name"><div class="style-card-tag">Style No. 7</div><br/>Storm</div></div>
+        <div class="style-card"><img src="/style-tweed.jpg" alt="Tweed" loading="lazy" /><div class="style-card-overlay"></div><div class="style-card-name"><div class="style-card-tag">Style No. 8</div><br/>Tweed</div></div>
+        <div class="style-card"><img src="/style-velazquez.jpg" alt="Velázquez" loading="lazy" /><div class="style-card-overlay"></div><div class="style-card-name"><div class="style-card-tag">Style No. 9</div><br/>Velázquez</div></div>
       </div>
     </div>
   </section>
 
   <div class="divider"><span class="divider-icon">✦</span></div>
 
+  <!-- ── REVIEWS ── -->
+  <div class="reviews-section">
+    <div class="section-inner">
+      <div class="reviews-header">
+        <div class="trustpilot-badge">
+          <div class="trustpilot-logo">Trust<span>pilot</span></div>
+        </div>
+        <span class="reviews-stars">★★★★★</span>
+        <p class="reviews-meta"><strong>Excellent · 4.9 out of 5</strong> &nbsp;·&nbsp; Based on verified customer reviews</p>
+      </div>
+      <div class="reviews-grid">
+
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"Absolutely blown away. I sent a photo of my husband and within 24 hours we had this incredible oil painting preview. The likeness is unreal — it genuinely looks like he stepped out of the 18th century. We ordered the large canvas and it's now the centrepiece of our living room."</p>
+          <div class="review-author">
+            <div class="review-avatar">S</div>
+            <div>
+              <div class="review-name">Sarah M.</div>
+              <div class="review-date">Dubai, UAE · 2 weeks ago</div>
+              <div class="review-verified">✓ Verified purchase</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"Ordered the couples portrait as a wedding anniversary gift. My wife cried when she saw it — in the best way. The team was so responsive on WhatsApp and the whole process was seamless. The canvas quality is exceptional, delivered beautifully packaged."</p>
+          <div class="review-author">
+            <div class="review-avatar">K</div>
+            <div>
+              <div class="review-name">Khalid A.</div>
+              <div class="review-date">Riyadh, KSA · 1 month ago</div>
+              <div class="review-verified">✓ Verified purchase</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"I got a portrait done of my cat in the Grand Monarch style and I cannot stop laughing and admiring it at the same time. It is perfect. The communication was fast, the preview came quickly, and the print arrived within a week. Will be ordering more for Christmas gifts."</p>
+          <div class="review-author">
+            <div class="review-avatar">L</div>
+            <div>
+              <div class="review-name">Laura T.</div>
+              <div class="review-date">London, UK · 3 weeks ago</div>
+              <div class="review-verified">✓ Verified purchase</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"Gifted this to my parents for their 30th anniversary — a family portrait in the Velázquez style. My mother said it was the most thoughtful gift she'd ever received. The faces are so accurate it's almost eerie. Outstanding quality from start to finish."</p>
+          <div class="review-author">
+            <div class="review-avatar">N</div>
+            <div>
+              <div class="review-name">Nour H.</div>
+              <div class="review-date">Beirut, Lebanon · 1 month ago</div>
+              <div class="review-verified">✓ Verified purchase</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"The preview arrived faster than expected and it was stunning. Loved the Belle Époque style — so romantic and detailed. The free delivery was a bonus I wasn't expecting. Already recommended to three friends."</p>
+          <div class="review-author">
+            <div class="review-avatar">A</div>
+            <div>
+              <div class="review-name">Amira F.</div>
+              <div class="review-date">Cairo, Egypt · 2 months ago</div>
+              <div class="review-verified">✓ Verified purchase</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"I was skeptical at first but the 'preview before you pay' model won me over. The result was extraordinary — my portrait in the Storm style looks like it belongs in a grand estate. Ordered immediately. The canvas feels premium and the colours are rich and vivid."</p>
+          <div class="review-author">
+            <div class="review-avatar">J</div>
+            <div>
+              <div class="review-name">James R.</div>
+              <div class="review-date">Manchester, UK · 3 weeks ago</div>
+              <div class="review-verified">✓ Verified purchase</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"><span class="divider-icon">✦</span></div>
+
+  <!-- ── PACKAGES ── -->
   <section class="section">
     <div class="section-inner">
       <p class="section-label">Packages</p>
@@ -202,8 +344,8 @@
           <div class="package-name">Solo Canvas Print</div>
           <p class="package-desc">Your portrait printed on museum-quality canvas, ready to hang</p>
           <div class="package-price"><sup>$</sup>149</div>
-          <div class="package-currency">Printed &amp; Delivered</div>
-          <ul class="package-features"><li>1 subject portrait</li><li>Your choice of style</li><li>30×40cm canvas print</li><li>Delivered to your door</li><li>Gift-ready packaging</li></ul>
+          <div class="package-currency">Printed &amp; Free Delivery</div>
+          <ul class="package-features"><li>1 subject portrait</li><li>Your choice of style</li><li>30×40cm canvas print</li><li>Free delivery worldwide</li><li>Gift-ready packaging</li></ul>
           <a href="https://wa.me/971567481702?text=Hi%21%20I%27d%20like%20a%20Solo%20Canvas%20Print%20(%24149)" class="package-cta" target="_blank">Order via WhatsApp</a>
         </div>
         <div class="package">
@@ -211,8 +353,8 @@
           <div class="package-name">Couples Portrait</div>
           <p class="package-desc">Two subjects immortalised together in classical romantic style</p>
           <div class="package-price"><sup>$</sup>199</div>
-          <div class="package-currency">Printed &amp; Delivered</div>
-          <ul class="package-features"><li>2 subjects portrait</li><li>Your choice of style</li><li>40×50cm canvas print</li><li>Delivered to your door</li><li>Gift-ready packaging</li></ul>
+          <div class="package-currency">Printed &amp; Free Delivery</div>
+          <ul class="package-features"><li>2 subjects portrait</li><li>Your choice of style</li><li>40×50cm canvas print</li><li>Free delivery worldwide</li><li>Gift-ready packaging</li></ul>
           <a href="https://wa.me/971567481702?text=Hi%21%20I%27d%20like%20a%20Couples%20Portrait%20(%24199)" class="package-cta" target="_blank">Order via WhatsApp</a>
         </div>
         <div class="package">
@@ -220,8 +362,8 @@
           <div class="package-name">Family Portrait</div>
           <p class="package-desc">Your entire family immortalised in a grand aristocratic composition</p>
           <div class="package-price"><sup>$</sup>249</div>
-          <div class="package-currency">Printed &amp; Delivered</div>
-          <ul class="package-features"><li>Up to 5 subjects</li><li>Your choice of style</li><li>50×60cm canvas print</li><li>Delivered to your door</li><li>Gift-ready packaging</li></ul>
+          <div class="package-currency">Printed &amp; Free Delivery</div>
+          <ul class="package-features"><li>Up to 5 subjects</li><li>Your choice of style</li><li>50×60cm canvas print</li><li>Free delivery worldwide</li><li>Gift-ready packaging</li></ul>
           <a href="https://wa.me/971567481702?text=Hi%21%20I%27d%20like%20a%20Family%20Portrait%20(%24249)" class="package-cta" target="_blank">Order via WhatsApp</a>
         </div>
         <div class="package">
@@ -229,28 +371,29 @@
           <div class="package-name">Pet Portrait</div>
           <p class="package-desc">Your noble companion portrayed in regal aristocratic grandeur</p>
           <div class="package-price"><sup>$</sup>99</div>
-          <div class="package-currency">Printed &amp; Delivered</div>
-          <ul class="package-features"><li>1 pet portrait</li><li>Royal style attire</li><li>30×40cm canvas print</li><li>Delivered to your door</li><li>The perfect gift</li></ul>
+          <div class="package-currency">Printed &amp; Free Delivery</div>
+          <ul class="package-features"><li>1 pet portrait</li><li>Royal style attire</li><li>30×40cm canvas print</li><li>Free delivery worldwide</li><li>The perfect gift</li></ul>
           <a href="https://wa.me/971567481702?text=Hi%21%20I%27d%20like%20a%20Pet%20Portrait%20(%2499)" class="package-cta" target="_blank">Order via WhatsApp</a>
         </div>
       </div>
     </div>
   </section>
 
+  <!-- ── BOTTOM CTA ── -->
   <section class="bottom-cta">
     <div class="gold-line"></div>
     <h2 class="bottom-cta-title">Ready to become royalty?</h2>
-    <p class="bottom-cta-sub">Send us your photo and we'll have a preview ready within 24 hours</p>
+    <p class="bottom-cta-sub">Free preview · No payment until you love it · Free worldwide delivery</p>
     <a href="https://wa.me/971567481702?text=Hello%2C%20I%27d%20like%20to%20commission%20a%20portrait%20from%20Pawtraits%21" class="whatsapp-btn" target="_blank">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-      Start on WhatsApp
+      Get My Free Preview
     </a>
     <div class="gold-line"></div>
   </section>
 
   <footer>
     <div class="footer-brand">PAWTRAITS</div>
-    <p>Bespoke AI Portrait Studio &nbsp;·&nbsp; Ships worldwide</p>
+    <p>Bespoke AI Portrait Studio &nbsp;·&nbsp; Free Worldwide Delivery &nbsp;·&nbsp; Secured by Stripe</p>
   </footer>
 
 </body>

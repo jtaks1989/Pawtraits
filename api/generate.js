@@ -1,5 +1,3 @@
-const FormData = require('form-data');
-
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
@@ -69,20 +67,8 @@ module.exports = async function handler(req, res) {
   console.log('[generate] prompt:', prompt.substring(0, 200));
 
   try {
-    const imageBuffer = Buffer.from(imageBase64, 'base64');
-
-    const form = new FormData();
-    form.append('prompt[text]', prompt);
-    form.append('prompt[negative_prompt]', negativePrompt);
-    form.append('prompt[num_images]', '1');
-    form.append('prompt[w]', '832');
-    form.append('prompt[h]', '1216');
-    form.append('prompt[cfg_scale]', '7');
-    form.append('prompt[steps]', '30');
-    form.append('prompt[face_swap]', imageBuffer, {
-      filename: 'face.jpg',
-      contentType: imageMimeType,
-    });
+    // Send as JSON with base64 image — no form-data package needed
+    const imageDataUrl = `data:${imageMimeType};base64,${imageBase64}`;
 
     const astriaRes = await fetch(
       `https://api.astria.ai/tunes/${FLUX_TUNE_ID}/prompts`,
@@ -90,15 +76,26 @@ module.exports = async function handler(req, res) {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${ASTRIA_KEY}`,
-          ...form.getHeaders(),
+          'Content-Type': 'application/json',
         },
-        body: form,
+        body: JSON.stringify({
+          prompt: {
+            text: prompt,
+            negative_prompt: negativePrompt,
+            num_images: 1,
+            w: 832,
+            h: 1216,
+            cfg_scale: 7,
+            steps: 30,
+            face_swap: imageDataUrl,
+          },
+        }),
       }
     );
 
     if (!astriaRes.ok) {
       const e = await astriaRes.json().catch(() => ({}));
-      console.error('[generate] Astria error:', JSON.stringify(e));
+      console.error('[generate] Astria error body:', JSON.stringify(e));
       throw new Error(e?.error || e?.message || JSON.stringify(e) || 'Astria API HTTP ' + astriaRes.status);
     }
 
@@ -125,8 +122,8 @@ module.exports = async function handler(req, res) {
 
     const imgRes = await fetch(imageUrl);
     if (!imgRes.ok) throw new Error('Failed to fetch generated image');
-    const imgBuffer2 = await imgRes.arrayBuffer();
-    const b64 = Buffer.from(imgBuffer2).toString('base64');
+    const imgBuffer = await imgRes.arrayBuffer();
+    const b64 = Buffer.from(imgBuffer).toString('base64');
 
     // Printify upload (optional)
     let printifyImageId = null, printifyImageUrl = null;

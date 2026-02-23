@@ -20,7 +20,6 @@ module.exports = async function handler(req, res) {
   const ASTRIA_KEY = process.env.ASTRIA_API_KEY;
   if (!ASTRIA_KEY) return res.status(500).json({ error: 'ASTRIA_API_KEY not configured' });
 
-  // Realistic Vision v5.1 — correct base model for FaceID per Astria docs
   const BASE_TUNE_ID = 690204;
 
   const isGroup = category === 'family' || category === 'couples';
@@ -124,8 +123,9 @@ module.exports = async function handler(req, res) {
     promptForm.append('prompt[num_images]', '1');
     promptForm.append('prompt[face_correct]', 'true');
     promptForm.append('prompt[super_resolution]', 'true');
-    promptForm.append('prompt[w]', '832');
-    promptForm.append('prompt[h]', '1216');
+    promptForm.append('prompt[face_swap]', 'true');
+    promptForm.append('prompt[w]', '512');
+    promptForm.append('prompt[h]', '768');
     promptForm.append('prompt[steps]', '30');
 
     const promptRes = await fetch(

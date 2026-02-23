@@ -165,7 +165,7 @@
           </div>
         </div>
 
-        <div class="form-section" id="addressSection">
+        <div class="form-section" id="addressSection" style="display:none;">
           <div class="form-section-title">Delivery Address</div>
           <div class="field" id="field-address1">
             <label>Address Line 1</label>
@@ -260,8 +260,7 @@
   </div>
 
   <script>
-    const STRIPE_KEY = 'YOUR_STRIPE_PUBLISHABLE_KEY';
-    const stripe = Stripe(STRIPE_KEY);
+    const stripe = Stripe('pk_live_51Mmd1cKK8mgv7Wpm5vJa0cs9qhyjId82TnGqV74IfNDq0WPWvSOZgsFvqgdNdMRZwECK9t6dc87J3UmAol6USufD00Pm0oHX7I');
     const elements = stripe.elements({
       appearance: {
         theme: 'night',
@@ -281,11 +280,11 @@
     cardElement.on('blur', () => document.getElementById('cardWrapper').classList.remove('focused'));
 
     const packages = {
-      solo_digital:   { price: 79,  name: 'Solo Portrait (Digital)',     delivery: 'Digital download' },
-      solo_canvas:    { price: 149, name: 'Solo Canvas (30×40cm)',        delivery: 'Printed & shipped' },
-      couples_canvas: { price: 199, name: 'Couples Canvas (40×50cm)',     delivery: 'Printed & shipped' },
-      family_canvas:  { price: 249, name: 'Family Canvas (50×60cm)',      delivery: 'Printed & shipped' },
-      pet_canvas:     { price: 99,  name: 'Pet Canvas (30×40cm)',         delivery: 'Printed & shipped' },
+      solo_digital:   { price: 79,  name: 'Solo Portrait (Digital)',   delivery: 'Digital download' },
+      solo_canvas:    { price: 149, name: 'Solo Canvas (30×40cm)',      delivery: 'Printed & shipped' },
+      couples_canvas: { price: 199, name: 'Couples Canvas (40×50cm)',   delivery: 'Printed & shipped' },
+      family_canvas:  { price: 249, name: 'Family Canvas (50×60cm)',    delivery: 'Printed & shipped' },
+      pet_canvas:     { price: 99,  name: 'Pet Canvas (30×40cm)',       delivery: 'Printed & shipped' },
     };
 
     let selectedPackage = 'solo_digital';
@@ -307,11 +306,15 @@
       }
     });
 
-    // Pre-select from URL param e.g. /order.html?package=solo_canvas
     const urlPkg = new URLSearchParams(window.location.search).get('package');
     if (urlPkg && packages[urlPkg]) {
       const r = document.querySelector(`input[value="${urlPkg}"]`);
-      if (r) { r.checked = true; selectedPackage = urlPkg; document.querySelectorAll('.package-option').forEach(el => el.classList.remove('selected')); r.closest('.package-option').classList.add('selected'); }
+      if (r) {
+        r.checked = true;
+        selectedPackage = urlPkg;
+        document.querySelectorAll('.package-option').forEach(el => el.classList.remove('selected'));
+        r.closest('.package-option').classList.add('selected');
+      }
     }
     updateSummary(selectedPackage);
 

@@ -31,7 +31,7 @@
     .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: linear-gradient(to right, transparent, var(--gold), transparent); opacity: 0.4; }
     .divider-icon { color: var(--gold); font-size: 18px; }
     .section { padding: 100px 24px; position: relative; z-index: 1; }
-    .section-inner { max-width: 1100px; margin: 0 auto; }
+    .section-inner { max-width: 1200px; margin: 0 auto; }
     .section-label { font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 6px; text-transform: uppercase; color: var(--gold); text-align: center; margin-bottom: 16px; }
     .section-title { font-family: 'Cinzel', serif; font-size: clamp(28px, 4vw, 44px); font-weight: 400; text-align: center; margin-bottom: 60px; line-height: 1.2; }
     .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 2px; }
@@ -40,6 +40,17 @@
     .step-number { font-family: 'Cinzel', serif; font-size: 64px; font-weight: 600; color: rgba(201,169,110,0.12); line-height: 1; margin-bottom: 20px; display: block; }
     .step-title { font-family: 'Cinzel', serif; font-size: 16px; font-weight: 500; color: var(--gold-light); margin-bottom: 12px; }
     .step-desc { font-size: 16px; color: var(--text-muted); line-height: 1.7; font-style: italic; }
+
+    /* ── STYLES GRID WITH IMAGES ── */
+    .styles-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 3px; }
+    .style-card { position: relative; overflow: hidden; aspect-ratio: 1/1; cursor: pointer; }
+    .style-card img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.5s ease; filter: brightness(0.85); }
+    .style-card:hover img { transform: scale(1.06); filter: brightness(1); }
+    .style-card-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.1) 50%, transparent 100%); transition: background 0.3s; }
+    .style-card:hover .style-card-overlay { background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.2) 60%, transparent 100%); }
+    .style-card-name { position: absolute; bottom: 0; left: 0; right: 0; padding: 20px 18px 18px; font-family: 'Cinzel', serif; font-size: 13px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold-light); text-align: center; }
+    .style-card-tag { display: inline-block; font-size: 10px; letter-spacing: 3px; color: rgba(201,169,110,0.6); margin-bottom: 4px; font-family: 'Cinzel', serif; }
+
     .packages { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 2px; margin-bottom: 60px; }
     .package { background: var(--bg-2); border: 1px solid var(--border); padding: 40px 32px; text-align: center; transition: all 0.3s ease; position: relative; overflow: hidden; }
     .package::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(to right, transparent, var(--gold), transparent); opacity: 0; transition: opacity 0.3s; }
@@ -61,11 +72,6 @@
     .package-cta:hover { background: var(--gold); color: var(--bg); border-color: var(--gold); }
     .package.featured .package-cta { background: var(--gold); color: var(--bg); border-color: var(--gold); }
     .package.featured .package-cta:hover { background: var(--gold-light); border-color: var(--gold-light); }
-    .styles-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 2px; }
-    .style-card { background: var(--bg-2); border: 1px solid var(--border); padding: 24px 20px; text-align: center; transition: all 0.3s; }
-    .style-card:hover { border-color: rgba(201,169,110,0.4); background: var(--bg-3); }
-    .style-card-icon { font-size: 28px; margin-bottom: 10px; display: block; }
-    .style-card-name { font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 1px; color: var(--gold-light); }
     .bottom-cta { background: var(--bg-2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 80px 24px; text-align: center; position: relative; overflow: hidden; }
     .bottom-cta::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 80% at 50% 50%, rgba(201,169,110,0.05) 0%, transparent 70%); }
     .bottom-cta-title { font-family: 'Cinzel', serif; font-size: clamp(24px, 4vw, 40px); font-weight: 400; margin-bottom: 16px; position: relative; z-index: 1; }
@@ -76,7 +82,7 @@
     footer p { font-size: 13px; color: var(--text-muted); font-style: italic; }
     .footer-brand { font-family: 'Cinzel', serif; font-size: 18px; color: var(--gold); margin-bottom: 12px; letter-spacing: 3px; }
     .gold-line { width: 60px; height: 1px; background: var(--gold); margin: 24px auto; opacity: 0.6; }
-    @media (max-width: 600px) { .section { padding: 60px 16px; } .step, .package { padding: 32px 20px; } }
+    @media (max-width: 600px) { .section { padding: 60px 16px; } .step, .package { padding: 32px 20px; } .styles-grid { grid-template-columns: repeat(2, 1fr); } }
   </style>
 </head>
 <body>
@@ -115,15 +121,61 @@
       <p class="section-label">Portrait Styles</p>
       <h2 class="section-title">Nine Eras of Mastery</h2>
       <div class="styles-grid">
-        <div class="style-card"><span class="style-card-icon">🌲</span><div class="style-card-name">Red Forest</div></div>
-        <div class="style-card"><span class="style-card-icon">🧥</span><div class="style-card-name">Tweed</div></div>
-        <div class="style-card"><span class="style-card-icon">⚡</span><div class="style-card-name">Storm</div></div>
-        <div class="style-card"><span class="style-card-icon">🌹</span><div class="style-card-name">Casati</div></div>
-        <div class="style-card"><span class="style-card-icon">🥂</span><div class="style-card-name">French Romance</div></div>
-        <div class="style-card"><span class="style-card-icon">👑</span><div class="style-card-name">Velázquez</div></div>
-        <div class="style-card"><span class="style-card-icon">🌸</span><div class="style-card-name">Belle Époque</div></div>
-        <div class="style-card"><span class="style-card-icon">🏛️</span><div class="style-card-name">Nobel</div></div>
-        <div class="style-card"><span class="style-card-icon">⚜️</span><div class="style-card-name">Grand Monarch</div></div>
+
+        <div class="style-card">
+          <img src="/style-belle-epoque.jpg" alt="Belle Époque" loading="lazy" />
+          <div class="style-card-overlay"></div>
+          <div class="style-card-name"><div class="style-card-tag">Style No. 1</div><br/>Belle Époque</div>
+        </div>
+
+        <div class="style-card">
+          <img src="/style-casati.jpg" alt="Casati" loading="lazy" />
+          <div class="style-card-overlay"></div>
+          <div class="style-card-name"><div class="style-card-tag">Style No. 2</div><br/>Casati</div>
+        </div>
+
+        <div class="style-card">
+          <img src="/style-french-romance.jpg" alt="French Romance" loading="lazy" />
+          <div class="style-card-overlay"></div>
+          <div class="style-card-name"><div class="style-card-tag">Style No. 3</div><br/>French Romance</div>
+        </div>
+
+        <div class="style-card">
+          <img src="/style-grand-manner.jpg" alt="Grand Monarch" loading="lazy" />
+          <div class="style-card-overlay"></div>
+          <div class="style-card-name"><div class="style-card-tag">Style No. 4</div><br/>Grand Monarch</div>
+        </div>
+
+        <div class="style-card">
+          <img src="/style-nobel.jpg" alt="Nobel" loading="lazy" />
+          <div class="style-card-overlay"></div>
+          <div class="style-card-name"><div class="style-card-tag">Style No. 5</div><br/>Nobel</div>
+        </div>
+
+        <div class="style-card">
+          <img src="/style-red-forest.jpg" alt="Red Forest" loading="lazy" />
+          <div class="style-card-overlay"></div>
+          <div class="style-card-name"><div class="style-card-tag">Style No. 6</div><br/>Red Forest</div>
+        </div>
+
+        <div class="style-card">
+          <img src="/style-storm.jpg" alt="Storm" loading="lazy" />
+          <div class="style-card-overlay"></div>
+          <div class="style-card-name"><div class="style-card-tag">Style No. 7</div><br/>Storm</div>
+        </div>
+
+        <div class="style-card">
+          <img src="/style-tweed.jpg" alt="Tweed" loading="lazy" />
+          <div class="style-card-overlay"></div>
+          <div class="style-card-name"><div class="style-card-tag">Style No. 8</div><br/>Tweed</div>
+        </div>
+
+        <div class="style-card">
+          <img src="/style-velazquez.jpg" alt="Velázquez" loading="lazy" />
+          <div class="style-card-overlay"></div>
+          <div class="style-card-name"><div class="style-card-tag">Style No. 9</div><br/>Velázquez</div>
+        </div>
+
       </div>
     </div>
   </section>

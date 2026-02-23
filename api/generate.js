@@ -1,3 +1,5 @@
+const FormData = require('form-data');
+
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
@@ -18,7 +20,6 @@ module.exports = async function handler(req, res) {
   const ASTRIA_KEY = process.env.ASTRIA_API_KEY;
   if (!ASTRIA_KEY) return res.status(500).json({ error: 'ASTRIA_API_KEY not configured' });
 
-  // Astria Flux base model tune ID — verify this at astria.ai/gallery
   const FLUX_TUNE_ID = process.env.ASTRIA_TUNE_ID || '1504944';
 
   const isGroup = category === 'family' || category === 'couples';
@@ -32,23 +33,18 @@ module.exports = async function handler(req, res) {
     if (isMulti || cat === 'couples') {
       return `a hyperrealistic classical oil painting portrait of a couple, man wearing dark double-breasted frock coat with white cravat and high collar, woman wearing elegant period silk gown with lace trim at neckline, seated together in intimate pose, lush dark forest landscape background with rocky outcrops and moody dramatic sky with golden light breaking through clouds, warm candlelit chiaroscuro lighting, painted in the masterful style of Joshua Reynolds and John Constable, photorealistic faces and skin, luminous glowing skin tones, rich deep charcoal amber ivory gold palette, museum-quality oil painting, 8k ultra detailed`;
     }
-
     if (cat === 'family') {
       return `a hyperrealistic classical oil painting family group portrait, men wearing dark formal frock coats with white cravats, women wearing elegant silk brocade gowns with lace trim, grand interior with rich red velvet drapes and warm candlelight, painted in the style of Joshua Reynolds, photorealistic faces, luminous skin tones, museum-quality masterpiece, 8k`;
     }
-
     if (cat === 'pets') {
       return `a hyperrealistic classical oil painting portrait of a noble pet wearing a miniature ermine-trimmed royal mantle, dark stone architectural background with warm amber directional lighting, dramatic side lighting, painted in the style of George Stubbs and Edwin Landseer, rich warm palette deep brown gold ivory, museum-quality masterpiece, 8k`;
     }
-
     if (cat === 'children') {
       return `a hyperrealistic classical oil painting portrait of a child wearing opulent velvet robes with intricate lace trim and a small gold coronet, dark warm background with soft glowing light, painted in the style of Thomas Lawrence, photorealistic face, luminous skin tones, museum-quality masterpiece, 8k`;
     }
-
     if (gen === 'female') {
-      return `a hyperrealistic classical oil painting portrait of a woman wearing an elegant empire-waist silk gown with delicate lace trim at the décolletage, pearl drop earrings, hair pinned up with soft curls framing the face, lush romantic landscape background with trees and golden atmospheric sky, warm soft diffused lighting from the left, deep rich shadows, painted in the exquisite style of Elisabeth Vigée Le Brun and Thomas Gainsborough, photorealistic face, luminous glowing skin, cream ivory sage green warm gold palette, museum-quality masterpiece, 8k`;
+      return `a hyperrealistic classical oil painting portrait of a woman wearing an elegant empire-waist silk gown with delicate lace trim at the décolletage, pearl drop earrings, hair pinned up with soft curls framing the face, lush romantic landscape background with trees and golden atmospheric sky, warm soft diffused lighting from the left, painted in the style of Elisabeth Vigée Le Brun and Thomas Gainsborough, photorealistic face, luminous glowing skin, cream ivory sage green warm gold palette, museum-quality masterpiece, 8k`;
     }
-
     return `a hyperrealistic classical oil painting portrait of a man wearing a dark navy wool tailcoat with velvet lapels and a crisp white linen cravat tied at the throat, dramatic rocky forest landscape background with atmospheric depth and moody dark sky, dramatic Rembrandt side lighting from upper left casting deep warm amber shadows, painted in the masterful style of Sir Thomas Lawrence and Joshua Reynolds, photorealistic face and skin, luminous warm skin tones, confident half-body three-quarter pose, deep forest green umber charcoal palette, museum-quality masterpiece, 8k`;
   }
 
@@ -73,12 +69,8 @@ module.exports = async function handler(req, res) {
   console.log('[generate] prompt:', prompt.substring(0, 200));
 
   try {
-    // Convert base64 to a Buffer for multipart upload
     const imageBuffer = Buffer.from(imageBase64, 'base64');
 
-    // Astria single-shot: POST to base flux model with face image
-    // The face image is passed as form data — Astria uses it for face reference
-    const FormData = (await import('node:form-data')).default;
     const form = new FormData();
     form.append('prompt[text]', prompt);
     form.append('prompt[negative_prompt]', negativePrompt);
@@ -106,11 +98,12 @@ module.exports = async function handler(req, res) {
 
     if (!astriaRes.ok) {
       const e = await astriaRes.json().catch(() => ({}));
-      throw new Error(e?.error || e?.message || 'Astria API HTTP ' + astriaRes.status);
+      console.error('[generate] Astria error:', JSON.stringify(e));
+      throw new Error(e?.error || e?.message || JSON.stringify(e) || 'Astria API HTTP ' + astriaRes.status);
     }
 
     let promptData = await astriaRes.json();
-    console.log('[generate] Astria prompt created:', promptData.id);
+    console.log('[generate] Astria prompt created, id:', promptData.id);
 
     // Poll until images are ready
     const maxWait = 180000;
@@ -130,7 +123,6 @@ module.exports = async function handler(req, res) {
     const imageUrl = promptData.images[0].url;
     if (!imageUrl) throw new Error('No image URL returned from Astria');
 
-    // Fetch and convert to base64
     const imgRes = await fetch(imageUrl);
     if (!imgRes.ok) throw new Error('Failed to fetch generated image');
     const imgBuffer2 = await imgRes.arrayBuffer();
@@ -166,4 +158,3 @@ module.exports = async function handler(req, res) {
     return res.status(500).json({ error: err.message });
   }
 };
-```

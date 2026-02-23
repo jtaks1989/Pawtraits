@@ -2,8 +2,6 @@ module.exports = async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   const {
-    imageBase64,
-    imageMimeType = 'image/jpeg',
     category,
     stylePrompt,
     gender,
@@ -11,12 +9,12 @@ module.exports = async function handler(req, res) {
     isMultiPhoto,
   } = req.body;
 
-  if (!imageBase64 || !category) {
+  if (!category) {
     return res.status(400).json({ error: 'Missing fields' });
   }
 
-  const GEMINI_KEY = process.env.GEMINI_API_KEY;
-  if (!GEMINI_KEY) return res.status(500).json({ error: 'GEMINI_API_KEY not configured' });
+  const OPENAI_KEY = process.env.OPENAI_API_KEY;
+  if (!OPENAI_KEY) return res.status(500).json({ error: 'OPENAI_API_KEY not configured' });
 
   const isGroup = category === 'family' || category === 'couples';
   const isMultiSubject = isGroup || isMultiPhoto || (photoCount || 1) > 1;
@@ -61,42 +59,31 @@ module.exports = async function handler(req, res) {
     const fullPrompt = buildPrompt(description, stylePrompt, category, effectiveGender, isMultiSubject);
     console.log('[generate] prompt:', fullPrompt.substring(0, 200));
 
-    // gemini-2.0-flash-exp-image-generation with TEXT-only input = pure text-to-image
-    // Works on standard Gemini API key, no Vertex AI / Cloud needed
-    const r = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp-image-generation:generateContent?key=${GEMINI_KEY}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{
-            parts: [{ text: fullPrompt }],
-          }],
-          generationConfig: {
-            responseModalities: ['TEXT', 'IMAGE'],
-          },
-        }),
-      }
-    );
+    // Call DALL-E 3
+    const r = await fetch('https://api.openai.com/v1/images/generations', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${OPENAI_KEY}`,
+      },
+      body: JSON.stringify({
+        model: 'dall-e-3',
+        prompt: fullPrompt,
+        n: 1,
+        size: '1024x1024',
+        response_format: 'b64_json',
+        quality: 'hd',
+      }),
+    });
 
     if (!r.ok) {
       const e = await r.json().catch(() => ({}));
-      throw new Error(e?.error?.message || 'Gemini API HTTP ' + r.status);
+      throw new Error(e?.error?.message || 'OpenAI API HTTP ' + r.status);
     }
 
     const data = await r.json();
-    console.log('[generate] raw response keys:', JSON.stringify(data).substring(0, 300));
-
-    const parts = data?.candidates?.[0]?.content?.parts || [];
-    const imagePart = parts.find(p => p.inline_data?.data);
-
-    if (!imagePart) {
-      const textPart = parts.find(p => p.text);
-      throw new Error('No image returned. Model said: ' + (textPart?.text?.substring(0, 200) || 'nothing'));
-    }
-
-    const b64 = imagePart.inline_data.data;
-    const mimeType = imagePart.inline_data.mime_type || 'image/png';
+    const b64 = data?.data?.[0]?.b64_json;
+    if (!b64) throw new Error('DALL-E did not return an image');
 
     // Printify upload (optional)
     let printifyImageId = null, printifyImageUrl = null;
@@ -117,7 +104,7 @@ module.exports = async function handler(req, res) {
     }
 
     return res.status(200).json({
-      imageData: `data:${mimeType};base64,${b64}`,
+      imageData: `data:image/png;base64,${b64}`,
       printifyImageId,
       printifyImageUrl,
       portraitImageUrl: printifyImageUrl || null,

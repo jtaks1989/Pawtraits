@@ -20,17 +20,14 @@ module.exports = async function handler(req, res) {
   const ASTRIA_KEY = process.env.ASTRIA_API_KEY;
   if (!ASTRIA_KEY) return res.status(500).json({ error: 'ASTRIA_API_KEY not configured' });
 
-  // FaceID tune must be created against Realistic Vision — confirmed in Astria docs
-  const FACEID_BASE_TUNE_ID = '690204';
-  // Generation happens on Flux.1 dev — confirmed working in UI
-  const FLUX_TUNE_ID = '1504944';
+  // Realistic Vision v5.1 — correct base model for FaceID per Astria docs
+  const BASE_TUNE_ID = 690204;
 
   const isGroup = category === 'family' || category === 'couples';
   const isMultiSubject = isGroup || isMultiPhoto || (photoCount || 1) > 1;
   const effectiveGender = isGroup ? 'mixed'
     : (gender && gender !== 'auto') ? gender : null;
 
-  // Default to man if gender not specified — prevents feminine output
   const genderWord = effectiveGender === 'female' ? 'woman' : 'man';
 
   function buildPrompt(styleCore, cat, gen, isMulti, faceIdTuneId) {
@@ -67,7 +64,7 @@ module.exports = async function handler(req, res) {
   console.log('[generate] category:', category, '| gender:', effectiveGender, '| genderWord:', genderWord);
 
   try {
-    // ── STEP 1: Upload image to imgur to get a real HTTP URL ──────────────────
+    // ── STEP 1: Upload image to imgur ─────────────────────────────────────────
     console.log('[generate] uploading image to imgur...');
     const imgurRes = await fetch('https://api.imgur.com/3/image', {
       method: 'POST',
@@ -89,22 +86,23 @@ module.exports = async function handler(req, res) {
     if (!uploadedImageUrl) throw new Error('No image URL from imgur');
     console.log('[generate] image uploaded:', uploadedImageUrl);
 
-    // ── STEP 2: Create FaceID tune using Realistic Vision base (per Astria docs)
-    console.log('[generate] creating FaceID tune on Realistic Vision...');
-    const tuneForm = new FormData();
-    tuneForm.append('tune[title]', `pawtraits-${genderWord}-${Date.now()}`);
-    tuneForm.append('tune[name]', genderWord);
-    tuneForm.append('tune[model_type]', 'faceid');
-    tuneForm.append('tune[base_tune_id]', FACEID_BASE_TUNE_ID);
-    tuneForm.append('tune[image_urls][]', uploadedImageUrl);
-
+    // ── STEP 2: Create FaceID tune via JSON ───────────────────────────────────
+    console.log('[generate] creating FaceID tune...');
     const tuneRes = await fetch('https://api.astria.ai/tunes', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${ASTRIA_KEY}`,
-        ...tuneForm.getHeaders(),
+        'Content-Type': 'application/json',
       },
-      body: tuneForm,
+      body: JSON.stringify({
+        tune: {
+          title: `pawtraits-${genderWord}-${Date.now()}`,
+          name: genderWord,
+          model_type: 'faceid',
+          base_tune_id: BASE_TUNE_ID,
+          image_urls: [uploadedImageUrl],
+        },
+      }),
     });
 
     if (!tuneRes.ok) {
@@ -117,7 +115,7 @@ module.exports = async function handler(req, res) {
     const faceIdTuneId = tuneData.id;
     console.log('[generate] FaceID tune created, id:', faceIdTuneId);
 
-    // ── STEP 3: Generate portrait on Flux.1 dev ───────────────────────────────
+    // ── STEP 3: Generate portrait ─────────────────────────────────────────────
     const prompt = buildPrompt(stylePrompt, category, effectiveGender, isMultiSubject, faceIdTuneId);
     console.log('[generate] prompt:', prompt.substring(0, 200));
 
@@ -129,10 +127,9 @@ module.exports = async function handler(req, res) {
     promptForm.append('prompt[w]', '832');
     promptForm.append('prompt[h]', '1216');
     promptForm.append('prompt[steps]', '30');
-    promptForm.append('prompt[cfg_scale]', '4');
 
     const promptRes = await fetch(
-      `https://api.astria.ai/tunes/${FLUX_TUNE_ID}/prompts`,
+      `https://api.astria.ai/tunes/${BASE_TUNE_ID}/prompts`,
       {
         method: 'POST',
         headers: {
@@ -198,7 +195,7 @@ module.exports = async function handler(req, res) {
 
       await new Promise(r => setTimeout(r, 3000));
       const pollRes = await fetch(
-        `https://api.astria.ai/tunes/${FLUX_TUNE_ID}/prompts/${promptData.id}`,
+        `https://api.astria.ai/tunes/${BASE_TUNE_ID}/prompts/${promptData.id}`,
         { headers: { 'Authorization': `Bearer ${ASTRIA_KEY}` } }
       );
       promptData = await pollRes.json();

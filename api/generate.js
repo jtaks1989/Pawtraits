@@ -46,28 +46,12 @@ module.exports = async function handler(req, res) {
     return `a hyperrealistic classical oil painting portrait of a man wearing a dark navy wool tailcoat with velvet lapels and a crisp white linen cravat tied at the throat, dramatic rocky forest landscape background with atmospheric depth and moody dark sky, dramatic Rembrandt side lighting from upper left casting deep warm amber shadows, painted in the masterful style of Sir Thomas Lawrence and Joshua Reynolds, photorealistic face and skin, luminous warm skin tones, confident half-body three-quarter pose, deep forest green umber charcoal palette, museum-quality masterpiece, 8k`;
   }
 
-  function buildNegative(gen, isMulti) {
-    return [
-      'modern clothing', 'suit and tie', 'tuxedo', 'bow tie', 'contemporary fashion', 'casual clothes', 'jeans', 't-shirt',
-      'cartoon', 'anime', '3d render', 'digital art', 'illustration',
-      'ugly', 'deformed', 'distorted face', 'bad anatomy', 'extra limbs',
-      'blurry', 'low quality', 'jpeg artifacts',
-      'watermark', 'text', 'logo', 'signature',
-      'picture frame', 'ornate frame', 'decorative border',
-      'overexposed', 'washed out', 'flat lighting',
-      (!isMulti && gen === 'male') ? 'dress, feminine clothing, woman, female' : '',
-      (!isMulti && gen === 'female') ? 'masculine clothing, man, male' : '',
-    ].filter(Boolean).join(', ');
-  }
-
   const prompt = buildPrompt(stylePrompt, category, effectiveGender, isMultiSubject);
-  const negativePrompt = buildNegative(effectiveGender, isMultiSubject);
 
   console.log('[generate] category:', category, '| gender:', effectiveGender);
   console.log('[generate] prompt:', prompt.substring(0, 200));
 
   try {
-    // Send as JSON with base64 image — no form-data package needed
     const imageDataUrl = `data:${imageMimeType};base64,${imageBase64}`;
 
     const astriaRes = await fetch(
@@ -81,11 +65,10 @@ module.exports = async function handler(req, res) {
         body: JSON.stringify({
           prompt: {
             text: prompt,
-            negative_prompt: negativePrompt,
             num_images: 1,
             w: 832,
             h: 1216,
-            cfg_scale: 7,
+            cfg_scale: 4,
             steps: 30,
             face_swap: imageDataUrl,
           },

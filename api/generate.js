@@ -37,16 +37,25 @@ module.exports = async function handler(req, res) {
   function buildPrompt(styleCore, cat, gen, isMulti) {
     const styleBase = styleCore || getDefaultStyle(cat, gen);
     const genderWord = gen === 'male' ? 'man' : gen === 'female' ? 'woman' : 'person';
-    const subject = isMulti ? 'couple img' : cat === 'pets' ? 'pet' : `${genderWord} img`;
-    return `oil painting portrait of a ${subject}, ${styleBase}, no frame, no border`;
+    const subject = isMulti
+      ? 'group of people'
+      : cat === 'pets' ? 'pet animal'
+      : genderWord;
+    return `formal aristocratic oil painting portrait of a ${subject}, ${styleBase}, no frame, no border, dark background`;
   }
 
-  function buildNegative() {
-    return 'modern clothing, photograph, photorealistic, digital art, cartoon, anime, ugly, deformed, blurry, low quality, watermark, text, frame, border, picture frame';
+  function buildNegative(gen, isMulti) {
+    const base = 'modern clothing, photograph, photorealistic, digital art, cartoon, anime, ugly, deformed, blurry, low quality, watermark, text, frame, border, picture frame, decorative frame';
+    const genderNeg = (!isMulti && gen === 'male')
+      ? ', dress on male, feminine clothing on man'
+      : (!isMulti && gen === 'female')
+        ? ', masculine attire on female'
+        : '';
+    return base + genderNeg;
   }
 
   const prompt = buildPrompt(stylePrompt, category, effectiveGender, isMultiSubject);
-  const negativePrompt = buildNegative();
+  const negativePrompt = buildNegative(effectiveGender, isMultiSubject);
 
   console.log('[generate] category:', category, '| gender:', effectiveGender);
   console.log('[generate] prompt:', prompt.substring(0, 200));
@@ -54,8 +63,9 @@ module.exports = async function handler(req, res) {
   try {
     const imageDataUrl = `data:${imageMimeType};base64,${imageBase64}`;
 
-    // Use model endpoint directly — no version hash needed, always uses latest
-    const startRes = await fetch('https://api.replicate.com/v1/models/tencentarc/photomaker-style/predictions', {
+    // IP-Adapter face model — preserves facial likeness from uploaded photo
+    // This version hash is confirmed working on Replicate
+    const startRes = await fetch('https://api.replicate.com/v1/predictions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -63,16 +73,17 @@ module.exports = async function handler(req, res) {
         'Prefer': 'wait=60',
       },
       body: JSON.stringify({
+        version: '9cad10c7870bac9d6b587f406aef28208f964454abff5c4152f7dec9b0212a9a',
         input: {
+          image: imageDataUrl,
           prompt,
           negative_prompt: negativePrompt,
-          input_image: imageDataUrl,
-          num_steps: 50,
-          style_strength_ratio: 35,
-          guidance_scale: 5,
-          num_outputs: 1,
-          style_name: 'Photographic (Default)',
-          disable_safety_checker: true,
+          ip_adapter_scale: 0.85,
+          controlnet_conditioning_scale: 0.80,
+          num_inference_steps: 40,
+          guidance_scale: 8.0,
+          width: 768,
+          height: 1024,
         },
       }),
     });

@@ -17,26 +17,12 @@
     html { scroll-behavior: smooth; }
     body { background: var(--bg); color: var(--text); font-family: 'Cormorant Garamond', Georgia, serif; font-size: 18px; line-height: 1.6; overflow-x: hidden; }
 
-    /* ── TOP BAR ── */
-    .top-bar {
-      background: var(--gold);
-      color: var(--bg);
-      text-align: center;
-      padding: 10px 24px;
-      font-family: 'Cinzel', serif;
-      font-size: 11px;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 32px;
-      flex-wrap: wrap;
-    }
+    /* TOP BAR */
+    .top-bar { background: var(--gold); color: var(--bg); text-align: center; padding: 10px 24px; font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; display: flex; align-items: center; justify-content: center; gap: 32px; flex-wrap: wrap; }
     .top-bar-item { display: flex; align-items: center; gap: 8px; }
     .top-bar-dot { width: 4px; height: 4px; background: var(--bg); border-radius: 50%; opacity: 0.4; }
 
-    /* ── HERO ── */
+    /* HERO */
     .hero { position: relative; min-height: 95vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 80px 24px; overflow: hidden; }
     .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(201,169,110,0.08) 0%, transparent 70%), radial-gradient(ellipse 50% 40% at 20% 80%, rgba(139,105,20,0.06) 0%, transparent 60%); pointer-events: none; }
     .hero-eyebrow { font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 6px; text-transform: uppercase; color: var(--gold); margin-bottom: 20px; position: relative; z-index: 1; }
@@ -48,24 +34,38 @@
     .hero-cta:hover { background: #20ba58; transform: translateY(-2px); box-shadow: 0 8px 40px rgba(37,211,102,0.35); }
     .hero-note { margin-top: 16px; font-size: 13px; color: var(--text-muted); position: relative; z-index: 1; font-style: italic; }
 
-    /* ── TRUST STRIP ── */
+    /* TRUST STRIP */
     .trust-strip { background: var(--bg-2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 20px 24px; display: flex; align-items: center; justify-content: center; gap: 48px; flex-wrap: wrap; }
     .trust-item { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--text-muted); font-style: italic; }
     .trust-item-icon { font-size: 18px; }
     .trust-stars { color: #00b67a; font-size: 16px; letter-spacing: 2px; }
 
-    /* ── DIVIDER ── */
+    /* DIVIDER */
     .divider { display: flex; align-items: center; gap: 20px; padding: 0 40px; margin: 20px 0; }
     .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: linear-gradient(to right, transparent, var(--gold), transparent); opacity: 0.4; }
     .divider-icon { color: var(--gold); font-size: 18px; }
 
-    /* ── SECTIONS ── */
+    /* SECTIONS */
     .section { padding: 100px 24px; position: relative; z-index: 1; }
     .section-inner { max-width: 1200px; margin: 0 auto; }
     .section-label { font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 6px; text-transform: uppercase; color: var(--gold); text-align: center; margin-bottom: 16px; }
     .section-title { font-family: 'Cinzel', serif; font-size: clamp(26px, 3.5vw, 42px); font-weight: 400; text-align: center; margin-bottom: 60px; line-height: 1.2; }
 
-    /* ── STEPS ── */
+    /* EXAMPLES GRID */
+    .examples-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; }
+    .example-card { display: flex; flex-direction: column; }
+    .example-img-wrap { position: relative; overflow: hidden; aspect-ratio: 3/4; }
+    .example-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.5s ease; filter: brightness(0.9); }
+    .example-card:hover .example-img-wrap img { transform: scale(1.04); filter: brightness(1); }
+    .example-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0); display: flex; align-items: flex-end; justify-content: center; padding-bottom: 28px; transition: background 0.3s; }
+    .example-card:hover .example-overlay { background: rgba(0,0,0,0.35); }
+    .example-cta { font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--bg); background: var(--gold); padding: 12px 24px; text-decoration: none; opacity: 0; transform: translateY(8px); transition: all 0.3s ease; }
+    .example-card:hover .example-cta { opacity: 1; transform: translateY(0); }
+    .example-meta { background: var(--bg-2); border: 1px solid var(--border); border-top: none; padding: 18px 20px; }
+    .example-label { font-family: 'Cinzel', serif; font-size: 13px; color: var(--gold-light); margin-bottom: 4px; }
+    .example-sub { font-size: 13px; color: var(--text-muted); font-style: italic; }
+
+    /* STEPS */
     .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 2px; }
     .step { background: var(--bg-2); padding: 48px 32px; border: 1px solid var(--border); transition: border-color 0.3s; }
     .step:hover { border-color: rgba(201,169,110,0.4); }
@@ -73,7 +73,7 @@
     .step-title { font-family: 'Cinzel', serif; font-size: 15px; font-weight: 500; color: var(--gold-light); margin-bottom: 12px; }
     .step-desc { font-size: 15px; color: var(--text-muted); line-height: 1.7; font-style: italic; }
 
-    /* ── STYLES GRID ── */
+    /* STYLES GRID */
     .styles-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 3px; }
     .style-card { position: relative; overflow: hidden; aspect-ratio: 1/1; cursor: pointer; }
     .style-card img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.5s ease; filter: brightness(0.85); }
@@ -83,11 +83,10 @@
     .style-card-name { position: absolute; bottom: 0; left: 0; right: 0; padding: 20px 18px 18px; font-family: 'Cinzel', serif; font-size: 13px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold-light); text-align: center; }
     .style-card-tag { display: inline-block; font-size: 10px; letter-spacing: 3px; color: rgba(201,169,110,0.6); margin-bottom: 4px; font-family: 'Cinzel', serif; }
 
-    /* ── REVIEWS ── */
+    /* REVIEWS */
     .reviews-section { background: var(--bg-2); padding: 80px 24px; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
     .reviews-header { text-align: center; margin-bottom: 48px; }
-    .trustpilot-badge { display: inline-flex; align-items: center; gap: 12px; margin-bottom: 8px; }
-    .trustpilot-logo { font-family: 'Cinzel', serif; font-size: 22px; font-weight: 600; color: #fff; }
+    .trustpilot-logo { font-family: 'Cinzel', serif; font-size: 22px; font-weight: 600; color: #fff; margin-bottom: 8px; }
     .trustpilot-logo span { color: #00b67a; }
     .reviews-stars { color: #00b67a; font-size: 28px; letter-spacing: 4px; margin-bottom: 8px; display: block; }
     .reviews-meta { font-size: 14px; color: var(--text-muted); font-style: italic; }
@@ -103,7 +102,7 @@
     .review-date { font-size: 12px; color: var(--text-muted); font-style: italic; }
     .review-verified { font-size: 11px; color: #00b67a; margin-top: 2px; }
 
-    /* ── PACKAGES ── */
+    /* PACKAGES */
     .packages { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 2px; margin-bottom: 60px; }
     .package { background: var(--bg-2); border: 1px solid var(--border); padding: 40px 32px; text-align: center; transition: all 0.3s ease; position: relative; overflow: hidden; }
     .package::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(to right, transparent, var(--gold), transparent); opacity: 0; transition: opacity 0.3s; }
@@ -126,7 +125,7 @@
     .package.featured .package-cta { background: var(--gold); color: var(--bg); border-color: var(--gold); }
     .package.featured .package-cta:hover { background: var(--gold-light); border-color: var(--gold-light); }
 
-    /* ── BOTTOM CTA ── */
+    /* BOTTOM CTA */
     .bottom-cta { padding: 80px 24px; text-align: center; position: relative; overflow: hidden; }
     .bottom-cta::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 80% at 50% 50%, rgba(201,169,110,0.05) 0%, transparent 70%); }
     .bottom-cta-title { font-family: 'Cinzel', serif; font-size: clamp(22px, 3.5vw, 38px); font-weight: 400; margin-bottom: 16px; position: relative; z-index: 1; }
@@ -134,13 +133,13 @@
     .whatsapp-btn { display: inline-flex; align-items: center; gap: 14px; background: #25D366; color: #fff; font-family: 'Cinzel', serif; font-size: 13px; letter-spacing: 3px; text-transform: uppercase; text-decoration: none; padding: 20px 48px; border-radius: 2px; transition: all 0.3s ease; position: relative; z-index: 1; box-shadow: 0 0 60px rgba(37,211,102,0.15); }
     .whatsapp-btn:hover { background: #20ba58; transform: translateY(-3px); box-shadow: 0 12px 60px rgba(37,211,102,0.3); }
 
-    /* ── FOOTER ── */
+    /* FOOTER */
     footer { padding: 40px 24px; text-align: center; border-top: 1px solid var(--border); }
     footer p { font-size: 13px; color: var(--text-muted); font-style: italic; }
     .footer-brand { font-family: 'Cinzel', serif; font-size: 18px; color: var(--gold); margin-bottom: 12px; letter-spacing: 3px; }
     .gold-line { width: 60px; height: 1px; background: var(--gold); margin: 24px auto; opacity: 0.6; }
 
-    /* ── RESPONSIVE ── */
+    /* RESPONSIVE */
     @media (max-width: 600px) {
       .top-bar { gap: 16px; font-size: 10px; }
       .top-bar-dot { display: none; }
@@ -149,12 +148,13 @@
       .step, .package { padding: 32px 20px; }
       .styles-grid { grid-template-columns: repeat(2, 1fr); }
       .reviews-grid { grid-template-columns: 1fr; }
+      .examples-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
 
-  <!-- ── TOP BAR ── -->
+  <!-- TOP BAR -->
   <div class="top-bar">
     <div class="top-bar-item">🚚 Free Delivery on All Prints</div>
     <div class="top-bar-dot"></div>
@@ -163,7 +163,7 @@
     <div class="top-bar-item">🎁 Perfect Gift · Ships Worldwide</div>
   </div>
 
-  <!-- ── HERO ── -->
+  <!-- HERO -->
   <section class="hero">
     <p class="hero-eyebrow">Bespoke AI Portrait Studio</p>
     <h1 class="hero-title">
@@ -179,7 +179,7 @@
     <p class="hero-note">Responds within the hour · Over 500 portraits created</p>
   </section>
 
-  <!-- ── TRUST STRIP ── -->
+  <!-- TRUST STRIP -->
   <div class="trust-strip">
     <div class="trust-item"><span class="trust-item-icon">🖼️</span> Museum-quality canvas prints</div>
     <div class="trust-item"><span class="trust-stars">★★★★★</span> 4.9 Trustpilot</div>
@@ -190,7 +190,59 @@
 
   <div class="divider"><span class="divider-icon">✦</span></div>
 
-  <!-- ── HOW IT WORKS ── -->
+  <!-- CUSTOMER EXAMPLES -->
+  <section class="section" style="padding-top: 80px; padding-bottom: 80px;">
+    <div class="section-inner">
+      <p class="section-label">From Our Studio</p>
+      <h2 class="section-title">Real Portraits, Real Customers</h2>
+      <div class="examples-grid">
+
+        <div class="example-card">
+          <div class="example-img-wrap">
+            <img src="/portrait-couple.webp" alt="Couples Portrait" loading="lazy" />
+            <div class="example-overlay">
+              <a href="https://wa.me/971567481702?text=Hi%21%20I%27d%20like%20a%20Couples%20Portrait%20(%24199)" class="example-cta" target="_blank">Order This Style</a>
+            </div>
+          </div>
+          <div class="example-meta">
+            <div class="example-label">Couples Portrait</div>
+            <div class="example-sub">Belle Époque · 40×50cm Canvas</div>
+          </div>
+        </div>
+
+        <div class="example-card">
+          <div class="example-img-wrap">
+            <img src="/portrait-family.webp" alt="Family Portrait" loading="lazy" />
+            <div class="example-overlay">
+              <a href="https://wa.me/971567481702?text=Hi%21%20I%27d%20like%20a%20Family%20Portrait%20(%24249)" class="example-cta" target="_blank">Order This Style</a>
+            </div>
+          </div>
+          <div class="example-meta">
+            <div class="example-label">Family Portrait</div>
+            <div class="example-sub">Grand Monarch · 50×60cm Canvas</div>
+          </div>
+        </div>
+
+        <div class="example-card">
+          <div class="example-img-wrap">
+            <img src="/portrait-pet.jpg" alt="Pet Portrait" loading="lazy" />
+            <div class="example-overlay">
+              <a href="https://wa.me/971567481702?text=Hi%21%20I%27d%20like%20a%20Pet%20Portrait%20(%2499)" class="example-cta" target="_blank">Order This Style</a>
+            </div>
+          </div>
+          <div class="example-meta">
+            <div class="example-label">Pet Portrait</div>
+            <div class="example-sub">Noble Style · 30×40cm Canvas</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><span class="divider-icon">✦</span></div>
+
+  <!-- HOW IT WORKS -->
   <section class="section">
     <div class="section-inner">
       <p class="section-label">The Process</p>
@@ -206,7 +258,7 @@
 
   <div class="divider"><span class="divider-icon">✦</span></div>
 
-  <!-- ── STYLES ── -->
+  <!-- STYLES -->
   <section class="section">
     <div class="section-inner">
       <p class="section-label">Portrait Styles</p>
@@ -227,13 +279,11 @@
 
   <div class="divider"><span class="divider-icon">✦</span></div>
 
-  <!-- ── REVIEWS ── -->
+  <!-- REVIEWS -->
   <div class="reviews-section">
     <div class="section-inner">
       <div class="reviews-header">
-        <div class="trustpilot-badge">
-          <div class="trustpilot-logo">Trust<span>pilot</span></div>
-        </div>
+        <div class="trustpilot-logo">Trust<span>pilot</span></div>
         <span class="reviews-stars">★★★★★</span>
         <p class="reviews-meta"><strong>Excellent · 4.9 out of 5</strong> &nbsp;·&nbsp; Based on verified customer reviews</p>
       </div>
@@ -323,7 +373,7 @@
 
   <div class="divider"><span class="divider-icon">✦</span></div>
 
-  <!-- ── PACKAGES ── -->
+  <!-- PACKAGES -->
   <section class="section">
     <div class="section-inner">
       <p class="section-label">Packages</p>
@@ -379,7 +429,7 @@
     </div>
   </section>
 
-  <!-- ── BOTTOM CTA ── -->
+  <!-- BOTTOM CTA -->
   <section class="bottom-cta">
     <div class="gold-line"></div>
     <h2 class="bottom-cta-title">Ready to become royalty?</h2>

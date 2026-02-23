@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Complete Your Order — Pawtraits</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Cinzel:wght@400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://js.stripe.com/v3/"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --gold: #c9a96e; --gold-light: #e8d5a3;
+      --bg: #0d0b08; --bg-2: #141210; --bg-3: #1c1915;
+      --text: #e8dcc8; --text-muted: #8a7d68;
+      --border: rgba(201,169,110,0.2); --error: #e07070;
+    }
+    body { background: var(--bg); color: var(--text); font-family: 'Cormorant Garamond', Georgia, serif; font-size: 17px; line-height: 1.6; min-height: 100vh; }
+    .page { max-width: 1000px; margin: 0 auto; padding: 60px 24px; }
+    .back-link { display: inline-flex; align-items: center; gap: 8px; color: var(--text-muted); text-decoration: none; font-size: 14px; font-family: 'Cinzel', serif; letter-spacing: 2px; margin-bottom: 48px; transition: color 0.2s; }
+    .back-link:hover { color: var(--gold); }
+    .page-header { text-align: center; margin-bottom: 60px; }
+    .page-eyebrow { font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 6px; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; }
+    .page-title { font-family: 'Cinzel', serif; font-size: clamp(28px, 4vw, 44px); font-weight: 400; margin-bottom: 12px; }
+    .page-sub { font-size: 16px; color: var(--text-muted); font-style: italic; }
+    .gold-line { width: 60px; height: 1px; background: var(--gold); margin: 24px auto; opacity: 0.5; }
+    .layout { display: grid; grid-template-columns: 1fr 360px; gap: 32px; align-items: start; }
+    @media (max-width: 720px) { .layout { grid-template-columns: 1fr; } .order-summary { order: -1; } }
+    .form-section { background: var(--bg-2); border: 1px solid var(--border); padding: 36px; margin-bottom: 20px; }
+    .form-section-title { font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: 24px; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
+    .field { margin-bottom: 18px; }
+    .field label { display: block; font-size: 11px; font-family: 'Cinzel', serif; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 7px; }
+    .field input, .field select, .field textarea { width: 100%; background: var(--bg-3); border: 1px solid var(--border); color: var(--text); font-family: 'Cormorant Garamond', serif; font-size: 16px; padding: 11px 14px; outline: none; transition: border-color 0.2s; -webkit-appearance: none; appearance: none; }
+    .field input:focus, .field select:focus, .field textarea:focus { border-color: rgba(201,169,110,0.6); }
+    .field select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238a7d68' stroke-width='1.5'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; cursor: pointer; }
+    .field select option { background: #1c1915; }
+    .field textarea { resize: vertical; min-height: 80px; }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .field-error { color: var(--error); font-size: 12px; margin-top: 5px; font-style: italic; display: none; }
+    .field.has-error input, .field.has-error select { border-color: var(--error); }
+    .field.has-error .field-error { display: block; }
+    .package-options { display: flex; flex-direction: column; gap: 8px; }
+    .package-option { display: flex; align-items: center; gap: 14px; background: var(--bg-3); border: 1px solid var(--border); padding: 14px 18px; cursor: pointer; transition: all 0.2s; }
+    .package-option:hover { border-color: rgba(201,169,110,0.4); }
+    .package-option.selected { border-color: var(--gold); background: rgba(201,169,110,0.06); }
+    .package-option input[type="radio"] { display: none; }
+    .package-option-dot { width: 14px; height: 14px; border: 1px solid var(--text-muted); border-radius: 50%; flex-shrink: 0; position: relative; transition: all 0.2s; }
+    .package-option.selected .package-option-dot { border-color: var(--gold); background: var(--gold); }
+    .package-option-dot::after { content: ''; position: absolute; inset: 3px; background: var(--bg); border-radius: 50%; }
+    .package-option-name { font-family: 'Cinzel', serif; font-size: 12px; flex: 1; color: var(--text); }
+    .package-option-price { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 300; color: var(--gold-light); }
+    .order-summary { background: var(--bg-2); border: 1px solid var(--border); padding: 32px; position: sticky; top: 24px; }
+    .summary-title { font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: 22px; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
+    .summary-row { display: flex; justify-content: space-between; align-items: baseline; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 15px; }
+    .summary-row-label { color: var(--text-muted); font-style: italic; }
+    .summary-row-value { font-family: 'Cinzel', serif; font-size: 12px; text-align: right; max-width: 55%; }
+    .summary-total { display: flex; justify-content: space-between; align-items: baseline; padding: 18px 0 0; margin-top: 6px; border-top: 1px solid var(--border); }
+    .summary-total-label { font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); }
+    .summary-total-price { font-family: 'Cormorant Garamond', serif; font-size: 36px; font-weight: 300; color: var(--gold-light); }
+    .summary-note { font-size: 12px; color: var(--text-muted); font-style: italic; margin-top: 18px; line-height: 1.7; padding-top: 16px; border-top: 1px solid var(--border); }
+    .card-element-wrapper { background: var(--bg-3); border: 1px solid var(--border); padding: 13px 14px; transition: border-color 0.2s; }
+    .card-element-wrapper.focused { border-color: rgba(201,169,110,0.6); }
+    .submit-btn { width: 100%; background: var(--gold); color: var(--bg); font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: 3px; text-transform: uppercase; border: none; padding: 18px 24px; cursor: pointer; transition: all 0.3s ease; margin-top: 24px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+    .submit-btn:hover:not(:disabled) { background: var(--gold-light); }
+    .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .spinner { width: 15px; height: 15px; border: 2px solid rgba(0,0,0,0.25); border-top-color: var(--bg); border-radius: 50%; animation: spin 0.8s linear infinite; display: none; }
+    .submit-btn.loading .spinner { display: block; }
+    .submit-btn.loading .btn-text { display: none; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .global-error { background: rgba(224,112,112,0.08); border: 1px solid rgba(224,112,112,0.3); color: var(--error); padding: 12px 14px; font-size: 14px; font-style: italic; margin-top: 14px; display: none; }
+    .global-error.visible { display: block; }
+    .secure-badge { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 14px; font-size: 12px; color: var(--text-muted); font-style: italic; }
+    .success-state { display: none; text-align: center; padding: 80px 24px; }
+    .success-state.visible { display: block; }
+    .success-icon { font-size: 64px; margin-bottom: 24px; }
+    .success-title { font-family: 'Cinzel', serif; font-size: 32px; font-weight: 400; color: var(--gold-light); margin-bottom: 16px; }
+    .success-sub { font-size: 18px; color: var(--text-muted); font-style: italic; max-width: 480px; margin: 0 auto 32px; line-height: 1.8; }
+    .success-whatsapp { display: inline-flex; align-items: center; gap: 10px; background: #25D366; color: #fff; font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; padding: 16px 32px; border-radius: 2px; transition: all 0.3s; }
+    .success-whatsapp:hover { background: #20ba58; }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <a href="/" class="back-link">← Back to Pawtraits</a>
+
+    <div class="page-header">
+      <p class="page-eyebrow">Secure Checkout</p>
+      <h1 class="page-title">Complete Your Order</h1>
+      <p class="page-sub">Your portrait awaits. Fill in your details below.</p>
+      <div class="gold-line"></div>
+    </div>
+
+    <div class="success-state" id="successState">
+      <div class="success-icon">♛</div>
+      <div class="success-title">Order Confirmed</div>
+      <p class="success-sub">Thank you for your order. We will send your portrait preview via WhatsApp within 24 hours. Once you approve it, we will print and dispatch your canvas.</p>
+      <a href="https://wa.me/971567481702" class="success-whatsapp" target="_blank">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Message Us on WhatsApp
+      </a>
+    </div>
+
+    <div class="layout" id="checkoutLayout">
+      <form id="orderForm">
+
+        <div class="form-section">
+          <div class="form-section-title">Select Your Package</div>
+          <div class="package-options" id="packageOptions">
+            <label class="package-option selected">
+              <input type="radio" name="package" value="solo_digital" data-price="79" data-name="Solo Portrait (Digital)" checked />
+              <div class="package-option-dot"></div>
+              <span class="package-option-name">Solo Portrait — Digital</span>
+              <span class="package-option-price">$79</span>
+            </label>
+            <label class="package-option">
+              <input type="radio" name="package" value="solo_canvas" data-price="149" data-name="Solo Canvas Print (30×40cm)" />
+              <div class="package-option-dot"></div>
+              <span class="package-option-name">Solo Canvas Print — 30×40cm</span>
+              <span class="package-option-price">$149</span>
+            </label>
+            <label class="package-option">
+              <input type="radio" name="package" value="couples_canvas" data-price="199" data-name="Couples Canvas Print (40×50cm)" />
+              <div class="package-option-dot"></div>
+              <span class="package-option-name">Couples Canvas Print — 40×50cm</span>
+              <span class="package-option-price">$199</span>
+            </label>
+            <label class="package-option">
+              <input type="radio" name="package" value="family_canvas" data-price="249" data-name="Family Canvas Print (50×60cm)" />
+              <div class="package-option-dot"></div>
+              <span class="package-option-name">Family Canvas Print — 50×60cm</span>
+              <span class="package-option-price">$249</span>
+            </label>
+            <label class="package-option">
+              <input type="radio" name="package" value="pet_canvas" data-price="99" data-name="Pet Canvas Print (30×40cm)" />
+              <div class="package-option-dot"></div>
+              <span class="package-option-name">Pet Canvas Print — 30×40cm</span>
+              <span class="package-option-price">$99</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-title">Contact Details</div>
+          <div class="field-row">
+            <div class="field" id="field-firstName">
+              <label>First Name</label>
+              <input type="text" id="firstName" placeholder="James" autocomplete="given-name" />
+              <div class="field-error">Required</div>
+            </div>
+            <div class="field" id="field-lastName">
+              <label>Last Name</label>
+              <input type="text" id="lastName" placeholder="Thornton" autocomplete="family-name" />
+              <div class="field-error">Required</div>
+            </div>
+          </div>
+          <div class="field" id="field-email">
+            <label>Email Address</label>
+            <input type="email" id="email" placeholder="james@example.com" autocomplete="email" />
+            <div class="field-error">Please enter a valid email</div>
+          </div>
+          <div class="field" id="field-phone">
+            <label>WhatsApp Number</label>
+            <input type="tel" id="phone" placeholder="+971 50 000 0000" autocomplete="tel" />
+            <div class="field-error">Required — we will send your preview here</div>
+          </div>
+        </div>
+
+        <div class="form-section" id="addressSection">
+          <div class="form-section-title">Delivery Address</div>
+          <div class="field" id="field-address1">
+            <label>Address Line 1</label>
+            <input type="text" id="address1" placeholder="Villa 12, Street Name" autocomplete="address-line1" />
+            <div class="field-error">Required</div>
+          </div>
+          <div class="field">
+            <label>Address Line 2 <span style="opacity:0.5;font-family:serif;text-transform:none;letter-spacing:0">(optional)</span></label>
+            <input type="text" id="address2" placeholder="Building, Apartment, Floor" autocomplete="address-line2" />
+          </div>
+          <div class="field-row">
+            <div class="field" id="field-city">
+              <label>City</label>
+              <input type="text" id="city" placeholder="Dubai" autocomplete="address-level2" />
+              <div class="field-error">Required</div>
+            </div>
+            <div class="field" id="field-country">
+              <label>Country</label>
+              <select id="country" autocomplete="country">
+                <option value="">Select country</option>
+                <option value="AE" selected>United Arab Emirates</option>
+                <option value="SA">Saudi Arabia</option>
+                <option value="KW">Kuwait</option>
+                <option value="QA">Qatar</option>
+                <option value="BH">Bahrain</option>
+                <option value="OM">Oman</option>
+                <option value="GB">United Kingdom</option>
+                <option value="US">United States</option>
+                <option value="CA">Canada</option>
+                <option value="AU">Australia</option>
+                <option value="FR">France</option>
+                <option value="DE">Germany</option>
+                <option value="IT">Italy</option>
+                <option value="ES">Spain</option>
+                <option value="OTHER">Other</option>
+              </select>
+              <div class="field-error">Required</div>
+            </div>
+          </div>
+          <div class="field">
+            <label>Delivery Notes <span style="opacity:0.5;font-family:serif;text-transform:none;letter-spacing:0">(optional)</span></label>
+            <textarea id="notes" placeholder="Any special delivery instructions..."></textarea>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-title">Payment</div>
+          <div class="field">
+            <label>Card Details</label>
+            <div class="card-element-wrapper" id="cardWrapper">
+              <div id="cardElement"></div>
+            </div>
+          </div>
+          <div class="global-error" id="globalError"></div>
+          <button type="submit" class="submit-btn" id="submitBtn">
+            <div class="spinner"></div>
+            <span class="btn-text">Confirm &amp; Pay</span>
+          </button>
+          <div class="secure-badge">
+            <svg width="11" height="13" viewBox="0 0 12 14" fill="none"><path d="M6 0L1 2v4c0 3.5 2.5 5.7 5 6.5 2.5-.8 5-3 5-6.5V2L6 0z" fill="rgba(201,169,110,0.5)"/></svg>
+            Secured by Stripe · SSL encrypted
+          </div>
+        </div>
+
+      </form>
+
+      <div class="order-summary">
+        <div class="summary-title">Order Summary</div>
+        <div class="summary-row">
+          <span class="summary-row-label">Package</span>
+          <span class="summary-row-value" id="summaryPackage">Solo Portrait (Digital)</span>
+        </div>
+        <div class="summary-row">
+          <span class="summary-row-label">Delivery</span>
+          <span class="summary-row-value" id="summaryDelivery">Digital download</span>
+        </div>
+        <div class="summary-row">
+          <span class="summary-row-label">Preview</span>
+          <span class="summary-row-value">Via WhatsApp</span>
+        </div>
+        <div class="summary-row">
+          <span class="summary-row-label">Turnaround</span>
+          <span class="summary-row-value">Within 24 hours</span>
+        </div>
+        <div class="summary-total">
+          <span class="summary-total-label">Total</span>
+          <span class="summary-total-price" id="summaryTotal">$79</span>
+        </div>
+        <p class="summary-note">You will receive a watermarked preview on WhatsApp before we dispatch your print. Payment confirms your order and secures your spot.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const STRIPE_KEY = 'YOUR_STRIPE_PUBLISHABLE_KEY';
+    const stripe = Stripe(STRIPE_KEY);
+    const elements = stripe.elements({
+      appearance: {
+        theme: 'night',
+        variables: {
+          colorPrimary: '#c9a96e',
+          colorBackground: '#1c1915',
+          colorText: '#e8dcc8',
+          colorDanger: '#e07070',
+          fontFamily: 'Cormorant Garamond, Georgia, serif',
+          borderRadius: '0px',
+        }
+      }
+    });
+    const cardElement = elements.create('card');
+    cardElement.mount('#cardElement');
+    cardElement.on('focus', () => document.getElementById('cardWrapper').classList.add('focused'));
+    cardElement.on('blur', () => document.getElementById('cardWrapper').classList.remove('focused'));
+
+    const packages = {
+      solo_digital:   { price: 79,  name: 'Solo Portrait (Digital)',     delivery: 'Digital download' },
+      solo_canvas:    { price: 149, name: 'Solo Canvas (30×40cm)',        delivery: 'Printed & shipped' },
+      couples_canvas: { price: 199, name: 'Couples Canvas (40×50cm)',     delivery: 'Printed & shipped' },
+      family_canvas:  { price: 249, name: 'Family Canvas (50×60cm)',      delivery: 'Printed & shipped' },
+      pet_canvas:     { price: 99,  name: 'Pet Canvas (30×40cm)',         delivery: 'Printed & shipped' },
+    };
+
+    let selectedPackage = 'solo_digital';
+
+    function updateSummary(pkg) {
+      const p = packages[pkg];
+      document.getElementById('summaryPackage').textContent = p.name;
+      document.getElementById('summaryDelivery').textContent = p.delivery;
+      document.getElementById('summaryTotal').textContent = '$' + p.price;
+      document.getElementById('addressSection').style.display = pkg === 'solo_digital' ? 'none' : 'block';
+    }
+
+    document.getElementById('packageOptions').addEventListener('change', function(e) {
+      if (e.target.type === 'radio') {
+        selectedPackage = e.target.value;
+        document.querySelectorAll('.package-option').forEach(el => el.classList.remove('selected'));
+        e.target.closest('.package-option').classList.add('selected');
+        updateSummary(selectedPackage);
+      }
+    });
+
+    // Pre-select from URL param e.g. /order.html?package=solo_canvas
+    const urlPkg = new URLSearchParams(window.location.search).get('package');
+    if (urlPkg && packages[urlPkg]) {
+      const r = document.querySelector(`input[value="${urlPkg}"]`);
+      if (r) { r.checked = true; selectedPackage = urlPkg; document.querySelectorAll('.package-option').forEach(el => el.classList.remove('selected')); r.closest('.package-option').classList.add('selected'); }
+    }
+    updateSummary(selectedPackage);
+
+    function validate() {
+      let valid = true;
+      const required = ['firstName', 'lastName', 'email', 'phone'];
+      if (selectedPackage !== 'solo_digital') required.push('address1', 'city', 'country');
+      required.forEach(id => {
+        const field = document.getElementById('field-' + id);
+        const input = document.getElementById(id);
+        if (!field || !input) return;
+        let ok = input.value.trim().length > 0;
+        if (id === 'email') ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value.trim());
+        field.classList.toggle('has-error', !ok);
+        if (!ok) valid = false;
+      });
+      return valid;
+    }
+
+    document.getElementById('orderForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      if (!validate()) return;
+      const btn = document.getElementById('submitBtn');
+      const errorEl = document.getElementById('globalError');
+      btn.classList.add('loading');
+      btn.disabled = true;
+      errorEl.classList.remove('visible');
+      try {
+        const pkg = packages[selectedPackage];
+        const intentRes = await fetch('/api/checkout', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            package: selectedPackage,
+            packageName: pkg.name,
+            amount: pkg.price * 100,
+            currency: 'usd',
+            customerName: document.getElementById('firstName').value.trim() + ' ' + document.getElementById('lastName').value.trim(),
+            email: document.getElementById('email').value.trim(),
+            phone: document.getElementById('phone').value.trim(),
+            address: selectedPackage !== 'solo_digital' ? {
+              line1: document.getElementById('address1').value.trim(),
+              line2: document.getElementById('address2').value.trim(),
+              city: document.getElementById('city').value.trim(),
+              country: document.getElementById('country').value,
+              notes: document.getElementById('notes').value.trim(),
+            } : null,
+          }),
+        });
+        const intentData = await intentRes.json();
+        if (!intentRes.ok) throw new Error(intentData.error || 'Payment setup failed');
+        const { error } = await stripe.confirmCardPayment(intentData.clientSecret, {
+          payment_method: {
+            card: cardElement,
+            billing_details: {
+              name: document.getElementById('firstName').value.trim() + ' ' + document.getElementById('lastName').value.trim(),
+              email: document.getElementById('email').value.trim(),
+              phone: document.getElementById('phone').value.trim(),
+            }
+          }
+        });
+        if (error) throw new Error(error.message);
+        document.getElementById('checkoutLayout').style.display = 'none';
+        document.getElementById('successState').classList.add('visible');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } catch (err) {
+        errorEl.textContent = err.message;
+        errorEl.classList.add('visible');
+        btn.classList.remove('loading');
+        btn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

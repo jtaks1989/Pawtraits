@@ -23,27 +23,14 @@ module.exports = async function handler(req, res) {
   const effectiveGender = isGroup ? 'mixed'
     : (gender && gender !== 'auto') ? gender : null;
 
-  // Build subject description from category/gender (no vision step needed)
   function buildDescription(cat, gen, isMulti) {
-    if (isMulti) return 'a man and a woman together';
-    if (cat === 'pets') return 'a beloved pet animal';
-    if (cat === 'children') return 'a young child';
+    if (isMulti || cat === 'couples') return 'a couple, a man and a woman side by side';
     if (cat === 'family') return 'a family group';
-    if (cat === 'couples') return 'a couple, a man and a woman';
+    if (cat === 'pets') return 'a noble dog';
+    if (cat === 'children') return 'a young child';
     if (gen === 'male') return 'a man';
     if (gen === 'female') return 'a woman';
     return 'a person';
-  }
-
-  // Build final Imagen 3 prompt
-  function buildPortraitPrompt(description, styleCore, cat, gen, isMulti) {
-    const styleBase = styleCore || getDefaultStyle(cat, gen);
-    const subjectPrefix = isMulti
-      ? `Formal aristocratic group oil painting portrait of ${description}.`
-      : cat === 'pets'
-        ? `Regal aristocratic oil painting portrait of ${description}.`
-        : `Formal aristocratic oil painting portrait of ${description}.`;
-    return `${subjectPrefix} ${styleBase}. No picture frame, no border around the image. Museum-quality oil painting, rich painterly brushwork, dramatic lighting.`;
   }
 
   function getDefaultStyle(cat, gen) {
@@ -57,45 +44,59 @@ module.exports = async function handler(req, res) {
     return styles[cat] || styles.self;
   }
 
-  // Generate portrait with Imagen 3
-  async function generatePortrait(fullPrompt) {
-    const r = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${GEMINI_KEY}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          instances: [{ prompt: fullPrompt }],
-          parameters: {
-            sampleCount: 1,
-            aspectRatio: '3:4',
-            safetyFilterLevel: 'block_few',
-            personGeneration: 'allow_adult',
-          },
-        }),
-      }
-    );
-    if (!r.ok) {
-      const e = await r.json().catch(() => ({}));
-      throw new Error(e?.error?.message || 'Imagen API HTTP ' + r.status);
-    }
-    const d = await r.json();
-    const b64 = d?.predictions?.[0]?.bytesBase64Encoded;
-    if (!b64) {
-      console.error('Imagen response:', JSON.stringify(d).substring(0, 500));
-      throw new Error('Imagen did not return an image');
-    }
-    return b64;
+  function buildPrompt(description, styleCore, cat, gen, isMulti) {
+    const styleBase = styleCore || getDefaultStyle(cat, gen);
+    const prefix = isMulti || cat === 'couples' || cat === 'family'
+      ? `Formal aristocratic group oil painting portrait of ${description}.`
+      : cat === 'pets'
+        ? `Regal aristocratic oil painting portrait of ${description}.`
+        : `Formal aristocratic oil painting portrait of ${description}.`;
+    return `${prefix} ${styleBase}. No picture frame, no border. Museum-quality oil painting, rich painterly brushwork, dramatic lighting, dark background.`;
   }
 
   console.log('[generate] category:', category, '| gender:', effectiveGender, '| multi:', isMultiSubject);
 
   try {
     const description = buildDescription(category, effectiveGender, isMultiSubject);
-    const fullPrompt = buildPortraitPrompt(description, stylePrompt, category, effectiveGender, isMultiSubject);
+    const fullPrompt = buildPrompt(description, stylePrompt, category, effectiveGender, isMultiSubject);
     console.log('[generate] prompt:', fullPrompt.substring(0, 200));
 
-    const b64 = await generatePortrait(fullPrompt);
+    // gemini-2.0-flash-exp-image-generation with TEXT-only input = pure text-to-image
+    // Works on standard Gemini API key, no Vertex AI / Cloud needed
+    const r = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp-image-generation:generateContent?key=${GEMINI_KEY}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{
+            parts: [{ text: fullPrompt }],
+          }],
+          generationConfig: {
+            responseModalities: ['TEXT', 'IMAGE'],
+          },
+        }),
+      }
+    );
+
+    if (!r.ok) {
+      const e = await r.json().catch(() => ({}));
+      throw new Error(e?.error?.message || 'Gemini API HTTP ' + r.status);
+    }
+
+    const data = await r.json();
+    console.log('[generate] raw response keys:', JSON.stringify(data).substring(0, 300));
+
+    const parts = data?.candidates?.[0]?.content?.parts || [];
+    const imagePart = parts.find(p => p.inline_data?.data);
+
+    if (!imagePart) {
+      const textPart = parts.find(p => p.text);
+      throw new Error('No image returned. Model said: ' + (textPart?.text?.substring(0, 200) || 'nothing'));
+    }
+
+    const b64 = imagePart.inline_data.data;
+    const mimeType = imagePart.inline_data.mime_type || 'image/png';
 
     // Printify upload (optional)
     let printifyImageId = null, printifyImageUrl = null;
@@ -116,7 +117,7 @@ module.exports = async function handler(req, res) {
     }
 
     return res.status(200).json({
-      imageData: `data:image/png;base64,${b64}`,
+      imageData: `data:${mimeType};base64,${b64}`,
       printifyImageId,
       printifyImageUrl,
       portraitImageUrl: printifyImageUrl || null,

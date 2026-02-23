@@ -23,35 +23,41 @@ module.exports = async function handler(req, res) {
   const effectiveGender = isGroup ? 'mixed'
     : (gender && gender !== 'auto') ? gender : null;
 
-  // STEP 1: Use Gemini Vision to describe the subject from the photo
-  async function describeSubject(base64, mimeType, cat, isMulti) {
-    const descPrompt = isMulti
-      ? 'Describe ALL people visible in this photo in detail for a portrait painting. For each person include: gender, approximate age, skin tone, hair color and style, eye color, face shape, any distinctive facial features. Number each person.'
-      : cat === 'pets'
-        ? 'Describe this animal in detail: species, breed if visible, fur/coat color and texture, eye color, size, distinctive markings.'
-        : 'Describe this person\'s physical appearance in detail for a portrait painter: gender, approximate age, skin tone, hair color and style, hair length, eye color, face shape, jawline, nose shape, any distinctive features like beard or freckles. Be specific.';
-
-    const r = await fetch(
-      `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash-latest:generateContent?key=${GEMINI_KEY}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{
-            parts: [
-              { text: descPrompt },
-              { inline_data: { mime_type: mimeType, data: base64 } },
-            ],
-          }],
-        }),
-      }
-    );
-    if (!r.ok) throw new Error('Vision step failed: ' + r.status);
-    const d = await r.json();
-    return d?.candidates?.[0]?.content?.parts?.[0]?.text || 'a person';
+  // Build subject description from category/gender (no vision step needed)
+  function buildDescription(cat, gen, isMulti) {
+    if (isMulti) return 'a man and a woman together';
+    if (cat === 'pets') return 'a beloved pet animal';
+    if (cat === 'children') return 'a young child';
+    if (cat === 'family') return 'a family group';
+    if (cat === 'couples') return 'a couple, a man and a woman';
+    if (gen === 'male') return 'a man';
+    if (gen === 'female') return 'a woman';
+    return 'a person';
   }
 
-  // STEP 2: Use Imagen 3 to generate the portrait
+  // Build final Imagen 3 prompt
+  function buildPortraitPrompt(description, styleCore, cat, gen, isMulti) {
+    const styleBase = styleCore || getDefaultStyle(cat, gen);
+    const subjectPrefix = isMulti
+      ? `Formal aristocratic group oil painting portrait of ${description}.`
+      : cat === 'pets'
+        ? `Regal aristocratic oil painting portrait of ${description}.`
+        : `Formal aristocratic oil painting portrait of ${description}.`;
+    return `${subjectPrefix} ${styleBase}. No picture frame, no border around the image. Museum-quality oil painting, rich painterly brushwork, dramatic lighting.`;
+  }
+
+  function getDefaultStyle(cat, gen) {
+    const styles = {
+      pets:     'Style of George Stubbs — regal animal portrait, ermine-trimmed royal mantle, dark stone architectural background, warm directional lighting, visible impasto brushwork',
+      family:   'Style of Joshua Reynolds — formal 18th century family group portrait, men in velvet frock coats, women in silk brocade gowns, red velvet curtain background, warm candlelit atmosphere',
+      children: 'Style of Thomas Lawrence — formal 18th century child portrait, opulent velvet robes with lace trim, gold coronet, dark warm background, warm glowing light',
+      couples:  'Style of John Singer Sargent — intimate Victorian aristocratic oil portrait, man in dark frock coat with white cravat, woman in dark velvet gown with lace collar, dark painterly background',
+      self:     'Style of Joshua Reynolds — formal 18th century self-portrait, period aristocratic attire, dark warm background, warm side lighting, visible brushwork',
+    };
+    return styles[cat] || styles.self;
+  }
+
+  // Generate portrait with Imagen 3
   async function generatePortrait(fullPrompt) {
     const r = await fetch(
       `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${GEMINI_KEY}`,
@@ -82,40 +88,12 @@ module.exports = async function handler(req, res) {
     return b64;
   }
 
-  // Build final Imagen prompt from description + style
-  function buildPortraitPrompt(description, styleCore, cat, gen, isMulti) {
-    const styleBase = styleCore || getDefaultStyle(cat, gen);
-
-    const subjectPrefix = isMulti
-      ? `Group portrait of the following people: ${description}.`
-      : cat === 'pets'
-        ? `Regal aristocratic portrait of this animal: ${description}.`
-        : `Portrait of a person with these features: ${description}.`;
-
-    return `${subjectPrefix} ${styleBase}. No picture frame, no border. Museum-quality oil painting, photorealistic painted finish.`;
-  }
-
-  function getDefaultStyle(cat, gen) {
-    const styles = {
-      pets:     'Style of George Stubbs — regal animal portrait, ermine-trimmed royal mantle, dark stone architectural background, warm directional lighting, visible impasto brushwork',
-      family:   'Style of Joshua Reynolds — formal 18th century family group portrait, men in velvet frock coats, women in silk brocade gowns, red velvet curtain background, warm candlelit atmosphere',
-      children: 'Style of Thomas Lawrence — formal 18th century child portrait, opulent velvet robes with lace trim, gold coronet, dark warm background, warm glowing light',
-      couples:  'Style of John Singer Sargent — intimate Victorian aristocratic oil portrait, man in dark frock coat with white cravat, woman in dark velvet gown with lace collar, dark painterly background',
-      self:     'Style of Joshua Reynolds — formal 18th century self-portrait, period aristocratic attire, dark warm background, warm side lighting, visible brushwork',
-    };
-    return styles[cat] || styles.self;
-  }
-
   console.log('[generate] category:', category, '| gender:', effectiveGender, '| multi:', isMultiSubject);
 
   try {
-    // Step 1: describe the subject from the photo
-    const description = await describeSubject(imageBase64, imageMimeType, category, isMultiSubject);
-    console.log('[generate] description:', description.substring(0, 150));
-
-    // Step 2: generate portrait with Imagen 3
+    const description = buildDescription(category, effectiveGender, isMultiSubject);
     const fullPrompt = buildPortraitPrompt(description, stylePrompt, category, effectiveGender, isMultiSubject);
-    console.log('[generate] imagen prompt:', fullPrompt.substring(0, 200));
+    console.log('[generate] prompt:', fullPrompt.substring(0, 200));
 
     const b64 = await generatePortrait(fullPrompt);
 

@@ -20,8 +20,7 @@ module.exports = async function handler(req, res) {
   const ASTRIA_KEY = process.env.ASTRIA_API_KEY;
   if (!ASTRIA_KEY) return res.status(500).json({ error: 'ASTRIA_API_KEY not configured' });
 
-  // Realistic Vision v5.1 — correct base model for FaceID per Astria docs
-  const BASE_TUNE_ID = '690204';
+  const BASE_TUNE_ID = '1504944'; // Flux.1 dev — confirmed working in Astria UI
 
   const isGroup = category === 'family' || category === 'couples';
   const isMultiSubject = isGroup || isMultiPhoto || (photoCount || 1) > 1;
@@ -33,10 +32,12 @@ module.exports = async function handler(req, res) {
     : 'person';
 
   function buildPrompt(styleCore, cat, gen, isMulti, faceIdTuneId) {
-    const faceToken = `<faceid:${faceIdTuneId}:1>`;
+    const faceToken = `<faceid:${faceIdTuneId}:1.0>`;
+
+    if (styleCore) return `${faceToken} ${styleCore}`;
 
     if (isMulti || cat === 'couples') {
-      return `${faceToken} hyperrealistic classical oil painting portrait of a couple, man wearing dark double-breasted frock coat with white cravat and high collar, woman wearing elegant period silk gown with lace trim at neckline, seated together in intimate pose, lush dark forest landscape background with rocky outcrops and moody dramatic sky, warm candlelit chiaroscuro lighting, painted in the masterful style of Joshua Reynolds and John Constable, photorealistic faces and skin, luminous glowing skin tones, rich deep charcoal amber ivory gold palette, museum-quality oil painting, 8k`;
+      return `${faceToken} hyperrealistic classical oil painting portrait of a man and a woman couple, man wearing dark double-breasted wool frock coat with white cravat and high collar, woman wearing elegant period silk gown with lace trim at neckline, seated together in intimate pose, lush dark forest landscape background with rocky outcrops and moody dramatic sky, warm candlelit chiaroscuro lighting, painted in the masterful style of Joshua Reynolds and John Constable, photorealistic faces and skin, luminous glowing skin tones, rich deep charcoal amber ivory gold palette, museum-quality oil painting, 8k`;
     }
     if (cat === 'family') {
       return `${faceToken} hyperrealistic classical oil painting family group portrait, men wearing dark formal frock coats with white cravats, women wearing elegant silk brocade gowns with lace trim, grand interior with rich red velvet drapes and warm candlelight, painted in the style of Joshua Reynolds, photorealistic faces, luminous skin tones, museum-quality masterpiece, 8k`;
@@ -48,9 +49,10 @@ module.exports = async function handler(req, res) {
       return `${faceToken} hyperrealistic classical oil painting portrait of a child wearing opulent velvet robes with intricate lace trim and a small gold coronet, dark warm background with soft glowing light, painted in the style of Thomas Lawrence, photorealistic face, museum-quality masterpiece, 8k`;
     }
     if (gen === 'female') {
-      return `${faceToken} hyperrealistic classical oil painting portrait of a woman wearing an elegant empire-waist silk gown with delicate lace trim at the décolletage, pearl drop earrings, hair pinned up with soft curls framing the face, lush romantic landscape background, warm soft diffused lighting, painted in the style of Elisabeth Vigée Le Brun and Thomas Gainsborough, photorealistic face, luminous glowing skin, museum-quality masterpiece, 8k`;
+      return `${faceToken} hyperrealistic classical oil painting portrait of a woman, wearing an elegant empire-waist silk gown with delicate lace trim at the décolletage, pearl drop earrings, hair pinned up with soft curls framing the face, lush romantic landscape background with trees and golden atmospheric sky, warm soft diffused lighting from the left, painted in the style of Elisabeth Vigée Le Brun and Thomas Gainsborough, photorealistic face, luminous glowing skin, cream ivory sage green warm gold palette, museum-quality masterpiece, 8k`;
     }
-    return `${faceToken} hyperrealistic classical oil painting portrait of a man wearing a dark navy wool tailcoat with velvet lapels and a crisp white linen cravat, dramatic rocky forest landscape background, Rembrandt side lighting from upper left, painted in the masterful style of Sir Thomas Lawrence and Joshua Reynolds, photorealistic face and skin, luminous warm skin tones, confident half-body three-quarter pose, museum-quality masterpiece, 8k`;
+    // male — explicit masculine clothing first to prevent feminine output
+    return `${faceToken} hyperrealistic classical oil painting portrait of a man, wearing a dark navy wool tailcoat with velvet lapels and a crisp white linen cravat tied at the throat, masculine aristocratic attire, dramatic rocky forest landscape background with atmospheric depth and moody dark sky, Rembrandt side lighting from upper left casting deep warm amber shadows, painted in the masterful style of Sir Thomas Lawrence and Joshua Reynolds, photorealistic face and skin, luminous warm skin tones, confident half-body three-quarter pose, museum-quality masterpiece, 8k`;
   }
 
   function extractImageUrl(images) {
@@ -68,10 +70,10 @@ module.exports = async function handler(req, res) {
   try {
     const imageBuffer = Buffer.from(imageBase64, 'base64');
 
-    // ── STEP 1: Create FaceID tune (instant — no training needed) ─────────────
-    console.log('[generate] creating FaceID tune...');
+    // ── STEP 1: Create FaceID tune from uploaded photo ────────────────────────
+    console.log('[generate] creating FaceID tune on Flux.1 dev...');
     const tuneForm = new FormData();
-    tuneForm.append('tune[title]', `pawtraits-faceid-${Date.now()}`);
+    tuneForm.append('tune[title]', `pawtraits-${genderWord}-${Date.now()}`);
     tuneForm.append('tune[name]', genderWord);
     tuneForm.append('tune[model_type]', 'faceid');
     tuneForm.append('tune[base_tune_id]', BASE_TUNE_ID);
@@ -99,7 +101,7 @@ module.exports = async function handler(req, res) {
     const faceIdTuneId = tuneData.id;
     console.log('[generate] FaceID tune created, id:', faceIdTuneId);
 
-    // ── STEP 2: Generate portrait using FaceID tune ───────────────────────────
+    // ── STEP 2: Generate portrait ─────────────────────────────────────────────
     const prompt = buildPrompt(stylePrompt, category, effectiveGender, isMultiSubject, faceIdTuneId);
     console.log('[generate] prompt:', prompt.substring(0, 200));
 
@@ -111,6 +113,7 @@ module.exports = async function handler(req, res) {
     promptForm.append('prompt[w]', '832');
     promptForm.append('prompt[h]', '1216');
     promptForm.append('prompt[steps]', '30');
+    promptForm.append('prompt[cfg_scale]', '4');
 
     const promptRes = await fetch(
       `https://api.astria.ai/tunes/${BASE_TUNE_ID}/prompts`,

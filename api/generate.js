@@ -20,7 +20,7 @@ module.exports = async function handler(req, res) {
   const ASTRIA_KEY = process.env.ASTRIA_API_KEY;
   if (!ASTRIA_KEY) return res.status(500).json({ error: 'ASTRIA_API_KEY not configured' });
 
-  const FLUX_TUNE_ID = process.env.ASTRIA_TUNE_ID || '1504944';
+  const FLUX_TUNE_ID = process.env.ASTRIA_TUNE_ID || '3618064';
 
   const isGroup = category === 'family' || category === 'couples';
   const isMultiSubject = isGroup || isMultiPhoto || (photoCount || 1) > 1;
@@ -29,7 +29,6 @@ module.exports = async function handler(req, res) {
 
   function buildPrompt(styleCore, cat, gen, isMulti) {
     if (styleCore) return styleCore;
-
     if (isMulti || cat === 'couples') {
       return `a hyperrealistic classical oil painting portrait of a couple, man wearing dark double-breasted frock coat with white cravat and high collar, woman wearing elegant period silk gown with lace trim at neckline, seated together in intimate pose, lush dark forest landscape background with rocky outcrops and moody dramatic sky with golden light breaking through clouds, warm candlelit chiaroscuro lighting, painted in the masterful style of Joshua Reynolds and John Constable, photorealistic faces and skin, luminous glowing skin tones, rich deep charcoal amber ivory gold palette, museum-quality oil painting, 8k ultra detailed`;
     }
@@ -60,12 +59,12 @@ module.exports = async function handler(req, res) {
 
   const prompt = buildPrompt(stylePrompt, category, effectiveGender, isMultiSubject);
   console.log('[generate] category:', category, '| gender:', effectiveGender);
+  console.log('[generate] tune ID:', FLUX_TUNE_ID);
   console.log('[generate] prompt:', prompt.substring(0, 200));
 
   try {
     const imageBuffer = Buffer.from(imageBase64, 'base64');
 
-    // Send as multipart form — required for face_swap to actually work
     const form = new FormData();
     form.append('prompt[text]', prompt);
     form.append('prompt[num_images]', '1');
@@ -91,13 +90,15 @@ module.exports = async function handler(req, res) {
     );
 
     if (!astriaRes.ok) {
-      const e = await astriaRes.json().catch(() => ({}));
-      console.error('[generate] Astria error:', JSON.stringify(e));
-      throw new Error(JSON.stringify(e) || 'Astria API HTTP ' + astriaRes.status);
+      const rawText = await astriaRes.text().catch(() => 'could not read body');
+      console.error('[generate] Astria HTTP status:', astriaRes.status);
+      console.error('[generate] Astria raw error:', rawText);
+      throw new Error('Astria ' + astriaRes.status + ': ' + rawText);
     }
 
     let promptData = await astriaRes.json();
     console.log('[generate] prompt created id:', promptData.id);
+    console.log('[generate] initial response:', JSON.stringify(promptData).substring(0, 300));
 
     // Poll — stay within Vercel 60s limit
     const maxWait = 50000;

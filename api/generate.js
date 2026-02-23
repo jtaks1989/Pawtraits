@@ -27,7 +27,6 @@ module.exports = async function handler(req, res) {
 
   function buildPrompt(styleCore, cat, gen, isMulti) {
     if (styleCore) return styleCore;
-
     if (isMulti || cat === 'couples') {
       return `a hyperrealistic classical oil painting portrait of a couple, man wearing dark double-breasted frock coat with white cravat and high collar, woman wearing elegant period silk gown with lace trim at neckline, seated together in intimate pose, lush dark forest landscape background with rocky outcrops and moody dramatic sky with golden light breaking through clouds, warm candlelit chiaroscuro lighting, painted in the masterful style of Joshua Reynolds and John Constable, photorealistic faces and skin, luminous glowing skin tones, rich deep charcoal amber ivory gold palette, museum-quality oil painting, 8k ultra detailed`;
     }
@@ -46,14 +45,26 @@ module.exports = async function handler(req, res) {
     return `a hyperrealistic classical oil painting portrait of a man wearing a dark navy wool tailcoat with velvet lapels and a crisp white linen cravat tied at the throat, dramatic rocky forest landscape background with atmospheric depth and moody dark sky, dramatic Rembrandt side lighting from upper left casting deep warm amber shadows, painted in the masterful style of Sir Thomas Lawrence and Joshua Reynolds, photorealistic face and skin, luminous warm skin tones, confident half-body three-quarter pose, deep forest green umber charcoal palette, museum-quality masterpiece, 8k`;
   }
 
-  const prompt = buildPrompt(stylePrompt, category, effectiveGender, isMultiSubject);
+  // Extract image URL from Astria response — handles both string and object formats
+  function extractImageUrl(images) {
+    if (!images || images.length === 0) return null;
+    const first = images[0];
+    console.log('[generate] image entry type:', typeof first, '| value:', JSON.stringify(first).substring(0, 100));
+    if (typeof first === 'string') return first;
+    if (first && typeof first === 'object') {
+      return first.url || first.src || first.image_url || first.uri || Object.values(first)[0] || null;
+    }
+    return null;
+  }
 
+  const prompt = buildPrompt(stylePrompt, category, effectiveGender, isMultiSubject);
   console.log('[generate] category:', category, '| gender:', effectiveGender);
   console.log('[generate] prompt:', prompt.substring(0, 200));
 
   try {
     const imageDataUrl = `data:${imageMimeType};base64,${imageBase64}`;
 
+    // Create the prompt on Astria
     const astriaRes = await fetch(
       `https://api.astria.ai/tunes/${FLUX_TUNE_ID}/prompts`,
       {
@@ -78,60 +89,71 @@ module.exports = async function handler(req, res) {
 
     if (!astriaRes.ok) {
       const e = await astriaRes.json().catch(() => ({}));
-      console.error('[generate] Astria error body:', JSON.stringify(e));
-      throw new Error(e?.error || e?.message || JSON.stringify(e) || 'Astria API HTTP ' + astriaRes.status);
+      console.error('[generate] Astria create error:', JSON.stringify(e));
+      throw new Error(JSON.stringify(e) || 'Astria API HTTP ' + astriaRes.status);
     }
 
     let promptData = await astriaRes.json();
-    console.log('[generate] Astria prompt created, id:', promptData.id);
+    console.log('[generate] prompt created id:', promptData.id, '| initial images:', (promptData.images || []).length);
+    console.log('[generate] full initial response:', JSON.stringify(promptData).substring(0, 300));
 
-    // Poll until images are ready
-    const maxWait = 180000;
+    // Poll — max 50 seconds to stay within Vercel's 60s function limit
+    const maxWait = 50000;
     const startTime = Date.now();
 
-    while (!promptData.images || promptData.images.length === 0) {
-      if (Date.now() - startTime > maxWait) throw new Error('Generation timed out. Please try again.');
+    while (true) {
+      const images = promptData.images || [];
+      const imageUrl = extractImageUrl(images);
+      if (imageUrl) {
+        console.log('[generate] got image URL:', imageUrl.substring(0, 80));
+
+        // Fetch image and convert to base64
+        const imgRes = await fetch(imageUrl);
+        if (!imgRes.ok) throw new Error('Failed to fetch generated image');
+        const imgBuffer = await imgRes.arrayBuffer();
+        const b64 = Buffer.from(imgBuffer).toString('base64');
+
+        // Printify upload (optional)
+        let printifyImageId = null, printifyImageUrl = null;
+        const PK = process.env.PRINTIFY_API_KEY, PS = process.env.PRINTIFY_SHOP_ID;
+        if (PK && PS) {
+          try {
+            const pRes = await fetch('https://api.printify.com/v1/uploads/images.json', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${PK}` },
+              body: JSON.stringify({ file_name: `portrait-${category}-${Date.now()}.jpg`, contents: b64 }),
+            });
+            if (pRes.ok) {
+              const p = await pRes.json();
+              printifyImageId = p.id;
+              printifyImageUrl = p.preview_url || p.url || null;
+            }
+          } catch (e) { console.error('Printify error:', e.message); }
+        }
+
+        return res.status(200).json({
+          imageData: `data:image/jpeg;base64,${b64}`,
+          printifyImageId,
+          printifyImageUrl,
+          portraitImageUrl: printifyImageUrl || null,
+        });
+      }
+
+      if (Date.now() - startTime > maxWait) {
+        // Return the prompt ID so frontend can poll independently if needed
+        console.log('[generate] timed out polling, prompt id:', promptData.id);
+        throw new Error('Generation is taking longer than expected. Please retry.');
+      }
+
       await new Promise(r => setTimeout(r, 3000));
       const pollRes = await fetch(
         `https://api.astria.ai/tunes/${FLUX_TUNE_ID}/prompts/${promptData.id}`,
         { headers: { 'Authorization': `Bearer ${ASTRIA_KEY}` } }
       );
       promptData = await pollRes.json();
-      console.log('[generate] poll — images ready:', (promptData.images || []).length);
+      console.log('[generate] poll — images count:', (promptData.images || []).length, '| elapsed:', Math.round((Date.now() - startTime) / 1000) + 's');
+      console.log('[generate] poll raw:', JSON.stringify(promptData).substring(0, 200));
     }
-
-    const imageUrl = promptData.images[0].url;
-    if (!imageUrl) throw new Error('No image URL returned from Astria');
-
-    const imgRes = await fetch(imageUrl);
-    if (!imgRes.ok) throw new Error('Failed to fetch generated image');
-    const imgBuffer = await imgRes.arrayBuffer();
-    const b64 = Buffer.from(imgBuffer).toString('base64');
-
-    // Printify upload (optional)
-    let printifyImageId = null, printifyImageUrl = null;
-    const PK = process.env.PRINTIFY_API_KEY, PS = process.env.PRINTIFY_SHOP_ID;
-    if (PK && PS) {
-      try {
-        const pRes = await fetch('https://api.printify.com/v1/uploads/images.json', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${PK}` },
-          body: JSON.stringify({ file_name: `portrait-${category}-${Date.now()}.jpg`, contents: b64 }),
-        });
-        if (pRes.ok) {
-          const p = await pRes.json();
-          printifyImageId = p.id;
-          printifyImageUrl = p.preview_url || p.url || null;
-        }
-      } catch (e) { console.error('Printify error:', e.message); }
-    }
-
-    return res.status(200).json({
-      imageData: `data:image/jpeg;base64,${b64}`,
-      printifyImageId,
-      printifyImageUrl,
-      portraitImageUrl: printifyImageUrl || null,
-    });
 
   } catch (err) {
     console.error('[generate] error:', err.message);

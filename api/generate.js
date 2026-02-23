@@ -1,3 +1,5 @@
+const FormData = require('form-data');
+
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
@@ -27,6 +29,7 @@ module.exports = async function handler(req, res) {
 
   function buildPrompt(styleCore, cat, gen, isMulti) {
     if (styleCore) return styleCore;
+
     if (isMulti || cat === 'couples') {
       return `a hyperrealistic classical oil painting portrait of a couple, man wearing dark double-breasted frock coat with white cravat and high collar, woman wearing elegant period silk gown with lace trim at neckline, seated together in intimate pose, lush dark forest landscape background with rocky outcrops and moody dramatic sky with golden light breaking through clouds, warm candlelit chiaroscuro lighting, painted in the masterful style of Joshua Reynolds and John Constable, photorealistic faces and skin, luminous glowing skin tones, rich deep charcoal amber ivory gold palette, museum-quality oil painting, 8k ultra detailed`;
     }
@@ -45,11 +48,9 @@ module.exports = async function handler(req, res) {
     return `a hyperrealistic classical oil painting portrait of a man wearing a dark navy wool tailcoat with velvet lapels and a crisp white linen cravat tied at the throat, dramatic rocky forest landscape background with atmospheric depth and moody dark sky, dramatic Rembrandt side lighting from upper left casting deep warm amber shadows, painted in the masterful style of Sir Thomas Lawrence and Joshua Reynolds, photorealistic face and skin, luminous warm skin tones, confident half-body three-quarter pose, deep forest green umber charcoal palette, museum-quality masterpiece, 8k`;
   }
 
-  // Extract image URL from Astria response — handles both string and object formats
   function extractImageUrl(images) {
     if (!images || images.length === 0) return null;
     const first = images[0];
-    console.log('[generate] image entry type:', typeof first, '| value:', JSON.stringify(first).substring(0, 100));
     if (typeof first === 'string') return first;
     if (first && typeof first === 'object') {
       return first.url || first.src || first.image_url || first.uri || Object.values(first)[0] || null;
@@ -62,52 +63,52 @@ module.exports = async function handler(req, res) {
   console.log('[generate] prompt:', prompt.substring(0, 200));
 
   try {
-    const imageDataUrl = `data:${imageMimeType};base64,${imageBase64}`;
+    const imageBuffer = Buffer.from(imageBase64, 'base64');
 
-    // Create the prompt on Astria
+    // Send as multipart form — required for face_swap to actually work
+    const form = new FormData();
+    form.append('prompt[text]', prompt);
+    form.append('prompt[num_images]', '1');
+    form.append('prompt[w]', '832');
+    form.append('prompt[h]', '1216');
+    form.append('prompt[cfg_scale]', '4');
+    form.append('prompt[steps]', '30');
+    form.append('prompt[face_swap]', imageBuffer, {
+      filename: 'face.jpg',
+      contentType: imageMimeType,
+    });
+
     const astriaRes = await fetch(
       `https://api.astria.ai/tunes/${FLUX_TUNE_ID}/prompts`,
       {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${ASTRIA_KEY}`,
-          'Content-Type': 'application/json',
+          ...form.getHeaders(),
         },
-        body: JSON.stringify({
-          prompt: {
-            text: prompt,
-            num_images: 1,
-            w: 832,
-            h: 1216,
-            cfg_scale: 4,
-            steps: 30,
-            face_swap: imageDataUrl,
-          },
-        }),
+        body: form,
       }
     );
 
     if (!astriaRes.ok) {
       const e = await astriaRes.json().catch(() => ({}));
-      console.error('[generate] Astria create error:', JSON.stringify(e));
+      console.error('[generate] Astria error:', JSON.stringify(e));
       throw new Error(JSON.stringify(e) || 'Astria API HTTP ' + astriaRes.status);
     }
 
     let promptData = await astriaRes.json();
-    console.log('[generate] prompt created id:', promptData.id, '| initial images:', (promptData.images || []).length);
-    console.log('[generate] full initial response:', JSON.stringify(promptData).substring(0, 300));
+    console.log('[generate] prompt created id:', promptData.id);
 
-    // Poll — max 50 seconds to stay within Vercel's 60s function limit
+    // Poll — stay within Vercel 60s limit
     const maxWait = 50000;
     const startTime = Date.now();
 
     while (true) {
-      const images = promptData.images || [];
-      const imageUrl = extractImageUrl(images);
+      const imageUrl = extractImageUrl(promptData.images || []);
+
       if (imageUrl) {
         console.log('[generate] got image URL:', imageUrl.substring(0, 80));
 
-        // Fetch image and convert to base64
         const imgRes = await fetch(imageUrl);
         if (!imgRes.ok) throw new Error('Failed to fetch generated image');
         const imgBuffer = await imgRes.arrayBuffer();
@@ -140,8 +141,6 @@ module.exports = async function handler(req, res) {
       }
 
       if (Date.now() - startTime > maxWait) {
-        // Return the prompt ID so frontend can poll independently if needed
-        console.log('[generate] timed out polling, prompt id:', promptData.id);
         throw new Error('Generation is taking longer than expected. Please retry.');
       }
 
@@ -151,8 +150,7 @@ module.exports = async function handler(req, res) {
         { headers: { 'Authorization': `Bearer ${ASTRIA_KEY}` } }
       );
       promptData = await pollRes.json();
-      console.log('[generate] poll — images count:', (promptData.images || []).length, '| elapsed:', Math.round((Date.now() - startTime) / 1000) + 's');
-      console.log('[generate] poll raw:', JSON.stringify(promptData).substring(0, 200));
+      console.log('[generate] poll — images:', (promptData.images || []).length, '| elapsed:', Math.round((Date.now() - startTime) / 1000) + 's');
     }
 
   } catch (err) {

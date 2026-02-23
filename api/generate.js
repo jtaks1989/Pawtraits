@@ -20,8 +20,8 @@ module.exports = async function handler(req, res) {
   const ASTRIA_KEY = process.env.ASTRIA_API_KEY;
   if (!ASTRIA_KEY) return res.status(500).json({ error: 'ASTRIA_API_KEY not configured' });
 
-  // Flux1.dev base model from Astria gallery — confirmed ID from docs
-  const BASE_TUNE_ID = '1504944';
+  // Realistic Vision v5.1 — correct base model for FaceID per Astria docs
+  const BASE_TUNE_ID = '690204';
 
   const isGroup = category === 'family' || category === 'couples';
   const isMultiSubject = isGroup || isMultiPhoto || (photoCount || 1) > 1;
@@ -33,10 +33,7 @@ module.exports = async function handler(req, res) {
     : 'person';
 
   function buildPrompt(styleCore, cat, gen, isMulti, faceIdTuneId) {
-    // <faceid:tuneId:strength> token tells Astria to use the person's face
     const faceToken = `<faceid:${faceIdTuneId}:1>`;
-    const styleBase = styleCore || getDefaultStyle(cat, gen);
-    const gw = gen === 'male' ? 'man' : gen === 'female' ? 'woman' : 'person';
 
     if (isMulti || cat === 'couples') {
       return `${faceToken} hyperrealistic classical oil painting portrait of a couple, man wearing dark double-breasted frock coat with white cravat and high collar, woman wearing elegant period silk gown with lace trim at neckline, seated together in intimate pose, lush dark forest landscape background with rocky outcrops and moody dramatic sky, warm candlelit chiaroscuro lighting, painted in the masterful style of Joshua Reynolds and John Constable, photorealistic faces and skin, luminous glowing skin tones, rich deep charcoal amber ivory gold palette, museum-quality oil painting, 8k`;
@@ -54,17 +51,6 @@ module.exports = async function handler(req, res) {
       return `${faceToken} hyperrealistic classical oil painting portrait of a woman wearing an elegant empire-waist silk gown with delicate lace trim at the décolletage, pearl drop earrings, hair pinned up with soft curls framing the face, lush romantic landscape background, warm soft diffused lighting, painted in the style of Elisabeth Vigée Le Brun and Thomas Gainsborough, photorealistic face, luminous glowing skin, museum-quality masterpiece, 8k`;
     }
     return `${faceToken} hyperrealistic classical oil painting portrait of a man wearing a dark navy wool tailcoat with velvet lapels and a crisp white linen cravat, dramatic rocky forest landscape background, Rembrandt side lighting from upper left, painted in the masterful style of Sir Thomas Lawrence and Joshua Reynolds, photorealistic face and skin, luminous warm skin tones, confident half-body three-quarter pose, museum-quality masterpiece, 8k`;
-  }
-
-  function getDefaultStyle(cat, gen) {
-    const styles = {
-      pets:     'regal oil painting, style of George Stubbs, ermine-trimmed royal mantle, dark stone background',
-      family:   'formal 18th century oil painting, style of Joshua Reynolds, velvet frock coats, silk brocade gowns',
-      children: 'formal 18th century child portrait, style of Thomas Lawrence, opulent velvet robes',
-      couples:  'Victorian aristocratic oil portrait, style of John Singer Sargent, dark painterly background',
-      self:     'formal 18th century aristocratic oil painting, style of Joshua Reynolds, dark warm background',
-    };
-    return styles[cat] || styles.self;
   }
 
   function extractImageUrl(images) {

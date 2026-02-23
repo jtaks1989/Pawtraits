@@ -32,7 +32,7 @@ module.exports = async function handler(req, res) {
         : 'Describe this person\'s physical appearance in detail for a portrait painter: gender, approximate age, skin tone, hair color and style, hair length, eye color, face shape, jawline, nose shape, any distinctive features like beard or freckles. Be specific.';
 
     const r = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`,
+      `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash-latest:generateContent?key=${GEMINI_KEY}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

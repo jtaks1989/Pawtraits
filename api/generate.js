@@ -23,81 +23,40 @@ module.exports = async function handler(req, res) {
   const effectiveGender = isGroup ? 'mixed'
     : (gender && gender !== 'auto') ? gender : null;
 
-  // Prompts tuned to match Surrealium-style hyperrealistic classical oil portraits.
-  // InstantID preserves the real face — prompts only need to describe
-  // the clothing, background, lighting and painting style.
   function buildPrompt(styleCore, cat, gen, isMulti) {
-
     if (styleCore) return styleCore;
 
     if (isMulti || cat === 'couples') {
-      return `a hyperrealistic classical oil painting of a couple, 
-        man wearing an elegant dark double-breasted frock coat with white cravat and high collar, 
-        woman wearing a beautiful period silk gown with lace trim at neckline, 
-        seated together in an intimate pose in a lush dark forest landscape with rocky outcrops, 
-        dramatic moody sky with golden light breaking through clouds, 
-        warm candlelit chiaroscuro lighting, rich jewel-tone palette of deep charcoal amber ivory gold, 
-        painted in the masterful style of Joshua Reynolds and John Constable, 
-        photorealistic faces, luminous glowing skin tones, 
-        museum-quality oil painting, 8k ultra detailed`;
+      return `hyperrealistic classical oil painting portrait of a couple, man wearing dark double-breasted frock coat with white cravat and high collar, woman wearing elegant period silk gown with lace trim at neckline, seated together in intimate pose, lush dark forest landscape with rocky outcrops and moody dramatic sky with golden light breaking through clouds, warm candlelit chiaroscuro lighting, painted in the masterful style of Joshua Reynolds and John Constable, photorealistic faces and skin, luminous glowing skin tones, rich jewel-tone palette deep charcoal amber ivory gold, museum-quality oil painting, 8k ultra detailed`;
     }
 
     if (cat === 'family') {
-      return `a hyperrealistic classical oil painting family group portrait, 
-        men wearing dark formal frock coats with white cravats, 
-        women wearing elegant silk brocade gowns with lace trim, 
-        grand interior with red velvet drapes and warm candlelight, 
-        painted in the style of Joshua Reynolds, 
-        photorealistic faces, luminous skin tones, masterpiece, 8k`;
+      return `hyperrealistic classical oil painting family group portrait, men wearing dark formal frock coats with white cravats, women wearing elegant silk brocade gowns with lace trim, grand interior with rich red velvet drapes and warm candlelight, painted in the style of Joshua Reynolds, photorealistic faces, luminous skin tones, museum-quality masterpiece, 8k`;
     }
 
     if (cat === 'pets') {
-      return `a hyperrealistic classical oil painting portrait of a noble pet 
-        wearing a miniature ermine-trimmed royal mantle, 
-        dark stone architectural background with warm amber lighting, 
-        dramatic side lighting, painted in the style of George Stubbs, 
-        rich warm palette of deep brown gold ivory, masterpiece, 8k`;
+      return `hyperrealistic classical oil painting portrait of a noble pet wearing a miniature ermine-trimmed royal mantle, dark stone architectural background with warm amber directional lighting, dramatic side lighting, painted in the style of George Stubbs and Edwin Landseer, rich warm palette deep brown gold ivory, museum-quality masterpiece, 8k`;
     }
 
     if (cat === 'children') {
-      return `a hyperrealistic classical oil painting portrait of a child, 
-        wearing opulent velvet robes with intricate lace trim and a small gold coronet, 
-        dark warm background with soft glowing light, 
-        painted in the style of Thomas Lawrence, 
-        photorealistic face, luminous skin tones, masterpiece, 8k`;
+      return `hyperrealistic classical oil painting portrait of a child wearing opulent velvet robes with intricate lace trim and a small gold coronet, dark warm background with soft glowing light, painted in the style of Thomas Lawrence, photorealistic face, luminous skin tones, museum-quality masterpiece, 8k`;
     }
 
-    // self portrait
     if (gen === 'female') {
-      return `a hyperrealistic classical oil painting portrait of a woman, 
-        wearing an elegant empire-waist silk gown with delicate lace trim at the décolletage, 
-        pearl drop earrings, hair pinned up with soft curls framing the face, 
-        lush romantic landscape background with trees and a golden atmospheric sky, 
-        warm soft diffused lighting from the left, deep rich shadows, 
-        painted in the exquisite style of Elisabeth Vigée Le Brun and Thomas Gainsborough, 
-        photorealistic face, luminous glowing skin, 
-        cream ivory sage green warm gold palette, masterpiece, 8k`;
+      return `hyperrealistic classical oil painting portrait of a woman wearing an elegant empire-waist silk gown with delicate lace trim at the décolletage, pearl drop earrings, hair pinned up with soft curls framing the face, lush romantic landscape background with trees and golden atmospheric sky, warm soft diffused lighting from the left, deep rich shadows, painted in the exquisite style of Elisabeth Vigée Le Brun and Thomas Gainsborough, photorealistic face, luminous glowing skin, cream ivory sage green warm gold palette, museum-quality masterpiece, 8k`;
     }
 
-    // male self portrait (default)
-    return `a hyperrealistic classical oil painting portrait of a man, 
-      wearing a dark navy wool tailcoat with velvet lapels and a crisp white linen cravat tied at the throat, 
-      dramatic rocky forest landscape background with atmospheric depth and moody dark sky, 
-      dramatic Rembrandt side lighting from upper left casting deep warm shadows, 
-      painted in the masterful style of Sir Thomas Lawrence and Joshua Reynolds, 
-      photorealistic face and skin, luminous warm skin tones, confident half-body composition, 
-      slight three-quarter pose, deep forest green umber charcoal palette, masterpiece, 8k`;
+    return `hyperrealistic classical oil painting portrait of a man wearing a dark navy wool tailcoat with velvet lapels and a crisp white linen cravat tied at the throat, dramatic rocky forest landscape background with atmospheric depth and moody dark sky, dramatic Rembrandt side lighting from upper left casting deep warm amber shadows, painted in the masterful style of Sir Thomas Lawrence and Joshua Reynolds, photorealistic face and skin, luminous warm skin tones, confident half-body three-quarter pose, deep forest green umber charcoal palette, museum-quality masterpiece, 8k`;
   }
 
   function buildNegative(gen, isMulti) {
     return [
-      'modern clothing', 'suit and tie', 'tuxedo', 'bow tie', 'contemporary fashion',
-      'casual clothes', 'jeans', 't-shirt', 'hoodie',
+      'modern clothing', 'suit and tie', 'tuxedo', 'bow tie', 'contemporary fashion', 'casual clothes', 'jeans', 't-shirt',
       'cartoon', 'anime', '3d render', 'digital art', 'illustration',
-      'ugly', 'deformed', 'distorted face', 'bad anatomy', 'extra limbs', 'floating limbs',
-      'blurry', 'low quality', 'low resolution', 'jpeg artifacts',
+      'ugly', 'deformed', 'distorted face', 'bad anatomy', 'extra limbs',
+      'blurry', 'low quality', 'jpeg artifacts',
       'watermark', 'text', 'logo', 'signature',
-      'picture frame', 'ornate frame', 'decorative border', 'canvas border',
+      'picture frame', 'ornate frame', 'decorative border',
       'overexposed', 'washed out', 'flat lighting',
       (!isMulti && gen === 'male') ? 'dress, feminine clothing, woman, female' : '',
       (!isMulti && gen === 'female') ? 'masculine clothing, man, male' : '',
@@ -113,9 +72,8 @@ module.exports = async function handler(req, res) {
   try {
     const imageDataUrl = `data:${imageMimeType};base64,${imageBase64}`;
 
-    // InstantID — locks onto the real face from the photo and composites it
-    // photorealistically into the painted scene. This is how Surrealium works.
-    const startRes = await fetch('https://api.replicate.com/v1/models/zsxkib/instant-id/predictions', {
+    // Using confirmed-working IP-Adapter version hash with improved prompts
+    const startRes = await fetch('https://api.replicate.com/v1/predictions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -123,18 +81,17 @@ module.exports = async function handler(req, res) {
         'Prefer': 'wait=60',
       },
       body: JSON.stringify({
+        version: '9cad10c7870bac9d6b587f406aef28208f964454abff5c4152f7dec9b0212a9a',
         input: {
           image: imageDataUrl,
           prompt,
           negative_prompt: negativePrompt,
-          ip_adapter_scale: 0.8,       // face fidelity — high = more like the real person
-          controlnet_conditioning_scale: 0.8,
-          num_inference_steps: 30,
-          guidance_scale: 7,
-          width: 832,
+          ip_adapter_scale: 0.85,
+          controlnet_conditioning_scale: 0.75,
+          num_inference_steps: 40,
+          guidance_scale: 8.5,
+          width: 768,
           height: 1024,
-          output_format: 'jpg',
-          disable_safety_checker: true,
         },
       }),
     });
@@ -147,7 +104,6 @@ module.exports = async function handler(req, res) {
     let prediction = await startRes.json();
     console.log('[generate] prediction started:', prediction.id, prediction.status);
 
-    // Poll until done
     const maxWait = 180000;
     const startTime = Date.now();
     while (
@@ -161,7 +117,7 @@ module.exports = async function handler(req, res) {
         headers: { 'Authorization': `Bearer ${REPLICATE_KEY}` },
       });
       prediction = await pollRes.json();
-      console.log('[generate] poll status:', prediction.status);
+      console.log('[generate] poll:', prediction.status);
     }
 
     if (prediction.status !== 'succeeded') {

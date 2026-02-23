@@ -63,19 +63,13 @@ module.exports = async function handler(req, res) {
   console.log('[generate] prompt:', prompt.substring(0, 200));
 
   try {
-    const imageBuffer = Buffer.from(imageBase64, 'base64');
-
+    // Test without face_swap first to confirm basic connectivity
     const form = new FormData();
     form.append('prompt[text]', prompt);
     form.append('prompt[num_images]', '1');
     form.append('prompt[w]', '832');
     form.append('prompt[h]', '1216');
-    form.append('prompt[cfg_scale]', '4');
     form.append('prompt[steps]', '30');
-    form.append('prompt[face_swap]', imageBuffer, {
-      filename: 'face.jpg',
-      contentType: imageMimeType,
-    });
 
     const astriaRes = await fetch(
       `https://api.astria.ai/tunes/${FLUX_TUNE_ID}/prompts`,
@@ -100,7 +94,6 @@ module.exports = async function handler(req, res) {
     console.log('[generate] prompt created id:', promptData.id);
     console.log('[generate] initial response:', JSON.stringify(promptData).substring(0, 300));
 
-    // Poll — stay within Vercel 60s limit
     const maxWait = 50000;
     const startTime = Date.now();
 
@@ -115,7 +108,6 @@ module.exports = async function handler(req, res) {
         const imgBuffer = await imgRes.arrayBuffer();
         const b64 = Buffer.from(imgBuffer).toString('base64');
 
-        // Printify upload (optional)
         let printifyImageId = null, printifyImageUrl = null;
         const PK = process.env.PRINTIFY_API_KEY, PS = process.env.PRINTIFY_SHOP_ID;
         if (PK && PS) {

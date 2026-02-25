@@ -5,13 +5,14 @@ module.exports = async function handler(req, res) {
 
   const {
     package: pkg,
-    packageName,
+    size,
     amount,
     currency = 'usd',
-    customerName,
+    name,
     email,
     phone,
     address,
+    notes,
   } = req.body;
 
   if (!amount || !pkg) {
@@ -19,20 +20,17 @@ module.exports = async function handler(req, res) {
   }
 
   try {
+    // Build metadata to match dashboard expectations
     const metadata = {
       package: pkg,
-      packageName: packageName || '',
-      customerName: customerName || '',
+      size: size || '—',
+      name: name || '',
+      email: email || '',
       phone: phone || '',
+      address: address ? JSON.stringify(address) : '—',
+      notes: notes || '',
+      fulfillment_status: 'new',
     };
-
-    if (address) {
-      metadata.address_line1 = address.line1 || '';
-      metadata.address_line2 = address.line2 || '';
-      metadata.city = address.city || '';
-      metadata.country = address.country || '';
-      metadata.delivery_notes = address.notes || '';
-    }
 
     // Find or create Stripe customer
     let customer;
@@ -41,10 +39,9 @@ module.exports = async function handler(req, res) {
       customer = existing.data[0];
     } else {
       customer = await stripe.customers.create({
-        name: customerName,
+        name,
         email,
         phone,
-        metadata,
       });
     }
 
@@ -54,12 +51,12 @@ module.exports = async function handler(req, res) {
       currency,
       customer: customer.id,
       receipt_email: email,
-      description: `Pawtraits — ${packageName}`,
+      description: `Eternised — ${pkg}${size ? ' · ' + size : ''}`,
       metadata,
       automatic_payment_methods: { enabled: true },
     });
 
-    console.log('[checkout] created:', paymentIntent.id, '| amount:', amount, '| package:', pkg);
+    console.log('[checkout] created:', paymentIntent.id, '| amount:', amount, '| package:', pkg, '| size:', size);
 
     return res.status(200).json({
       clientSecret: paymentIntent.client_secret,

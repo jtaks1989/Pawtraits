@@ -146,6 +146,9 @@
     footer p { font-size: 13px; color: var(--text-muted); font-style: italic; }
     .footer-brand { font-family: 'Cinzel', serif; font-size: 20px; color: var(--gold); margin-bottom: 6px; letter-spacing: 5px; }
     .footer-tagline { font-family: 'Cormorant Garamond', serif; font-size: 14px; color: var(--text-muted); font-style: italic; margin-bottom: 16px; }
+    .footer-links { display: flex; justify-content: center; gap: 32px; flex-wrap: wrap; margin-bottom: 16px; }
+    .footer-links a { font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--gold); }
     .gold-line { width: 60px; height: 1px; background: var(--gold); margin: 24px auto; opacity: 0.6; }
 
     /* RESPONSIVE */
@@ -464,9 +467,14 @@
     <div class="gold-line"></div>
   </section>
 
+  <!-- FOOTER -->
   <footer>
     <div class="footer-brand">ETERNISED</div>
     <div class="footer-tagline">Bespoke AI Portrait Studio</div>
+    <div class="footer-links">
+      <a href="/legal.html">Terms &amp; Conditions</a>
+      <a href="/legal.html#privacy">Privacy Policy</a>
+    </div>
     <p>Free Worldwide Delivery &nbsp;·&nbsp; Secured by Stripe &nbsp;·&nbsp; Preview Before You Pay</p>
   </footer>
 

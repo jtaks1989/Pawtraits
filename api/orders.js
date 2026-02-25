@@ -1,15 +1,18 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
+// Only show orders created on or after this date (Eternised launch date)
+const LAUNCH_TIMESTAMP = Math.floor(new Date('2026-02-25').getTime() / 1000);
+
 module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-  // ── GET: fetch all orders
   if (req.method === 'GET') {
     try {
       const paymentIntents = await stripe.paymentIntents.list({
         limit: 100,
+        created: { gte: LAUNCH_TIMESTAMP },
       });
 
       const orders = paymentIntents.data
@@ -35,7 +38,6 @@ module.exports = async function handler(req, res) {
     }
   }
 
-  // ── POST: update fulfillment status
   if (req.method === 'POST') {
     try {
       const { id, status } = req.body;

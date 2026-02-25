@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Legal — Eternised</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Cinzel:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --gold: #c9a96e; --gold-light: #e8d5a3;
+      --bg: #0d0b08; --bg-2: #141210; --bg-3: #1c1915;
+      --text: #e8dcc8; --text-muted: #8a7d68;
+      --border: rgba(201,169,110,0.2);
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: 'Cormorant Garamond', Georgia, serif; font-size: 18px; line-height: 1.6; overflow-x: hidden; }
+
+    .top-bar { background: var(--gold); color: var(--bg); text-align: center; padding: 10px 24px; font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; display: flex; align-items: center; justify-content: center; gap: 32px; flex-wrap: wrap; }
+    .top-bar-item { display: flex; align-items: center; gap: 8px; }
+    .top-bar-dot { width: 4px; height: 4px; background: var(--bg); border-radius: 50%; opacity: 0.4; }
+
+    nav { display: flex; align-items: center; justify-content: space-between; padding: 20px 40px; border-bottom: 1px solid var(--border); }
+    .nav-logo { font-family: 'Cinzel', serif; font-size: 20px; letter-spacing: 5px; color: var(--gold); text-decoration: none; }
+    .nav-back { font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+    .nav-back:hover { color: var(--gold); }
+
+    .divider { display: flex; align-items: center; gap: 20px; padding: 0 40px; margin: 20px 0; }
+    .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: linear-gradient(to right, transparent, var(--gold), transparent); opacity: 0.4; }
+    .divider-icon { color: var(--gold); font-size: 18px; }
+
+    .tab-bar { background: var(--bg-2); border-bottom: 1px solid var(--border); display: flex; padding: 0 40px; }
+    .tab-btn { font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 4px; text-transform: uppercase; color: var(--text-muted); background: none; border: none; border-bottom: 2px solid transparent; padding: 18px 0; margin-right: 40px; cursor: pointer; transition: color 0.2s, border-color 0.2s; margin-bottom: -1px; }
+    .tab-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
+    .tab-btn:hover:not(.active) { color: var(--text); }
+
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    .doc-wrap { max-width: 800px; margin: 0 auto; padding: 70px 24px 100px; }
+
+    .section-label { font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 6px; text-transform: uppercase; color: var(--gold); text-align: center; margin-bottom: 16px; }
+    .doc-title { font-family: 'Cinzel', serif; font-size: clamp(28px, 4vw, 46px); font-weight: 400; text-align: center; margin-bottom: 12px; line-height: 1.2; }
+    .doc-date { text-align: center; font-size: 14px; color: var(--text-muted); font-style: italic; margin-bottom: 48px; }
+    .gold-line { width: 60px; height: 1px; background: var(--gold); margin: 0 auto 48px; opacity: 0.6; }
+
+    .callout { background: var(--bg-2); border: 1px solid var(--border); border-left: 3px solid var(--gold); padding: 20px 28px; margin-bottom: 48px; }
+    .callout p { font-size: 16px; color: var(--text); font-style: italic; line-height: 1.7; margin: 0; }
+
+    h2 { font-family: 'Cinzel', serif; font-size: 18px; font-weight: 500; color: var(--gold-light); margin: 48px 0 16px; letter-spacing: 1px; }
+    h3 { font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: var(--gold); margin: 28px 0 12px; }
+    p { font-size: 16px; color: var(--text-muted); margin-bottom: 16px; line-height: 1.8; font-style: italic; }
+    ul { padding-left: 0; list-style: none; margin-bottom: 16px; }
+    ul li { font-size: 16px; color: var(--text-muted); padding: 7px 0 7px 22px; position: relative; border-bottom: 1px solid rgba(255,255,255,0.04); font-style: italic; line-height: 1.7; }
+    ul li::before { content: '✓'; position: absolute; left: 0; color: var(--gold); font-size: 12px; font-style: normal; }
+    strong { color: var(--text); font-style: normal; font-weight: 500; }
+    a { color: var(--gold); text-decoration: none; }
+    a:hover { color: var(--gold-light); text-decoration: underline; }
+
+    footer { padding: 40px 24px; text-align: center; border-top: 1px solid var(--border); }
+    footer p { font-size: 13px; color: var(--text-muted); font-style: italic; }
+    .footer-brand { font-family: 'Cinzel', serif; font-size: 20px; color: var(--gold); margin-bottom: 6px; letter-spacing: 5px; }
+    .footer-tagline { font-family: 'Cormorant Garamond', serif; font-size: 14px; color: var(--text-muted); font-style: italic; margin-bottom: 16px; }
+    .footer-links { display: flex; justify-content: center; gap: 32px; flex-wrap: wrap; margin-bottom: 16px; }
+    .footer-links a { font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--gold); }
+
+    .wa-float { position: fixed; bottom: 1.75rem; right: 1.75rem; z-index: 999; display: flex; align-items: center; gap: 12px; background: #25D366; color: #fff; font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; padding: 16px 28px; border-radius: 2px; box-shadow: 0 0 40px rgba(37,211,102,0.2); transition: all 0.3s ease; }
+    .wa-float:hover { background: #20ba58; transform: translateY(-2px); box-shadow: 0 8px 40px rgba(37,211,102,0.35); color: #fff; text-decoration: none; }
+    .wa-float svg { width: 20px; height: 20px; flex-shrink: 0; }
+
+    @media (max-width: 600px) {
+      .top-bar { gap: 16px; font-size: 10px; }
+      .top-bar-dot { display: none; }
+      nav { padding: 16px 20px; }
+      .tab-bar { padding: 0 20px; }
+      .tab-btn { margin-right: 24px; font-size: 9px; }
+      .doc-wrap { padding: 40px 20px 80px; }
+      .wa-float { bottom: 1rem; right: 1rem; padding: 13px 20px; font-size: 10px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="top-bar">
+    <div class="top-bar-item">
+      <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+      Free Delivery on All Prints
+    </div>
+    <div class="top-bar-dot"></div>
+    <div class="top-bar-item">
+      <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      Rated 4.9 on Trustpilot
+    </div>
+    <div class="top-bar-dot"></div>
+    <div class="top-bar-item">
+      <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
+      Perfect Gift · Ships Worldwide
+    </div>
+  </div>
+
+  <nav>
+    <a href="/" class="nav-logo">ETERNISED</a>
+    <a href="/" class="nav-back">← Back to Home</a>
+  </nav>
+
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="switchTab('terms')">Terms &amp; Conditions</button>
+    <button class="tab-btn" onclick="switchTab('privacy')">Privacy Policy</button>
+  </div>
+
+  <!-- TERMS -->
+  <div class="tab-content active" id="tab-terms">
+    <div class="doc-wrap">
+      <p class="section-label">Legal</p>
+      <h1 class="doc-title">Terms &amp; Conditions</h1>
+      <p class="doc-date">Last updated: February 2026 &nbsp;&middot;&nbsp; The Circle Editions LLC, Delaware, USA</p>
+      <div class="gold-line"></div>
+      <div class="callout"><p>By placing an order or using our services, you agree to the following terms. Please read them carefully before proceeding.</p></div>
+
+      <h2>1. About Eternised</h2>
+      <p>Eternised ("we", "us", "our") is a luxury AI portrait studio operated by The Circle Editions LLC, a company registered in the State of Delaware, United States of America. We transform customer-submitted photographs into custom classical oil painting portraits, available as digital downloads and archival print products shipped worldwide.</p>
+
+      <h2>2. Ordering &amp; Payment</h2>
+      <p>Orders are initiated via our website or WhatsApp. Payment is processed securely through Stripe. All prices are displayed in USD. By completing payment you confirm that you have reviewed and approved your portrait preview.</p>
+      <ul>
+        <li>We do not charge until you confirm satisfaction with your free watermarked preview</li>
+        <li>All transactions are encrypted and handled by Stripe — we never store card details</li>
+        <li>Digital download orders are fulfilled instantly via WhatsApp upon payment</li>
+      </ul>
+
+      <h2>3. Portrait Preview Process</h2>
+      <p>After receiving your photo, we generate a watermarked preview and deliver it via WhatsApp within 24 hours — completely free, with no payment required. Revisions are included as follows:</p>
+      <ul>
+        <li><strong>Digital Download</strong> — 1 complimentary revision</li>
+        <li><strong>Fine Art Print</strong> — 1 complimentary revision</li>
+        <li><strong>Large Canvas</strong> — 2 complimentary revisions</li>
+      </ul>
+      <p>Once you approve the portrait and payment is made, the order is final and production begins immediately.</p>
+
+      <h2>4. Photo Requirements &amp; Rights</h2>
+      <p>You are responsible for ensuring any photo submitted is owned by you or that you hold the legal right to use it. By submitting a photo you grant Eternised a limited, non-exclusive licence to process the image solely to fulfil your order.</p>
+      <ul>
+        <li>Photos must not contain illegal, offensive, or third-party infringing content</li>
+        <li>We reserve the right to decline any order at our discretion</li>
+        <li>Photos are never used for any purpose other than producing your portrait</li>
+      </ul>
+
+      <h2>5. Intellectual Property</h2>
+      <p>Your portrait is created for personal use. You receive a licence to print, display, and share it for non-commercial purposes. Commercial use or resale without written permission is prohibited. Eternised reserves the right to display anonymised portrait examples for marketing unless you opt out in writing.</p>
+
+      <h2>6. Shipping &amp; Delivery</h2>
+      <p>All printed products ship worldwide with free delivery on every order. Estimated timelines are indicative — we are not liable for carrier delays. Import duties and customs fees are the customer's responsibility.</p>
+      <ul>
+        <li><strong>Fine Art Print</strong> — 7&ndash;10 business days production + transit</li>
+        <li><strong>Large Canvas</strong> — 7&ndash;10 business days production + transit</li>
+        <li>International orders: allow an additional 3&ndash;7 days</li>
+      </ul>
+
+      <h2>7. Returns &amp; Refunds</h2>
+      <p>As every portrait is custom-made to order, we do not accept returns based on preference. Exceptions:</p>
+      <ul>
+        <li>If your print or canvas arrives damaged, photograph it within 72 hours and contact us — we will reprint and reship at no cost</li>
+        <li>Digital downloads are non-refundable once delivered</li>
+        <li>If we are unable to fulfil your order for any reason, a full refund is issued</li>
+      </ul>
+
+      <h2>8. Limitation of Liability</h2>
+      <p>To the fullest extent permitted by applicable law, Eternised shall not be liable for any indirect, incidental, or consequential damages. Our total liability shall not exceed the amount paid for the specific order in question.</p>
+
+      <h2>9. Governing Law</h2>
+      <p>These terms are governed by the laws of the State of Delaware, United States of America. Any disputes shall be subject to the jurisdiction of the courts of Delaware, USA.</p>
+
+      <h2>10. Contact</h2>
+      <p>Questions? Reach us at <a href="mailto:hello@byremi.net">hello@byremi.net</a> or on <a href="https://wa.me/971567481702" target="_blank" rel="noopener">WhatsApp</a>.</p>
+      <div class="gold-line" style="margin-top:60px;margin-bottom:0;"></div>
+    </div>
+  </div>
+
+  <!-- PRIVACY -->
+  <div class="tab-content" id="tab-privacy">
+    <div class="doc-wrap">
+      <p class="section-label">Legal</p>
+      <h1 class="doc-title">Privacy Policy</h1>
+      <p class="doc-date">Last updated: February 2026 &nbsp;&middot;&nbsp; The Circle Editions LLC, Delaware, USA</p>
+      <div class="gold-line"></div>
+      <div class="callout"><p>Your privacy matters. This policy explains what data we collect, how we use it, and your rights. We keep it simple and honest.</p></div>
+
+      <h2>1. Who We Are</h2>
+      <p>Eternised is operated by The Circle Editions LLC, registered in Delaware, USA. This policy applies to information collected through our website (eternised.me) and via WhatsApp communications in connection with our services.</p>
+
+      <h2>2. What Data We Collect</h2>
+      <h3>Information You Provide</h3>
+      <ul>
+        <li><strong>Photos</strong> — submitted to create your portrait</li>
+        <li><strong>Contact details</strong> — name, phone number, and/or email when ordering</li>
+        <li><strong>Delivery address</strong> — for print and canvas orders</li>
+        <li><strong>Payment information</strong> — processed entirely by Stripe; we never see or store card details</li>
+        <li><strong>Communications</strong> — messages sent via WhatsApp or email</li>
+      </ul>
+      <h3>Automatically Collected</h3>
+      <ul>
+        <li>Anonymised website analytics (page visits, device type, referral source)</li>
+        <li>Standard server logs (IP address, browser type, pages visited)</li>
+      </ul>
+
+      <h2>3. How We Use Your Data</h2>
+      <p>We use your information exclusively to:</p>
+      <ul>
+        <li>Generate and deliver your portrait</li>
+        <li>Process payment and arrange shipping</li>
+        <li>Communicate with you about your order</li>
+        <li>Comply with legal obligations</li>
+      </ul>
+      <p>We do not sell, rent, or share your personal data with third parties for marketing purposes.</p>
+
+      <h2>4. Third-Party Services</h2>
+      <ul>
+        <li><strong>Stripe</strong> — secure payment processing</li>
+        <li><strong>Vercel</strong> — website hosting</li>
+        <li><strong>WhatsApp / Meta</strong> — customer communication (subject to Meta's privacy policy)</li>
+        <li><strong>Astria</strong> — AI portrait generation (your photo is processed solely to create your artwork)</li>
+      </ul>
+
+      <h2>5. Data Retention</h2>
+      <p>We retain order records for up to 2 years for customer service and legal purposes. Photos submitted for generation are deleted within 90 days of order completion, unless you request earlier removal.</p>
+
+      <h2>6. Your Rights</h2>
+      <ul>
+        <li>Request a copy of the personal data we hold about you</li>
+        <li>Request correction of inaccurate data</li>
+        <li>Request deletion of your data (subject to legal retention requirements)</li>
+        <li>Withdraw consent for marketing communications at any time</li>
+      </ul>
+      <p>To exercise any of these rights: <a href="mailto:hello@byremi.net">hello@byremi.net</a></p>
+
+      <h2>7. Cookies</h2>
+      <p>Our website uses minimal cookies for essential functionality and anonymised analytics only. We do not use advertising or tracking cookies. You can disable cookies in your browser settings without affecting core site functionality.</p>
+
+      <h2>8. Security</h2>
+      <p>We apply reasonable technical and organisational measures to protect your data. All payments are encrypted via Stripe's PCI-compliant infrastructure.</p>
+
+      <h2>9. Children's Privacy</h2>
+      <p>Our services are not directed at children under 13. We do not knowingly collect personal data from children. If you believe a child has submitted information to us, contact us and we will promptly delete it.</p>
+
+      <h2>10. Changes to This Policy</h2>
+      <p>We may update this policy from time to time. The updated version will be posted here with a revised date. Continued use of our services constitutes acceptance of the updated policy.</p>
+
+      <h2>11. Contact</h2>
+      <p>Privacy questions: <a href="mailto:hello@byremi.net">hello@byremi.net</a> or via <a href="https://wa.me/971567481702" target="_blank" rel="noopener">WhatsApp</a>.</p>
+      <div class="gold-line" style="margin-top:60px;margin-bottom:0;"></div>
+    </div>
+  </div>
+
+  <div class="divider"><span class="divider-icon">&#10022;</span></div>
+
+  <footer>
+    <div class="footer-brand">ETERNISED</div>
+    <div class="footer-tagline">Bespoke AI Portrait Studio</div>
+    <div class="footer-links">
+      <a href="/">Home</a>
+      <a href="/legal.html">Terms &amp; Conditions</a>
+      <a href="/legal.html#privacy" onclick="switchTab('privacy');return false;">Privacy Policy</a>
+      <a href="mailto:hello@byremi.net">Contact</a>
+    </div>
+    <p>Free Worldwide Delivery &nbsp;&middot;&nbsp; Secured by Stripe &nbsp;&middot;&nbsp; Preview Before You Pay</p>
+  </footer>
+
+  <a href="https://wa.me/971567481702?text=I%20am%20interested%20in%20commissioning%20a%20portrait%20from%20Eternised%20%E2%99%9B" class="wa-float" target="_blank" rel="noopener">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    Chat on WhatsApp
+  </a>
+
+  <script>
+    function switchTab(id) {
+      document.querySelectorAll('.tab-btn').forEach((btn, i) => {
+        btn.classList.toggle('active', (i === 0 && id === 'terms') || (i === 1 && id === 'privacy'));
+      });
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      document.getElementById('tab-' + id).classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    if (window.location.hash === '#privacy') switchTab('privacy');
+  </script>
+
+</body>
+</html>

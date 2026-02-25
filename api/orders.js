@@ -1,32 +1,52 @@
-async function handler(req, res) {
-  // Simple password check
-  const { password } = req.query;
-  if (password !== process.env.ADMIN_PASSWORD) {
-    return res.status(401).json({ error: 'Unauthorized' });
-  }
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
-  const AIRTABLE_KEY     = process.env.AIRTABLE_API_KEY;
-  const AIRTABLE_BASE_ID = process.env.AIRTABLE_BASE_ID;
+module.exports = async function handler(req, res) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-  if (!AIRTABLE_KEY || !AIRTABLE_BASE_ID) {
-    return res.status(500).json({ error: 'Airtable not configured' });
-  }
+  // ── GET: fetch all orders
+  if (req.method === 'GET') {
+    try {
+      const paymentIntents = await stripe.paymentIntents.list({
+        limit: 100,
+      });
 
-  try {
-    const res2 = await fetch(
-      `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/Orders?sort[0][field]=Order%20Date&sort[0][direction]=desc&maxRecords=100`,
-      { headers: { 'Authorization': `Bearer ${AIRTABLE_KEY}` } }
-    );
-    if (!res2.ok) {
-      const err = await res2.text();
-      return res.status(500).json({ error: err });
+      const orders = paymentIntents.data
+        .filter(pi => pi.status === 'succeeded')
+        .map(pi => ({
+          id: pi.id,
+          amount: pi.amount,
+          currency: pi.currency,
+          created: pi.created,
+          status: pi.metadata?.fulfillment_status || 'new',
+          name: pi.metadata?.name || '—',
+          email: pi.metadata?.email || '—',
+          phone: pi.metadata?.phone || '—',
+          package: pi.metadata?.package || '—',
+          size: pi.metadata?.size || '—',
+          address: pi.metadata?.address || '—',
+          notes: pi.metadata?.notes || '',
+        }));
+
+      return res.status(200).json({ orders });
+    } catch (err) {
+      return res.status(500).json({ error: err.message });
     }
-    const data = await res2.json();
-    const orders = (data.records || []).map(r => ({ id: r.id, ...r.fields }));
-    return res.status(200).json({ orders });
-  } catch (err) {
-    return res.status(500).json({ error: err.message });
   }
-}
 
-module.exports = handler;
+  // ── POST: update fulfillment status
+  if (req.method === 'POST') {
+    try {
+      const { id, status } = req.body;
+      await stripe.paymentIntents.update(id, {
+        metadata: { fulfillment_status: status }
+      });
+      return res.status(200).json({ success: true });
+    } catch (err) {
+      return res.status(500).json({ error: err.message });
+    }
+  }
+
+  res.status(405).end();
+};

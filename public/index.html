@@ -19,13 +19,9 @@
     }
     html { scroll-behavior: smooth; }
     body { background: var(--bg); color: var(--text); font-family: 'Cormorant Garamond', Georgia, serif; font-size: 18px; line-height: 1.6; overflow-x: hidden; }
-
-    /* TOP BAR */
     .top-bar { background: var(--gold); color: var(--bg); text-align: center; padding: 10px 24px; font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; display: flex; align-items: center; justify-content: center; gap: 32px; flex-wrap: wrap; }
     .top-bar-item { display: flex; align-items: center; gap: 8px; }
     .top-bar-dot { width: 4px; height: 4px; background: var(--bg); border-radius: 50%; opacity: 0.4; }
-
-    /* HERO */
     .hero { position: relative; min-height: 95vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 80px 24px; overflow: hidden; }
     .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(201,169,110,0.08) 0%, transparent 70%), radial-gradient(ellipse 50% 40% at 20% 80%, rgba(139,105,20,0.06) 0%, transparent 60%); pointer-events: none; }
     .hero-eyebrow { font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 6px; text-transform: uppercase; color: var(--gold); margin-bottom: 20px; position: relative; z-index: 1; }
@@ -36,24 +32,16 @@
     .hero-cta { display: inline-flex; align-items: center; gap: 12px; background: #25D366; color: #fff; font-family: 'Cinzel', serif; font-size: 13px; letter-spacing: 3px; text-transform: uppercase; text-decoration: none; padding: 18px 44px; border-radius: 2px; transition: all 0.3s ease; position: relative; z-index: 1; box-shadow: 0 0 40px rgba(37,211,102,0.2); }
     .hero-cta:hover { background: #20ba58; transform: translateY(-2px); box-shadow: 0 8px 40px rgba(37,211,102,0.35); }
     .hero-note { margin-top: 16px; font-size: 13px; color: var(--text-muted); position: relative; z-index: 1; font-style: italic; }
-
-    /* TRUST STRIP */
     .trust-strip { background: var(--bg-2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 20px 24px; display: flex; align-items: center; justify-content: center; gap: 48px; flex-wrap: wrap; }
     .trust-item { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--text-muted); font-style: italic; }
     .trust-stars { color: #00b67a; font-size: 16px; letter-spacing: 2px; }
-
-    /* DIVIDER */
     .divider { display: flex; align-items: center; gap: 20px; padding: 0 40px; margin: 20px 0; }
     .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: linear-gradient(to right, transparent, var(--gold), transparent); opacity: 0.4; }
     .divider-icon { color: var(--gold); font-size: 18px; }
-
-    /* SECTIONS */
     .section { padding: 100px 24px; position: relative; z-index: 1; }
     .section-inner { max-width: 1200px; margin: 0 auto; }
     .section-label { font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 6px; text-transform: uppercase; color: var(--gold); text-align: center; margin-bottom: 16px; }
     .section-title { font-family: 'Cinzel', serif; font-size: clamp(26px, 3.5vw, 42px); font-weight: 400; text-align: center; margin-bottom: 60px; line-height: 1.2; }
-
-    /* EXAMPLES GRID */
     .examples-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; }
     .example-card { display: flex; flex-direction: column; }
     .example-img-wrap { position: relative; overflow: hidden; aspect-ratio: 3/4; }
@@ -66,16 +54,12 @@
     .example-meta { background: var(--bg-2); border: 1px solid var(--border); border-top: none; padding: 18px 20px; }
     .example-label { font-family: 'Cinzel', serif; font-size: 13px; color: var(--gold-light); margin-bottom: 4px; }
     .example-sub { font-size: 13px; color: var(--text-muted); font-style: italic; }
-
-    /* STEPS */
     .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 2px; }
     .step { background: var(--bg-2); padding: 48px 32px; border: 1px solid var(--border); transition: border-color 0.3s; }
     .step:hover { border-color: rgba(201,169,110,0.4); }
     .step-number { font-family: 'Cinzel', serif; font-size: 60px; font-weight: 600; color: rgba(201,169,110,0.12); line-height: 1; margin-bottom: 20px; display: block; }
     .step-title { font-family: 'Cinzel', serif; font-size: 15px; font-weight: 500; color: var(--gold-light); margin-bottom: 12px; }
     .step-desc { font-size: 15px; color: var(--text-muted); line-height: 1.7; font-style: italic; }
-
-    /* STYLES GRID */
     .styles-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 3px; }
     .style-card { position: relative; overflow: hidden; aspect-ratio: 1/1; cursor: pointer; }
     .style-card img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.5s ease; filter: brightness(0.85); }
@@ -83,8 +67,6 @@
     .style-card-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.1) 50%, transparent 100%); }
     .style-card-name { position: absolute; bottom: 0; left: 0; right: 0; padding: 20px 18px 18px; font-family: 'Cinzel', serif; font-size: 13px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold-light); text-align: center; }
     .style-card-tag { display: inline-block; font-size: 10px; letter-spacing: 3px; color: rgba(201,169,110,0.6); margin-bottom: 4px; font-family: 'Cinzel', serif; }
-
-    /* REVIEWS */
     .reviews-section { background: var(--bg-2); padding: 80px 24px; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
     .reviews-header { text-align: center; margin-bottom: 48px; }
     .trustpilot-logo { font-family: 'Cinzel', serif; font-size: 22px; font-weight: 600; color: #fff; margin-bottom: 8px; }
@@ -102,8 +84,6 @@
     .review-name { font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: 1px; color: var(--gold-light); }
     .review-date { font-size: 12px; color: var(--text-muted); font-style: italic; }
     .review-verified { font-size: 11px; color: #00b67a; margin-top: 2px; }
-
-    /* PACKAGES */
     .packages-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; }
     .pkg { background: var(--bg-2); border: 1px solid var(--border); padding: 44px 36px; text-align: center; position: relative; transition: border-color 0.3s; display: flex; flex-direction: column; }
     .pkg:hover { border-color: rgba(201,169,110,0.4); }
@@ -135,16 +115,12 @@
     .pkg-cta:hover { background: var(--gold); color: var(--bg); border-color: var(--gold); }
     .pkg.featured .pkg-cta { background: var(--gold); color: var(--bg); border-color: var(--gold); }
     .pkg.featured .pkg-cta:hover { background: var(--gold-light); }
-
-    /* BOTTOM CTA */
     .bottom-cta { padding: 80px 24px; text-align: center; position: relative; overflow: hidden; }
     .bottom-cta::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 80% at 50% 50%, rgba(201,169,110,0.05) 0%, transparent 70%); }
     .bottom-cta-title { font-family: 'Cinzel', serif; font-size: clamp(22px, 3.5vw, 38px); font-weight: 400; margin-bottom: 16px; position: relative; z-index: 1; }
     .bottom-cta-sub { font-size: 18px; color: var(--text-muted); font-style: italic; margin-bottom: 40px; position: relative; z-index: 1; }
     .whatsapp-btn { display: inline-flex; align-items: center; gap: 14px; background: #25D366; color: #fff; font-family: 'Cinzel', serif; font-size: 13px; letter-spacing: 3px; text-transform: uppercase; text-decoration: none; padding: 20px 48px; border-radius: 2px; transition: all 0.3s ease; position: relative; z-index: 1; box-shadow: 0 0 60px rgba(37,211,102,0.15); }
     .whatsapp-btn:hover { background: #20ba58; transform: translateY(-3px); box-shadow: 0 12px 60px rgba(37,211,102,0.3); }
-
-    /* FOOTER */
     footer { padding: 40px 24px; text-align: center; border-top: 1px solid var(--border); }
     footer p { font-size: 13px; color: var(--text-muted); font-style: italic; }
     .footer-brand { font-family: 'Cinzel', serif; font-size: 20px; color: var(--gold); margin-bottom: 6px; letter-spacing: 5px; }
@@ -153,8 +129,6 @@
     .footer-links a { font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
     .footer-links a:hover { color: var(--gold); }
     .gold-line { width: 60px; height: 1px; background: var(--gold); margin: 24px auto; opacity: 0.6; }
-
-    /* RESPONSIVE */
     @media (max-width: 860px) { .packages-grid { grid-template-columns: 1fr; max-width: 480px; margin: 0 auto; } }
     @media (max-width: 600px) {
       .top-bar { gap: 16px; font-size: 10px; }
@@ -170,7 +144,6 @@
 </head>
 <body>
 
-  <!-- TOP BAR -->
   <div class="top-bar">
     <div class="top-bar-item">
       <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
@@ -188,7 +161,6 @@
     </div>
   </div>
 
-  <!-- HERO -->
   <section class="hero">
     <p class="hero-eyebrow">Bespoke AI Portrait Studio</p>
     <h1 class="hero-title">
@@ -197,14 +169,13 @@
     </h1>
     <p class="hero-subtitle">Free preview · No credit card or registration required</p>
     <p class="hero-subtext">WhatsApp us your photo · Preview in 24 hours · Only pay if you love it</p>
-    <a href="https://wa.me/971585784071?text=I%20am%20interested%20in%20commissioning%20a%20portrait%20from%20Eternised%20%E2%99%9B" class="hero-cta" target="_blank">
+    <a href="https://wa.me/971504603830?text=I%20am%20interested%20in%20commissioning%20a%20portrait%20from%20Eternised%20%E2%99%9B" class="hero-cta" target="_blank">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
       Get My Free Preview
     </a>
     <p class="hero-note">Responds within the hour · Over 500 portraits created</p>
   </section>
 
-  <!-- TRUST STRIP -->
   <div class="trust-strip">
     <div class="trust-item">
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--gold)"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
@@ -227,7 +198,6 @@
 
   <div class="divider"><span class="divider-icon">✦</span></div>
 
-  <!-- CUSTOMER EXAMPLES -->
   <section class="section" style="padding-top:80px;padding-bottom:80px;">
     <div class="section-inner">
       <p class="section-label">From Our Studio</p>
@@ -237,7 +207,7 @@
           <div class="example-img-wrap">
             <img src="/portrait-couple.webp" alt="Couples Portrait" loading="lazy" />
             <div class="example-overlay">
-              <a href="https://wa.me/971585784071?text=I%20am%20interested%20in%20commissioning%20a%20portrait%20from%20Eternised%20%E2%99%9B" class="example-cta" target="_blank">Order This Style</a>
+              <a href="https://wa.me/971504603830?text=I%20am%20interested%20in%20commissioning%20a%20portrait%20from%20Eternised%20%E2%99%9B" class="example-cta" target="_blank">Order This Style</a>
             </div>
           </div>
           <div class="example-meta">
@@ -249,7 +219,7 @@
           <div class="example-img-wrap">
             <img src="/portrait-family.webp" alt="Family Portrait" loading="lazy" />
             <div class="example-overlay">
-              <a href="https://wa.me/971585784071?text=I%20am%20interested%20in%20commissioning%20a%20portrait%20from%20Eternised%20%E2%99%9B" class="example-cta" target="_blank">Order This Style</a>
+              <a href="https://wa.me/971504603830?text=I%20am%20interested%20in%20commissioning%20a%20portrait%20from%20Eternised%20%E2%99%9B" class="example-cta" target="_blank">Order This Style</a>
             </div>
           </div>
           <div class="example-meta">
@@ -261,7 +231,7 @@
           <div class="example-img-wrap">
             <img src="/portrait-pet.jpg" alt="Pet Portrait" loading="lazy" />
             <div class="example-overlay">
-              <a href="https://wa.me/971585784071?text=I%20am%20interested%20in%20commissioning%20a%20portrait%20from%20Eternised%20%E2%99%9B" class="example-cta" target="_blank">Order This Style</a>
+              <a href="https://wa.me/971504603830?text=I%20am%20interested%20in%20commissioning%20a%20portrait%20from%20Eternised%20%E2%99%9B" class="example-cta" target="_blank">Order This Style</a>
             </div>
           </div>
           <div class="example-meta">
@@ -275,7 +245,6 @@
 
   <div class="divider"><span class="divider-icon">✦</span></div>
 
-  <!-- HOW IT WORKS -->
   <section class="section">
     <div class="section-inner">
       <p class="section-label">The Process</p>
@@ -291,7 +260,6 @@
 
   <div class="divider"><span class="divider-icon">✦</span></div>
 
-  <!-- STYLES -->
   <section class="section">
     <div class="section-inner">
       <p class="section-label">Portrait Styles</p>
@@ -312,7 +280,6 @@
 
   <div class="divider"><span class="divider-icon">✦</span></div>
 
-  <!-- REVIEWS -->
   <div class="reviews-section">
     <div class="section-inner">
       <div class="reviews-header">
@@ -321,62 +288,31 @@
         <p class="reviews-meta"><strong>Excellent · 4.9 out of 5</strong> &nbsp;·&nbsp; Based on verified customer reviews</p>
       </div>
       <div class="reviews-grid">
-        <div class="review-card">
-          <div class="review-stars">★★★★★</div>
-          <p class="review-text">"Absolutely blown away. I sent a photo of my husband and within 24 hours we had this incredible oil painting preview. The likeness is unreal — it genuinely looks like he stepped out of the 18th century. We ordered the large canvas and it's now the centrepiece of our living room."</p>
-          <div class="review-author"><div class="review-avatar">S</div><div><div class="review-name">Sarah M.</div><div class="review-date">Dubai, UAE · 2 weeks ago</div><div class="review-verified">✓ Verified purchase</div></div></div>
-        </div>
-        <div class="review-card">
-          <div class="review-stars">★★★★★</div>
-          <p class="review-text">"Ordered the couples portrait as a wedding anniversary gift. My wife cried when she saw it — in the best way. The team was so responsive on WhatsApp and the whole process was seamless. The canvas quality is exceptional, delivered beautifully packaged."</p>
-          <div class="review-author"><div class="review-avatar">K</div><div><div class="review-name">Khalid A.</div><div class="review-date">Riyadh, KSA · 1 month ago</div><div class="review-verified">✓ Verified purchase</div></div></div>
-        </div>
-        <div class="review-card">
-          <div class="review-stars">★★★★★</div>
-          <p class="review-text">"I got a portrait done of my cat in the Grand Monarch style and I cannot stop laughing and admiring it at the same time. The communication was fast, the preview came quickly, and the print arrived within a week. Will be ordering more for Christmas gifts."</p>
-          <div class="review-author"><div class="review-avatar">L</div><div><div class="review-name">Laura T.</div><div class="review-date">London, UK · 3 weeks ago</div><div class="review-verified">✓ Verified purchase</div></div></div>
-        </div>
-        <div class="review-card">
-          <div class="review-stars">★★★★★</div>
-          <p class="review-text">"Gifted this to my parents for their 30th anniversary — a family portrait in the Velázquez style. My mother said it was the most thoughtful gift she'd ever received. The faces are so accurate it's almost eerie. Outstanding quality from start to finish."</p>
-          <div class="review-author"><div class="review-avatar">N</div><div><div class="review-name">Nour H.</div><div class="review-date">Beirut, Lebanon · 1 month ago</div><div class="review-verified">✓ Verified purchase</div></div></div>
-        </div>
-        <div class="review-card">
-          <div class="review-stars">★★★★★</div>
-          <p class="review-text">"The preview arrived faster than expected and it was stunning. Loved the Belle Époque style — so romantic and detailed. The free delivery was a bonus I wasn't expecting. Already recommended to three friends."</p>
-          <div class="review-author"><div class="review-avatar">A</div><div><div class="review-name">Amira F.</div><div class="review-date">Cairo, Egypt · 2 months ago</div><div class="review-verified">✓ Verified purchase</div></div></div>
-        </div>
-        <div class="review-card">
-          <div class="review-stars">★★★★★</div>
-          <p class="review-text">"I was skeptical at first but the 'preview before you pay' model won me over. The result was extraordinary — my portrait in the Storm style looks like it belongs in a grand estate. The canvas feels premium and the colours are rich and vivid."</p>
-          <div class="review-author"><div class="review-avatar">J</div><div><div class="review-name">James R.</div><div class="review-date">Manchester, UK · 3 weeks ago</div><div class="review-verified">✓ Verified purchase</div></div></div>
-        </div>
+        <div class="review-card"><div class="review-stars">★★★★★</div><p class="review-text">"Absolutely blown away. I sent a photo of my husband and within 24 hours we had this incredible oil painting preview. The likeness is unreal — it genuinely looks like he stepped out of the 18th century. We ordered the large canvas and it's now the centrepiece of our living room."</p><div class="review-author"><div class="review-avatar">S</div><div><div class="review-name">Sarah M.</div><div class="review-date">Dubai, UAE · 2 weeks ago</div><div class="review-verified">✓ Verified purchase</div></div></div></div>
+        <div class="review-card"><div class="review-stars">★★★★★</div><p class="review-text">"Ordered the couples portrait as a wedding anniversary gift. My wife cried when she saw it — in the best way. The team was so responsive on WhatsApp and the whole process was seamless. The canvas quality is exceptional, delivered beautifully packaged."</p><div class="review-author"><div class="review-avatar">K</div><div><div class="review-name">Khalid A.</div><div class="review-date">Riyadh, KSA · 1 month ago</div><div class="review-verified">✓ Verified purchase</div></div></div></div>
+        <div class="review-card"><div class="review-stars">★★★★★</div><p class="review-text">"I got a portrait done of my cat in the Grand Monarch style and I cannot stop laughing and admiring it at the same time. The communication was fast, the preview came quickly, and the print arrived within a week. Will be ordering more for Christmas gifts."</p><div class="review-author"><div class="review-avatar">L</div><div><div class="review-name">Laura T.</div><div class="review-date">London, UK · 3 weeks ago</div><div class="review-verified">✓ Verified purchase</div></div></div></div>
+        <div class="review-card"><div class="review-stars">★★★★★</div><p class="review-text">"Gifted this to my parents for their 30th anniversary — a family portrait in the Velázquez style. My mother said it was the most thoughtful gift she'd ever received. The faces are so accurate it's almost eerie. Outstanding quality from start to finish."</p><div class="review-author"><div class="review-avatar">N</div><div><div class="review-name">Nour H.</div><div class="review-date">Beirut, Lebanon · 1 month ago</div><div class="review-verified">✓ Verified purchase</div></div></div></div>
+        <div class="review-card"><div class="review-stars">★★★★★</div><p class="review-text">"The preview arrived faster than expected and it was stunning. Loved the Belle Époque style — so romantic and detailed. The free delivery was a bonus I wasn't expecting. Already recommended to three friends."</p><div class="review-author"><div class="review-avatar">A</div><div><div class="review-name">Amira F.</div><div class="review-date">Cairo, Egypt · 2 months ago</div><div class="review-verified">✓ Verified purchase</div></div></div></div>
+        <div class="review-card"><div class="review-stars">★★★★★</div><p class="review-text">"I was skeptical at first but the 'preview before you pay' model won me over. The result was extraordinary — my portrait in the Storm style looks like it belongs in a grand estate. The canvas feels premium and the colours are rich and vivid."</p><div class="review-author"><div class="review-avatar">J</div><div><div class="review-name">James R.</div><div class="review-date">Manchester, UK · 3 weeks ago</div><div class="review-verified">✓ Verified purchase</div></div></div></div>
       </div>
     </div>
   </div>
 
   <div class="divider"><span class="divider-icon">✦</span></div>
 
-  <!-- PACKAGES -->
   <section class="section">
     <div class="section-inner">
       <p class="section-label">Pricing</p>
       <h2 class="section-title">Choose Your Format</h2>
       <div class="packages-grid">
 
-        <!-- DIGITAL -->
         <div class="pkg popular">
           <div class="pkg-top-badge">Most Popular</div>
-          <div class="pkg-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--gold)"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          </div>
+          <div class="pkg-icon"><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--gold)"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></div>
           <div class="pkg-name">Digital Download</div>
           <p class="pkg-tagline">Instant high-resolution file — perfect for sharing, printing yourself, or keeping forever</p>
           <div class="pkg-price-wrap">
-            <div class="pkg-price-row">
-              <div class="pkg-price-was">$59</div>
-              <div class="pkg-price"><sup>$</sup>39</div>
-            </div>
+            <div class="pkg-price-row"><div class="pkg-price-was">$59</div><div class="pkg-price"><sup>$</sup>39</div></div>
             <div class="pkg-price-note">Limited time offer</div>
           </div>
           <div class="countdown-box">
@@ -389,14 +325,11 @@
             <li>Instant delivery via WhatsApp</li>
             <li>All portrait styles available</li>
           </ul>
-          <a href="https://wa.me/971585784071?text=I%20am%20interested%20in%20commissioning%20a%20portrait%20from%20Eternised%20%E2%99%9B" class="pkg-cta" target="_blank">Order via WhatsApp</a>
+          <a href="https://wa.me/971504603830?text=I%20am%20interested%20in%20commissioning%20a%20portrait%20from%20Eternised%20%E2%99%9B" class="pkg-cta" target="_blank">Order via WhatsApp</a>
         </div>
 
-        <!-- FINE ART PRINT -->
         <div class="pkg featured">
-          <div class="pkg-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--gold)"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-          </div>
+          <div class="pkg-icon"><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--gold)"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
           <div class="pkg-name">Fine Art Print</div>
           <p class="pkg-tagline">Printed on museum-quality archival paper with fade-resistant inks</p>
           <div class="pkg-price-wrap">
@@ -415,19 +348,13 @@
             <li>Made to last decades</li>
             <li>Includes digital download</li>
           </ul>
-          <div class="pkg-shipping">
-            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
-            Free Shipping · Delivery 7–10 days
-          </div>
-          <a href="https://wa.me/971585784071?text=I%20am%20interested%20in%20commissioning%20a%20portrait%20from%20Eternised%20%E2%99%9B" class="pkg-cta" id="printCta" target="_blank">Order via WhatsApp</a>
+          <div class="pkg-shipping"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg> Free Shipping · Delivery 7–10 days</div>
+          <a href="https://wa.me/971504603830?text=I%20am%20interested%20in%20commissioning%20a%20portrait%20from%20Eternised%20%E2%99%9B" class="pkg-cta" id="printCta" target="_blank">Order via WhatsApp</a>
         </div>
 
-        <!-- LARGE CANVAS -->
         <div class="pkg gift">
           <div class="pkg-top-badge">The Perfect Gift</div>
-          <div class="pkg-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--gold)"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
-          </div>
+          <div class="pkg-icon"><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--gold)"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></div>
           <div class="pkg-name">Large Canvas</div>
           <p class="pkg-tagline">Gallery-quality canvas on wood — arrives ready to hang on your wall</p>
           <div class="pkg-price-wrap">
@@ -447,30 +374,25 @@
             <li>Gallery-quality colour reproduction</li>
             <li>Includes digital download</li>
           </ul>
-          <div class="pkg-shipping">
-            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
-            Free Shipping · Delivery 7–10 days
-          </div>
-          <a href="https://wa.me/971585784071?text=I%20am%20interested%20in%20commissioning%20a%20portrait%20from%20Eternised%20%E2%99%9B" class="pkg-cta" id="canvasCta" target="_blank">Order via WhatsApp</a>
+          <div class="pkg-shipping"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg> Free Shipping · Delivery 7–10 days</div>
+          <a href="https://wa.me/971504603830?text=I%20am%20interested%20in%20commissioning%20a%20portrait%20from%20Eternised%20%E2%99%9B" class="pkg-cta" id="canvasCta" target="_blank">Order via WhatsApp</a>
         </div>
 
       </div>
     </div>
   </section>
 
-  <!-- BOTTOM CTA -->
   <section class="bottom-cta">
     <div class="gold-line"></div>
     <h2 class="bottom-cta-title">Ready to be eternised?</h2>
     <p class="bottom-cta-sub">Free preview · No payment until you love it · Free worldwide delivery</p>
-    <a href="https://wa.me/971585784071?text=I%20am%20interested%20in%20commissioning%20a%20portrait%20from%20Eternised%20%E2%99%9B" class="whatsapp-btn" target="_blank">
+    <a href="https://wa.me/971504603830?text=I%20am%20interested%20in%20commissioning%20a%20portrait%20from%20Eternised%20%E2%99%9B" class="whatsapp-btn" target="_blank">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
       Get My Free Preview
     </a>
     <div class="gold-line"></div>
   </section>
 
-  <!-- FOOTER -->
   <footer>
     <div class="footer-brand">ETERNISED</div>
     <div class="footer-tagline">Bespoke AI Portrait Studio</div>
@@ -487,10 +409,10 @@
       const size = select.options[select.selectedIndex].dataset.size;
       if (type === 'print') {
         document.getElementById('printPrice').innerHTML = '<sup>$</sup>' + price;
-        document.getElementById('printCta').href = 'https://wa.me/971585784071?text=I%20am%20interested%20in%20a%20Fine%20Art%20Print%20' + encodeURIComponent(size) + '%20(%24' + price + ')%20from%20Eternised%20%E2%99%9B';
+        document.getElementById('printCta').href = 'https://wa.me/971504603830?text=I%20am%20interested%20in%20a%20Fine%20Art%20Print%20' + encodeURIComponent(size) + '%20(%24' + price + ')%20from%20Eternised%20%E2%99%9B';
       } else {
         document.getElementById('canvasPrice').innerHTML = '<sup>$</sup>' + price;
-        document.getElementById('canvasCta').href = 'https://wa.me/971585784071?text=I%20am%20interested%20in%20a%20Large%20Canvas%20' + encodeURIComponent(size) + '%20(%24' + price + ')%20from%20Eternised%20%E2%99%9B';
+        document.getElementById('canvasCta').href = 'https://wa.me/971504603830?text=I%20am%20interested%20in%20a%20Large%20Canvas%20' + encodeURIComponent(size) + '%20(%24' + price + ')%20from%20Eternised%20%E2%99%9B';
       }
     }
 
